@@ -9,13 +9,13 @@ const CustomButton = ({ text, ...props }) => {
       fullWidth
       sx={{
         borderRadius: "20px",
-        paddingY: "10px", // Match Figma button padding
+        paddingY: "10px", 
         marginBottom: "10px",
         backgroundColor: "#0086AD",
         fontWeight: "bold",
         fontSize: "16px",
-        textTransform: "none", // Prevent uppercase transformation
-        maxWidth: "358px", // Set button width according to Figma dimensions
+        textTransform: "none",
+        maxWidth: "358px",
       }}
       {...props} // Spread any additional props for customization
     >

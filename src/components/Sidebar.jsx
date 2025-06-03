@@ -115,7 +115,6 @@ export default function Sidebar() {
         <Toolbar>
           {/* Only Show Menu Icon on Mobile */}
           {isMobile && (
-            
             <IconButton
               edge="start"
               color="inherit"
@@ -127,12 +126,9 @@ export default function Sidebar() {
           )}
 
           {/* AppBar Title */}
-          <Typography variant="p" fontWeight="bold" noWrap sx={{ flexGrow: 1, color: 'black' }}>
-            {/* Available Properties */}
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1, color: 'black' }}>
+            {/* Admin Dashboard */}
           </Typography>
-          {/* <Typography variant="h6"  sx={{margin: "25px 0 0 25px"}}>
-                 
-                </Typography> */}
 
           {/* Notification Icon */}
           <IconButton color="inherit" sx={{ color: 'black' }}>

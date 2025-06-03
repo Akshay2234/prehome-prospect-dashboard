@@ -2,6 +2,7 @@ import React from 'react';
 import cardImage from "../assets/placeholderImage.png"
 import cardIcon from "../assets/Frame 89.png"
 import cardIcon2 from "../assets/Frame 90.png"
+import '../App.css'
 
 const BootstrapCarousel = ({ id = {}, images = [] }) => {
   return (

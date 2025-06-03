@@ -13,31 +13,11 @@ const PropertyCards = ({ Heading, SubHeading, ...props }) => {
     <Container
       maxWidth="lg"
       className="prop-card-main-container"
-      // sx={{
-      //   height: { xs: "auto", md: 384 },
-      //   width: { xs: "100%", md: "100%" },
-      //   marginTop: "5%",
-      //   borderRadius: { xs: "31px", md: "12px" },
-      //   fontFamily: "Poppins, sans-serif",
-      //   backgroundColor: { xs: "#fefefe", md: "#fefefe" },
-      //   paddingX: { xs: 0 },
-      //   paddingY: { xs: 0, md: 0 },
-      //   border: { xs: "1px solid #D9D9D9", md: 0 },
-      //   margin: { xs: 1, md: "0% 2%" },
-      // }}
+     
     >
       <Box
       className="prop-card-box"
-        // sx={{
-        //   display: "flex",
-        //   //   height: "384px",
-        //   width: "100%",
-
-        //   flexDirection: { xs: "column", md: "row" },
-        //   margin: "0px",
-        //   padding: { xs: 0, md: "20px" },
-        //   fontFamily: "Poppins, sans-serif",
-        // }}
+  
       >
         <Grid item xs={12} md={4} lg={4} className="carousel-img-container">
           <BootstrapCarousel
@@ -85,12 +65,7 @@ const PropertyCards = ({ Heading, SubHeading, ...props }) => {
             </Box>
             <Box
             className="view-prop-cta-cont"
-              // sx={{
-              //   marginTop: { xs: "10%", md: "4%" },
-              //   display: "flex",
-              //   justifyContent: { xs: "flex-end", md: "flex-start" },
-              //   marginBottom: "10px",
-              // }}
+         
             >
               <ViewPropButton text="View Property"/>
             </Box>

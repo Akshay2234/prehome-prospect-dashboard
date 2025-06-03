@@ -17,7 +17,6 @@ import {
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { getAllProperty } from "../apis/adminApi";
-import BootstrapCarousel from "../components/BootstrapCarousel";
 import "../App.css";
 import PropertyCards from "../components/PropertyCards";
 
