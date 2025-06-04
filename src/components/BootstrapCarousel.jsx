@@ -1,21 +1,19 @@
-import React from 'react';
-import cardImage from "../assets/placeholderImage.png"
 import cardIcon from "../assets/Frame 89.png"
 import cardIcon2 from "../assets/Frame 90.png"
-import '../App.css'
+import "../assets/style.css";
 
-const BootstrapCarousel = ({ id = {}, images = [] }) => {
+const BootstrapCarousel = ({ id = {},img }) => {
   return (
     <div id={id} className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-inner">
         <div className="carousel-item active">
-          <img src={cardImage} className="d-block" alt="Slide 1"  style={{objectFit:"cover",width:"100%"}}/>
+          <img src={img} className="d-block" alt="Slide 1"  style={{objectFit:"cover",width:"100%"}}/>
         </div>
         <div className="carousel-item">
-          <img src={cardImage} className="d-block" alt="Slide 2" style={{objectFit:"cover",width:"100%"}}/>
+          <img src={img} className="d-block" alt="Slide 2" style={{objectFit:"cover",width:"100%"}}/>
         </div>
         <div className="carousel-item">
-          <img src={cardImage} className="d-block" alt="Slide 3" style={{objectFit:"cover",width:"100%"}}/>
+          <img src={img} className="d-block" alt="Slide 3" style={{objectFit:"cover",width:"100%"}}/>
         </div>
       </div>
       <button className="carousel-control-prev" type="button"  data-bs-target={`#${id}`} data-bs-slide="prev">

@@ -4,7 +4,9 @@ import { Button, Container, Box, Grid, Typography } from "@mui/material";
 import BootstrapCarousel from "../components/BootstrapCarousel";
 import PropertyCardButton from "./PropertyCardButton";
 import ViewPropButton from "./ViewPropButton";
-import "../App.css";
+import "../assets/style.css";
+import cardImage from "../assets/placeholderImage.png"
+
 
 
 
@@ -22,11 +24,7 @@ const PropertyCards = ({ Heading, SubHeading, ...props }) => {
         <Grid item xs={12} md={4} lg={4} className="carousel-img-container">
           <BootstrapCarousel
             id="carouselOne"
-            images={[
-              "/images/slide1.jpg",
-              "/images/slide2.jpg",
-              "/images/slide3.jpg",
-            ]}
+            img={cardImage}
           />
         </Grid>
 
@@ -67,7 +65,7 @@ const PropertyCards = ({ Heading, SubHeading, ...props }) => {
             className="view-prop-cta-cont"
          
             >
-              <ViewPropButton text="View Property"/>
+              <ViewPropButton  text="View Property" to="/property-detail"/>
             </Box>
           </Box>
         </Grid>

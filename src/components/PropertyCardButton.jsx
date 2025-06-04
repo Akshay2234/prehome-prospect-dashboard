@@ -1,5 +1,5 @@
+import "../assets/style.css";
 
-import "../App.css";
 
 
 const PropertyCardButton = ({ text, ...props }) => {

@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import ChatIcon from "../assets/Frame 645.png";
 import ChevronIcon from "../assets/chevron_forward.png";
-import "../App.css";
+import "../assets/style.css";
+
 
 const PrehomeHelp = () => {
   return (

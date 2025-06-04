@@ -2,18 +2,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import { Box, createTheme, ThemeProvider } from "@mui/material";
 import Sidebar from "./components/Sidebar";
 import AvailablePropertyScreen from "./screens/AvailablePropertyScreen";
-import PropertyDetailsScreen from "./screens/PropertyDetailsScreen";
-import BottomNavigationBar from "./components/BottomNavigationBar";
-// import AuthScreen from "./screens/AuthScreen";
-// import SignUpPasswordScreen from "./screens/SignUpPasswordScreen";
-// import LoginWithPasswordScreen from "./screens/LoginWithPasswordScreen";
-// import OtpVerifyScreen from "./screens/OtpVerifyScreen";
-// import ConvertNewUser from "./screens/ConvertNewUser";
-import AuthRoute from "./components/AuthRoute";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import DashboardScreen from "./screens/DashboardScreen";
 import PrehomeHelp from "./screens/PrehomeHelp";
-
+import PropertyDetails from "./screens/propertyDetails";
 function AppContent() {
   const location = useLocation();
 
@@ -38,21 +29,8 @@ function AppContent() {
         }}
       >
         <Routes>
-          {/* <Route
-            path="/"
-            element={
-              <AuthRoute>
-                <h1>Home Page</h1>
-              </AuthRoute>
-            }
-          /> */}
+         
           <Route path="/" element={<DashboardScreen/>} />
-          {/* <Route path="/" element={<AuthRoute><DashboardScreen/></AuthRoute>} /> */}
-          {/* <Route path="/auth" element={<AuthScreen />} /> */}
-          {/* <Route path="/verify" element={<OtpVerifyScreen />} />
-          <Route path="/signup" element={<SignUpPasswordScreen />} />
-          <Route path="/login" element={<LoginWithPasswordScreen />} />
-          <Route path="/convert-new-user" element={<ConvertNewUser />} /> */}
           <Route
             path="/available-property"
             element={
@@ -62,7 +40,7 @@ function AppContent() {
           <Route
             path="/property-detail"
             element={
-                <PropertyDetailsScreen />
+                <PropertyDetails />
             }
           />
           <Route
@@ -71,21 +49,11 @@ function AppContent() {
                 <PrehomeHelp />
             }
           />
-          <Route
-            path="*"
-            element={
-              <AuthRoute>
-                <h1>404 - Page Not Found</h1>
-              </AuthRoute>
-            }
-          />
+         
         </Routes>
       </Box>
 
-      {/* Bottom Navigation for Mobile */}
-      {
-        !hiddenSidebarRoutes.includes(location.pathname) && <BottomNavigationBar />
-      }
+   
       
     </Box>
   );
@@ -95,11 +63,9 @@ function App() {
   const theme = createTheme();
   return (
     <ThemeProvider theme={theme}>
-      <GoogleOAuthProvider clientId="597576292269-1lsjf5rb8vi3n472f4l64ebuthl79fss.apps.googleusercontent.com">
         <Router>
           <AppContent />
         </Router>
-      </GoogleOAuthProvider>
     </ThemeProvider>
   );
 }
