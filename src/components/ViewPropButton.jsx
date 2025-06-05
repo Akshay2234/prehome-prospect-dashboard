@@ -4,7 +4,7 @@ import "../assets/style.css";
 import { useNavigate } from "react-router-dom";
 
 
-const ViewPropButton = ({text,to, ...props }) => {
+const ViewPropButton = ({text,to,img, ...props }) => {
   const navigate = useNavigate(); // For navigation
  const handleClick = () => {
     navigate(to);
@@ -16,6 +16,7 @@ const ViewPropButton = ({text,to, ...props }) => {
                 onClick={handleClick}
       {...props} // Spread any additional props for customization
     >
+      <img src={img} alt="" />
       {text}
     </button>
   );

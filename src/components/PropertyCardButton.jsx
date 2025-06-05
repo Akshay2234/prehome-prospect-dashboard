@@ -7,7 +7,7 @@ const PropertyCardButton = ({ text, ...props }) => {
     <button
   
       type="button"
-      className="card-peach-btn"
+      className="card-peach-btn shortlisted"
      
       {...props} // Spread any additional props for customization
     >
