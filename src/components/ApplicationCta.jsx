@@ -12,7 +12,7 @@ const ApplicationCta = ({text,value}) => {
     <>
       <Button
         type="button"
-        className="btn-group application-btn"
+        className=" application-btn "
         data-value=""
         onClick={() => handleLocationSelection("Option1")}
         style={{

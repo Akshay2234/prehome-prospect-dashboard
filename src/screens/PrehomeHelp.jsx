@@ -4,161 +4,198 @@ import {
   Box,
   //   CircularProgress,
   Grid,
-  Button,
   //   Slider
 } from "@mui/material";
 import ChatIcon from "../assets/Frame 645.png";
 import ChevronIcon from "../assets/chevron_forward.png";
 import "../assets/style.css";
-
+import ChatbotCta from "../components/ChatbotCta";
+import OutlineCta from "../components/OutlineCta";
+import ApplicationCta from "../components/ApplicationCta";
 
 const PrehomeHelp = () => {
   return (
     <>
-    <Box 
-    style={{
-        zIndex: "9999",
-        height:"20px"
-      }}>
-
-    </Box>
-    <Container
-      maxWidth="xl"
-      style={{
-        zIndex: "9999",
-      }}
-    >
-      <Container
-        maxWidth="lg"
-        sx={{
-          marginLeft: "7px",
-          border: "1px solid grey",
-          position: "fixed",
-          zIndex: 999,
-          // display: "flex",
-
-          marginTop: "5%",
-          height: "100px",
-          width: "100%",
-          borderRadius: "24px",
-          flexDirection: { xs: "column", md: "row" },
-          // margin: "0px",
-          fontFamily: "Poppins, sans-serif",
-          backgroundColor: { xs: "#11202E", md: "white" },
-          paddingX: { xs: 0 },
-          paddingY: { xs: 0, md: 2 },
-        }}
-      >
-        <Box
-          sx={{
-            padding: "15px",
-            margin: "0px 15px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Grid>
-            <Box item xs={12} md={4} lg={4}>
-              <img src={ChatIcon} alt="" />
+      <Container maxWidth="xl" className="chatbot-body">
+          <Container sx={{ height: "120px" ,width:"100%",background: "#ECECEC",
+    position: "fixed",
+    zIndex: "99"}}></Container>
+        <Container maxWidth="xl" className="chatbot-card">
+        
+          <Container maxWidth="lg" className="chatbot-header">
+              
+            <Box className="chatbot-head">
+              <Grid>
+                <Box item xs={12} md={4} lg={4}>
+                  <img src={ChatIcon} alt="" />
+                </Box>
+              </Grid>
+              <Grid>
+                <Box item xs={12} md={4} lg={4}>
+                  <Typography
+                    variant="h4"
+                    display="block"
+                    fontSize={20}
+                    fontWeight="bold"
+                    gutterBottom
+                    sx={{ color: { sx: "white", md: "#454B58" } }}
+                  >
+                    Chatbot
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid>
+                <Box item xs={12} md={4} lg={4}>
+                  <img src={ChevronIcon} alt="" />
+                </Box>
+              </Grid>
             </Box>
-          </Grid>
-          <Grid>
-            <Box item xs={12} md={4} lg={4}>
-              <Typography
-                variant="h4"
-                display="block"
-                fontSize={20}
-                fontWeight="bold"
-                gutterBottom
-                sx={{ color: { sx: "white", md: "#454B58" } }}
+          </Container>
+
+        
+
+          <Container maxWidth="lg" className="chat-container">
+            <Box className="chat-card">
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
               >
-                Chatbot
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid>
-            <Box item xs={12} md={4} lg={4}>
-              <img src={ChevronIcon} alt="" />
-            </Box>
-          </Grid>
-        </Box>
-      </Container>
+                <ChatbotCta text="Hello, How can i help?" />
+                <ChatbotCta
+                  text="Welcome to LiveChat I was made with. Pick a topic from the
+            list or type down a question!"
+                />
+              </Grid>
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  alignItems: "self-end",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <ChatbotCta
+                  text=" I have a query"
+                  className="chatbot-cta color-cta"
+                />
+              </Grid>
 
-      <Container sx={{ height: "150px" }}></Container>
-      <Container
-        maxWidth="lg"
-        sx={{
-          // display: "flex",
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <ChatbotCta text="Select one of the following:" />
 
-          border: "1px solid grey",
-          position: "relative",
-          height: "100vh",
-          width: "100%",
-          //   marginTop: "1%",
-          flexDirection: { xs: "column", md: "row" },
-          // margin: "0px",
-          fontFamily: "Poppins, sans-serif",
-          backgroundColor: { xs: "#11202E", md: "white" },
-          paddingX: { xs: 0 },
-          paddingY: { xs: 0, md: 0 },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            height: "300px",
-            width: "70%",
-            flexDirection: { xs: "column", md: "column" },
-            margin: "0px",
-            padding: "20px",
-            fontFamily: "Poppins, sans-serif",
-          }}
-        >
-          <Button
-            type="button"
-            sx={{
-              color: "rgb(117 117 117)",
-              height: "72px",
-              width: "300px",
-              borderRadius: "12px",
-              padding: "10px 20px",
-              border: "1px solid #ccc",
-              transition: "all 0.3s",
-              margin: "5px",
-              marginTop: "20px",
-              cursor: "pointer",
-              fontFamily: "Poppins",
-              textAlign: "left",
-            }}
-          >
-            Hello, How can i help?
-          </Button>
-          <Button
-            type="button"
-            sx={{
-              color: "rgb(117 117 117)",
-              height: "72px",
-              width: "80%",
-              borderRadius: "12px",
-              padding: "10px 20px",
-              border: "1px solid #ccc",
-              transition: "all 0.3s",
-              margin: "5px",
-              marginTop: "20px",
-              cursor: "pointer",
-              fontFamily: "Poppins",
-              textAlign: "left",
-            }}
-          >
-            Welcome to LiveChat <br />I was made with. Pick a topic from the
-            list or type down a question!
-          </Button>
-        </Box>
+                <Box className="cta-container mt-3">
+                  <OutlineCta
+                    text="Balcony view"
+                    className="chatbot-outline-cta "
+                  ></OutlineCta>
+                  <OutlineCta
+                    text="Option 1"
+                    className="chatbot-outline-cta"
+                  ></OutlineCta>
+                  <OutlineCta
+                    text="Option 2"
+                    className="chatbot-outline-cta"
+                  ></OutlineCta>
+                  <OutlineCta
+                    text="Option 3"
+                    className="chatbot-outline-cta"
+                  ></OutlineCta>
+                  <OutlineCta
+                    text="Option 4"
+                    className="chatbot-outline-cta"
+                  ></OutlineCta>
+                  <OutlineCta
+                    text="Option 5"
+                    className="chatbot-outline-cta"
+                  ></OutlineCta>
+                </Box>
+              </Grid>
+
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  alignItems: "self-end",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <ChatbotCta
+                  text=" I have a query"
+                  className="chatbot-cta color-cta"
+                />
+              </Grid>
+
+              <Grid
+                xs={12}
+                sm={12}
+                md={6}
+                lg={6}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <ChatbotCta text="Select one of the following:" />
+
+                <Box className="cta-container mt-3">
+                  <ApplicationCta
+                    text="Lorem, ipsum dolor sit amet consectetur voluptatibus."
+                    className="chatbot-application-btn"
+                  ></ApplicationCta>
+                  <ApplicationCta
+                    text="Lorem, ipsum dolor sit amet consectetur voluptatibus."
+                    className="chatbot-application-btn"
+                  ></ApplicationCta>
+                </Box>
+              </Grid>
+
+              <Grid
+                xs={12}
+                sm={12}
+                md={6}
+                lg={6}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Box className="cta-container">
+                  <ApplicationCta
+                    text="Lorem, ipsum dolor sit amet consectetur voluptatibus."
+                    className="chatbot-application-btn"
+                  ></ApplicationCta>
+                  <ApplicationCta
+                    text="Lorem, ipsum dolor sit amet consectetur voluptatibus."
+                    className="chatbot-application-btn"
+                  ></ApplicationCta>
+                </Box>
+              </Grid>
+            </Box>
+          </Container>
+        </Container>
       </Container>
-    </Container>
     </>
-
   );
 };
 

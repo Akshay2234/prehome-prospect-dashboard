@@ -1,129 +1,111 @@
-import { Box, Typography, Container, useMediaQuery } from "@mui/material";
-// import ViewPropButton from "../components/ViewPropButton";
-import OutlineCta from "../components/OutlineCta";
-import cardImage from "../assets/Frame 86.png";
-import BootstrapCarousel from "../components/BootstrapCarousel";
-import LeftArrow from "../assets/Component 13.png";
-// import shortlistIcon from "../assets/event_upcoming.png"
-import mapImage from "../assets/mapimage.png";
-import ShortlistCTA from "../components/ShortListCta";
-import { useTheme } from "@mui/material/styles";
+import  {  useEffect } from "react";
+import {
+  Typography,
+  Container,
+  Box,
+  Slider,
+} from "@mui/material";
+// import logo from "../assets/logo.png";
+// import CustomTextField from "../components/CustomTextField";
+// import CustomButton from "../components/CustomButton";
+// import zIndex from "@mui/material/styles/zIndex";
+import "../assets/style.css";
+import CtaCards from "../components/CtaCards";
+import SliderCard from "../components/SliderCard";
+import InputCta from "../components/InputCta";
 
-const PropertyDetails = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+const DashboardScreen = () => {
+
+
+
+
+
   return (
-    <Box
-      className="property-main-box"
-      sx={{
-        p: 2,
-        backgroundColor: { xs: "#fff", md: "#ECECEC" },
-        minHeight: "100vh",
-      }}
-    >
-      {/* Top Navigation */}
-      <Container maxWidth="lg">
-        <Box className="navigation-box">
-          <img src={LeftArrow} alt="" />
-          <Typography
-            variant="h5"
-            fontWeight="bold"
-            sx={{ display: { xs: "none", md: "block",lg:"block" } }}
-          >
-            Property Details
-          </Typography>
-          {isMobile && (
-            <Typography fontWeight="bold" fontSize={16} padding="8% 0">
-              About The Property
-            </Typography>
-          )}
-        </Box>
-        <Box className="Heading-box">
-          <h6 className="prop-card-head">
-            Entire Bromo mountain view Cabin in Surabaya
-          </h6>
+    <>
+      <Container maxWidth="xl" sx={{background: { md: "#ECECEC", xs: "#fff" }}}>
+        <Container className="heading-container">
+          <Box className="fixed-card">
+            <h4 className="Heading">Start your home ownership journey</h4>
+            <Box display="flex" justifyContent="space-between">
+              <Typography className="sub-heading">
+                Personal Information
+              </Typography>
+              <Typography className="sub-heading">25% Complete</Typography>
+            </Box>
+            <Box display="flex">
+              <Slider
+                trackColor="#"
+                thumbColor="#"
+                railColor="#"
+                valueLabelColor="#"
+                min={0}
+                max={100}
+                valueLabelDisplay="off"
+                valueLabelFormat={(value) => `${value} `}
+                sx={{
+                  "& .MuiSlider-track": {
+                    backgroundColor: "#0086AD",
+                    height: 20, // Adjust track thickness
+                    border: "none",
+                  },
+                  "& .MuiSlider-rail": {
+                    backgroundColor: "#DEDEDE",
+                    height: 20, // Adjust rail thickness
+                  },
+                  "& .MuiSlider-thumb": {
+                    backgroundColor: "#0086AD",
+                    border: "2px solid white",
+                    width: 25, // Adjust thumb size (width)
+                    height: 25, // Adjust thumb size (height)
+                    "&:hover, &:focus, &.Mui-active": {
+                      boxShadow: "none", // Remove the expanded color effect
+                    },
+                  },
+                  "& .MuiSlider-valueLabel": {
+                    backgroundColor: "#DCF7FF",
+                    color: "black",
+                    fontWeight: "bold",
+                    top: "-2px",
+                    borderRadius: "20px",
+                    padding: "8px",
+                    paddingX: "16px",
+                    "&:before": {
+                      display: "none",
+                    },
+                    "& *": {
+                      transform: "none",
+                    },
+                  },
+                }}
+              />
+            </Box>
+          </Box>
+        </Container>
 
-          {/* <ViewPropButton text="Shortlist Property" img={shortlistIcon} onClick={clicked}></ViewPropButton> */}
-          <ShortlistCTA></ShortlistCTA>
-        </Box>
+        <Container sx={{ height: "260px",background: "#ECECEC",
+    position: "fixed",
+    zIndex: "99" }}></Container>
 
-        <Box className="cta-container">
-          <OutlineCta text="Balcony view"></OutlineCta>
-          <OutlineCta text="Option 1"></OutlineCta>
-          <OutlineCta text="Option 2"></OutlineCta>
-          <OutlineCta text="Option 3"></OutlineCta>
-          <OutlineCta text="Option 4"></OutlineCta>
-          <OutlineCta text="Option 5"></OutlineCta>
-        </Box>
+        <CtaCards subHeading=" What inspired you to start looking for a new home?" text="skip"></CtaCards>
+        <CtaCards subHeading=" What inspired you to start looking for a new home?" text="skip"></CtaCards>
+
+        <SliderCard subHeading=" What inspired you to start looking for a new home? 2"></SliderCard>
+
+        <CtaCards subHeading=" What inspired you to start looking for a new home? 3 "></CtaCards>
+
+        <CtaCards subHeading=" What inspired you to start looking for a new home? 3 "></CtaCards>
+
+        <InputCta
+          subHeading="What inspired you to start looking for a new home?"
+          subHeading2="What inspired you to start looking for a new home?"
+        ></InputCta>
+        <InputCta
+          subHeading="What inspired you to start looking for a new home2?"
+          subHeading2="What inspired you to start looking for a new home2?"
+        ></InputCta>
       </Container>
-
-      <Container maxWidth="lg">
-        <BootstrapCarousel id="carouselOne" img={cardImage} />
-      </Container>
-
-      <Box className="text-card-container">
-        <Box className="text-card">
-          <p className="Heading-text-card">Property Features</p>
-          <p className="sub-Heading-1">Interior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-        </Box>
-
-        <Box className="text-card">
-          <p className="Heading-text-card">General Property Information</p>
-          <p className="sub-Heading-1">Interior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-
-          <p className="sub-Heading-1">Interior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-        </Box>
-      </Box>
-
-      <Container maxWidth="lg">
-        <img src={mapImage} alt="" width="100%" />
-      </Container>
-    </Box>
+    </>
   );
 };
-export default PropertyDetails;
+
+export default DashboardScreen;

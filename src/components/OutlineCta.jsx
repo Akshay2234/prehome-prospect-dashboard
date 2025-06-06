@@ -15,7 +15,7 @@ const OutlineCta = ({text, ...props }) => {
   return (
     <button
       type="button"
-    className={`outline-cta ${isClicked ? 'clicked' : ''}`}
+    className={`outline-cta chatbot-outline-cta  ${isClicked ? 'clicked' : ''}`}
     onClick={handleClick}
       {...props} // Spread any additional props for customization
     >

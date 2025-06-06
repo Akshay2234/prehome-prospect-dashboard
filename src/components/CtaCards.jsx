@@ -2,7 +2,7 @@ import { Container, Box, Grid } from "@mui/material";
 import ApplicationCta from "./ApplicationCta";
 import "../assets/style.css";
 
-const CtaCards = ({subHeading}) => {
+const CtaCards = ({subHeading,text}) => {
   return (
     <>
       <Container
@@ -12,12 +12,22 @@ const CtaCards = ({subHeading}) => {
         <Box
           className="content-box"
         >
+          <Box className="subhead-text-cont">
+
           <h4
             
             className="card-subhead"
           >
            {subHeading}
           </h4>
+          <h4
+            
+            className="skip-text"
+          >
+           {text}
+          </h4>
+          </Box>
+
           <Grid item xs={12} md={6} lg={6}>
             <Box display="flex" justifyContent="space-between">
               <ApplicationCta text="option 1" value="1" />
