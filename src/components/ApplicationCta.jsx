@@ -14,10 +14,10 @@ const ApplicationCta = ({text,value}) => {
         type="button"
         className=" application-btn "
         data-value=""
-        onClick={() => handleLocationSelection("Option1")}
+        onClick={() => handleLocationSelection(value)}
         style={{
           border:
-            selectedButton === "Option1"
+            selectedButton === `${value}`
               ? "2px solid rgb(239, 156, 0)"
               : "1px solid #ccc",
           transition: "all 0.3s",         

@@ -51,7 +51,6 @@ const InputCta = ({ subHeading,subHeading2 }) => {
             <Grid item xs={12} md={12} lg={12}>
               <TextField
                 fullWidth
-                value={""}
                 sx={{
                   mb: "16px",
                   borderRadius: "15px",

@@ -84,10 +84,11 @@ const DashboardScreen = () => {
 
         <Container sx={{ height: "260px",background: "#ECECEC",
     position: "fixed",
-    zIndex: "99" }}></Container>
+    zIndex: "99",
+    }}></Container>
 
-        <CtaCards subHeading=" What inspired you to start looking for a new home?" text="skip"></CtaCards>
-        <CtaCards subHeading=" What inspired you to start looking for a new home?" text="skip"></CtaCards>
+        <CtaCards subHeading=" What inspired you to start looking for a new home?" text="skip"></CtaCards> {/* just for spacing*/}
+        <CtaCards subHeading=" What inspired you to start looking for a new home?" text="skip" ></CtaCards>
 
         <SliderCard subHeading=" What inspired you to start looking for a new home? 2"></SliderCard>
 
