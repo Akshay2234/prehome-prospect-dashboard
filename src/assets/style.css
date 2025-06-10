@@ -40,7 +40,10 @@
 .read-the-docs {
   color: #888;
 } */
-
+.css-kibv85{
+  overflow: scroll!important;
+  scrollbar-width: none;
+}
 p {
   margin-top: 0;
   margin-bottom: 0 !important;
