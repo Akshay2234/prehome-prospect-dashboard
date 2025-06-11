@@ -14,12 +14,12 @@ const CtaCards = ({subHeading,text}) => {
         >
           <Box className="subhead-text-cont">
 
-          <h4
+          <p
             
             className="card-subhead"
           >
            {subHeading}
-          </h4>
+          </p>
           <h4
             
             className="skip-text"

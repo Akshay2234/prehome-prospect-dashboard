@@ -29,6 +29,7 @@ const PropertyDetails = () => {
             variant="h5"
             fontWeight="bold"
             sx={{ display: { xs: "none", md: "block",lg:"block" } }}
+            className="Heading-application"
           >
             Property Details
           </Typography>

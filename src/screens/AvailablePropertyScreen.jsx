@@ -8,14 +8,15 @@ const AvailablePropertyScreen = () => {
     <>
       <Box
         width="lg"
+        
       >
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          sx={{ margin: "50px 0 0 25px", display: { xs: "none", md: "block" } }}
+        <h4
+          className="Heading-application"
+       
+ 
         >
           Available Properties
-        </Typography>
+        </h4>
 
         <PropertyCards
           Heading="Entire Bromo mountain view Cabin in Surabaya from card"

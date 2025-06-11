@@ -11,15 +11,11 @@ const SliderCard = ({subHeading}) => {
         <Box
           className="content-box"
         >
-          <Typography
-            variant="h4"
-            display="block"
-            fontSize={20}
-            gutterBottom
-            sx={{ color: { sx: "white", md: "black" } }}
+          <p
+            className="card-subhead"
           >
            {subHeading}
-          </Typography>
+          </p>
          <Slider
           trackColor="#"
           thumbColor="#"

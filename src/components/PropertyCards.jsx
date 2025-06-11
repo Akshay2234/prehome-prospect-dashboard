@@ -35,7 +35,7 @@ const PropertyCards = ({ Heading, SubHeading, ...props }) => {
               fontWeight="bold"
               // fontSize={24}
               gutterBottom
-              className="Heading"
+              className="Heading-application"
               sx={{
                 color: { sx: "white", md: "black" },
                 fontSize: { xs: 16, md: 20,lg:24 },
@@ -44,17 +44,13 @@ const PropertyCards = ({ Heading, SubHeading, ...props }) => {
               {/* Entire Bromo mountain view Cabin in Surabaya */}
               {Heading}
             </Typography>
-            <Typography
-              display="block"
+            <p
               className="sub-Heading"
-              sx={{
-                color: { sx: "white", md: "black" },
-                fontSize: { xs: 12, md: 14,lg:16 },
-              }}
+              
             >
               {/* Luxurious villa with stunning ocean views and private beach access. */}
               {SubHeading}
-            </Typography>
+            </p>
 
             <Box height={{ xs: 125,md:100 }} className="card-btn-container">
               <PropertyCardButton text="Luxury" />

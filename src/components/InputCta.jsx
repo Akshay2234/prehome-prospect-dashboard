@@ -7,16 +7,11 @@ const InputCta = ({ subHeading,subHeading2 }) => {
     <>
       <Container maxWidth="lg" className="app-card-container">
         <Box className="content-box">
-          <Typography
-            variant="h4"
-            display="block"
-            fontSize={20}
-            gutterBottom
-            sx={{ color: { sx: "white", md: "black" } }}
-            // className="Heading"
+          <p
+            className="card-subhead"
           >
             {subHeading}
-          </Typography>
+          </p>
           <Grid item xs={12} md={6} lg={6}>
             <Box display="flex" justifyContent="space-between">
               <ApplicationCta text="option 1" value="1" />
@@ -39,15 +34,11 @@ const InputCta = ({ subHeading,subHeading2 }) => {
               fontFamily: "Poppins, sans-serif",
             }}
           >
-            <Typography
-              variant="h4"
-              display="block"
-              fontSize={20}
-              gutterBottom
-              sx={{ color: { sx: "white", md: "black" } }}
+            <p 
+             className="card-subhead"
             >
               {subHeading2}
-            </Typography>
+            </p>
             <Grid item xs={12} md={12} lg={12}>
               <TextField
                 fullWidth

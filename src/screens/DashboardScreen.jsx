@@ -27,10 +27,10 @@ const DashboardScreen = () => {
           <Box className="fixed-card">
             <h4 className="Heading">Start your home ownership journey</h4>
             <Box display="flex" justifyContent="space-between">
-              <Typography className="sub-heading">
+              <p className="sub-heading">
                 Personal Information
-              </Typography>
-              <Typography className="sub-heading">25% Complete</Typography>
+              </p>
+              <p className="precent-text">25% Complete</p>
             </Box>
             <Box display="flex">
               <Slider
