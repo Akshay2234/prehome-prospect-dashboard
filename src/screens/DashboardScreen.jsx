@@ -15,11 +15,6 @@ import SliderCard from "../components/SliderCard";
 import InputCta from "../components/InputCta";
 
 const DashboardScreen = () => {
-
-
-
-
-
   return (
     <>
       <Container maxWidth="xl" sx={{background: { md: "#ECECEC", xs: "#fff" }}}>
