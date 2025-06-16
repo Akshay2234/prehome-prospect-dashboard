@@ -2,7 +2,6 @@ import {
   Typography,
   Container,
   Box,
-  //   CircularProgress,
   Grid,
   TextField,
 } from "@mui/material";
@@ -14,180 +13,154 @@ import ChatbotCta from "../components/ChatbotCta";
 import ChatbotOutlineCta from "../components/ChatbotOutlineCta";
 import ChatbotLargeCta from "../components/chatbotLargeCta";
 
+import { chatbotNodes } from "../data/chatbotData";
+import { useState, useRef, useEffect } from "react";
+
 const PrehomeHelp = () => {
+  const [currentNode, setCurrentNode] = useState(chatbotNodes.root);
+  const [chatHistory, setChatHistory] = useState([
+    { message: chatbotNodes.root.message, type: "bot" },
+  ]);
+  const [userInput, setUserInput] = useState("");
+  const chatContainerRef = useRef(null);
+
+  const handleOptionClick = (option) => {
+    const nextNode = chatbotNodes[option.nextId];
+    if (nextNode) {
+      setChatHistory((prev) => [
+        ...prev,
+        { message: option.text, type: "user" },
+        { message: nextNode.message, type: "bot" },
+      ]);
+      setCurrentNode(nextNode);
+    }
+  };
+
+  const handleSend = () => {
+    if (userInput.trim() === "") return;
+    setChatHistory((prev) => [
+      ...prev,
+      { message: userInput, type: "user" },
+      { message: "Thank you for your query. Please select an option or start over.", type: "bot" },
+    ]);
+    setUserInput("");
+  };
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
+
   return (
-    <>
-      <Container maxWidth="xl" className="chatbot-body">
-        <Container maxWidth="xl" className="chatbot-parent">
-          <Container maxWidth="lg" className="chat-container">
-            <Container maxWidth="lg" className="chatbot-header">
-              <Box className="chatbot-head">
-                <Grid>
-                  <Box item xs={12} md={4} lg={4}>
-                    <img src={ChatIcon} alt="" />
-                  </Box>
-                </Grid>
-                <Grid>
-                  <Box item xs={12} md={4} lg={4}>
-                    <p className="chatbot-heading">Chatbot</p>
-                  </Box>
-                </Grid>
-                <Grid>
-                  <Box item xs={12} md={4} lg={4}>
-                    <img src={ChevronIcon} alt="" />
-                  </Box>
-                </Grid>
-              </Box>
-            </Container>
-            <Box className="chat-card">
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <ChatbotCta text="Hello, How can i help?" />
-                <ChatbotCta
-                  text="Welcome to LiveChat I was made with. Pick a topic from the
-            list or type down a question!"
-                />
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{
-                  display: "flex",
-                  alignItems: "self-end",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <ChatbotCta
-                  text=" I have a query"
-                  className="chatbot-cta color-cta"
-                />
-              </Grid>
-
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <ChatbotCta text="Select one of the following:" />
-
-                <Box className="cta-container mt-3">
-                  <ChatbotOutlineCta text="Balcony view"></ChatbotOutlineCta>
-                  <ChatbotOutlineCta text="Option 1"></ChatbotOutlineCta>
-                  <ChatbotOutlineCta text="Option 2"></ChatbotOutlineCta>
-                  <ChatbotOutlineCta text="Option 3"></ChatbotOutlineCta>
-                  <ChatbotOutlineCta text="Option 4"></ChatbotOutlineCta>
-                  <ChatbotOutlineCta text="Option 5"></ChatbotOutlineCta>
+    <Container maxWidth="xl" className="chatbot-body">
+      <Container maxWidth="xl" className="chatbot-parent">
+        <Container maxWidth="lg" className="chat-container">
+          <Container maxWidth="lg" className="chatbot-header">
+            <Box className="chatbot-head">
+              <Grid>
+                <Box item xs={12} md={4} lg={4}>
+                  <img src={ChatIcon} alt="" />
                 </Box>
               </Grid>
-
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{
-                  display: "flex",
-                  alignItems: "self-end",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <ChatbotCta
-                  text=" I have a query"
-                  className="chatbot-cta color-cta"
-                />
-              </Grid>
-
-              <Grid
-                xs={12}
-                sm={12}
-                md={6}
-                lg={6}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <ChatbotCta text="Select one of the following:" />
-
-                <Box className="cta-container mt-3">
-                  <ChatbotLargeCta text="Lorem, ipsum dolor sit amet consectetur voluptatibus."></ChatbotLargeCta>
-                  <ChatbotLargeCta text="Lorem, ipsum dolor sit amet consectetur voluptatibus."></ChatbotLargeCta>
+              <Grid>
+                <Box item xs={12} md={4} lg={4}>
+                  <p className="chatbot-heading">Chatbot</p>
                 </Box>
               </Grid>
-
-              <Grid
-                xs={12}
-                sm={12}
-                md={6}
-                lg={6}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginBottom: "15%",
-                }}
-              >
-                <Box className="cta-container application-cta-container">
-                  <ChatbotLargeCta text="Lorem, ipsum dolor sit amet consectetur voluptatibus."></ChatbotLargeCta>
-                  <ChatbotLargeCta text="Lorem, ipsum dolor sit amet consectetur voluptatibus."></ChatbotLargeCta>
+              <Grid>
+                <Box item xs={12} md={4} lg={4}>
+                  <img src={ChevronIcon} alt="" />
                 </Box>
               </Grid>
             </Box>
-            <Container maxWidth="lg" className="chatbot-footer">
-              <Box
-                className="footer"
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
-              >
-                <TextField
-                  fullWidth
-                  placeholder="Enter your query here"
-                  className="chatbot-input"
-                  variant="outlined"
-                  fontFamily="Poppins"
-                  sx={{
-                    flex: 1,
-                    "& .MuiOutlinedInput-root": {
-                      fontFamily: "Poppins",
-                      "& fieldset": {
-                        border: "none",
-                      },
-                      "&:hover fieldset": {
-                        border: "none",
-                      },
-                      "&.Mui-focused fieldset": {
-                        border: "none",
-                      },
-                    },
-                  }}
-                />
+          </Container>
 
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <img
-                    src={SendIcon}
-                    alt="Send"
-                    style={{ width: 32, height: 32, cursor: "pointer" }}
-                  />
+          {/* Chat Messages */}
+          <Box className="chat-card" ref={chatContainerRef}   sx={{
+    maxHeight: "400px",
+    overflowY: "auto",
+    paddingRight: "10px",
+    marginBottom: "20px",
+    display: "flex",        // Important
+    flexDirection: "column" // Important for vertical stacking
+  }}>
+         {chatHistory.map((item, index) => (
+  <Grid
+    key={index}
+    xs={12}
+    sm={12}
+    md={12}
+    lg={12}
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      marginBottom: 2,
+      alignItems: item.type === "bot" ? "flex-start" : "flex-end", // 👈 alignment condition
+    }}
+  >
+    {item.type === "bot" ? (
+      <ChatbotCta text={item.message} />
+    ) : (
+      <ChatbotCta text={item.message} className="chatbot-cta color-cta" />
+    )}
+  </Grid>
+))}
+
+            {/* Options */}
+            {currentNode.options && (
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}
+              >
+                <ChatbotCta text="Select one of the following:" />
+                <Box className="cta-container mt-3">
+                  {currentNode.options.map((option, idx) => (
+                    <ChatbotOutlineCta
+                      key={idx}
+                      text={option.text}
+                      onClick={() => handleOptionClick(option)}
+                    />
+                  ))}
                 </Box>
+              </Grid>
+            )}
+          </Box>
+
+          {/* Input Footer */}
+          <Container maxWidth="lg" className="chatbot-footer">
+            <Box className="footer" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <TextField
+                fullWidth
+                placeholder="Enter your query here"
+                className="chatbot-input"
+                variant="outlined"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSend();
+                }}
+                sx={{
+                  flex: 1,
+                  "& .MuiOutlinedInput-root": {
+                    fontFamily: "Poppins",
+                    "& fieldset": { border: "none" },
+                    "&:hover fieldset": { border: "none" },
+                    "&.Mui-focused fieldset": { border: "none" },
+                  },
+                }}
+              />
+              <Box sx={{ display: "flex", alignItems: "center" }} onClick={handleSend}>
+                <img src={SendIcon} alt="Send" style={{ width: 32, height: 32, cursor: "pointer" }} />
               </Box>
-            </Container>
+            </Box>
           </Container>
         </Container>
       </Container>
-    </>
+    </Container>
   );
 };
 

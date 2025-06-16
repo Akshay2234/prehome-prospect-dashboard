@@ -1,41 +1,53 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Container } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 import "../assets/style.css";
 import PropertyCards from "../components/PropertyCards";
 
 const AvailablePropertyScreen = () => {
-  return (
-    <>
-      <Box
-        width="lg"
-        
-      >
-        <h4
-          className="Heading-application"
-       
- 
-        >
-          Available Properties
-        </h4>
+  const [properties, setProperties] = useState([]);
 
-        <PropertyCards
-          Heading="Entire Bromo mountain view Cabin in Surabaya from card"
-          SubHeading="Luxurious villa with stunning ocean views and private beach access from card."
-        />
-        <PropertyCards
-          Heading="Entire Bromo mountain view Cabin in Surabaya from card"
-          SubHeading="Luxurious villa with stunning ocean views and private beach access from card."
-        />
-        <PropertyCards
-          Heading="Entire Bromo mountain view Cabin in Surabaya from card"
-          SubHeading="Luxurious villa with stunning ocean views and private beach access from card."
-        />
-        <PropertyCards
-          Heading="Entire Bromo mountain view Cabin in Surabaya from card"
-          SubHeading="Luxurious villa with stunning ocean views and private beach access from card."
-        />
-      </Box>
-    </>
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
+  const fetchProperties = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/properties");
+      setProperties(res.data);
+    } catch (err) {
+      console.error("Error fetching properties:", err);
+    }
+  };
+
+  return (
+    <Box width="lg">
+      <Typography
+        variant="h5"
+        fontWeight="bold"
+        sx={{ margin: "50px 0 0 25px", display: { xs: "none", md: "block" } }}
+      >
+        Available Properties
+      </Typography>
+
+      <Container maxWidth="lg">
+        {properties.map((property) => (
+          <Link
+            key={property._id}
+            to={`/properties/${property._id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <PropertyCards
+              Heading={property.title}
+              SubHeading={`Located at ${property.location}`}
+              images={property.images} // ✅ Pass images here
+            />
+          </Link>
+        ))}
+      </Container>
+    </Box>
   );
 };
 

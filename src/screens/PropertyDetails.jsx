@@ -1,36 +1,93 @@
-import { Box, Typography, Container, useMediaQuery } from "@mui/material";
-// import ViewPropButton from "../components/ViewPropButton";
+import { Box, Typography, Container, useMediaQuery, Slider } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import OutlineCta from "../components/OutlineCta";
-import cardImage from "../assets/Frame 86.png";
 import BootstrapCarousel from "../components/BootstrapCarousel";
 import LeftArrow from "../assets/Component 13.png";
-// import shortlistIcon from "../assets/event_upcoming.png"
-import mapImage from "../assets/mapimage.png";
 import ShortlistCTA from "../components/ShortListCta";
 import { useTheme } from "@mui/material/styles";
+import axios from "axios";
+import MapComponent from "../components/MapComponent";
 
 const PropertyDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [property, setProperty] = useState(null);
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const [radius, setRadius] = useState(2000);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+
+  const API_KEY = 'AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc';
+
+  useEffect(() => {
+    if (!id) {
+      console.warn("No property ID found. Redirecting...");
+      navigate("/available-property");
+      return;
+    }
+
+    fetchProperty();
+  }, [id]);
+
+  useEffect(() => {
+    if (property) {
+      fetchNearbyPlaces(property.location);
+    }
+    // eslint-disable-next-line
+  }, [radius, property]);
+
+  const fetchProperty = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      setProperty(res.data);
+      setSelectedImageUrl(res.data.images[0]?.url); // Show first image by default
+      fetchNearbyPlaces(res.data.location);
+    } catch (err) {
+      console.error("Error fetching property:", err);
+    }
+  };
+
+  const fetchNearbyPlaces = async (location) => {
+    try {
+      const res = await axios.post('http://localhost:5000/api/properties/nearby-places', {
+        location: location,
+        type: 'restaurant',
+        radius: radius
+      });
+      setNearbyPlaces(res.data);
+    } catch (error) {
+      console.error('Error fetching nearby places:', error);
+    }
+  };
+
+  const handleRadiusChange = (event, newValue) => {
+    setRadius(newValue);
+  };
+
+  const handleImageLabelClick = (url) => {
+    setSelectedImageUrl(url);
+  };
+
+  if (!property) {
+    return (
+      <Container maxWidth="lg">
+        <Typography variant="h6" mt={5}>
+          Loading property details...
+        </Typography>
+      </Container>
+    );
+  }
+console.log("nearbyPlaces", nearbyPlaces);
+  console.log("property", property);
   return (
-    <Box
-      className="property-main-box"
-      sx={{
-        p: 2,
-        backgroundColor: { xs: "#fff", md: "#ECECEC" },
-        minHeight: "100vh",
-      }}
-    >
-      {/* Top Navigation */}
+    <Box className="property-main-box" sx={{ p: 2, backgroundColor: { xs: "#fff", md: "#ECECEC" }, minHeight: "100vh" }}>
       <Container maxWidth="lg">
         <Box className="navigation-box">
-          <img src={LeftArrow} alt="" />
-          <Typography
-            variant="h5"
-            fontWeight="bold"
-            sx={{ display: { xs: "none", md: "block",lg:"block" } }}
-            className="Heading-application"
-          >
+          <img src={LeftArrow} alt="Back" />
+          <Typography variant="h5" fontWeight="bold" sx={{ display: { xs: "none", md: "block", lg: "block" } }}>
             Property Details
           </Typography>
           {isMobile && (
@@ -39,92 +96,94 @@ const PropertyDetails = () => {
             </Typography>
           )}
         </Box>
-        <Box className="Heading-box">
-          <h6 className="prop-card-head">
-            Entire Bromo mountain view Cabin in Surabaya
-          </h6>
 
-          {/* <ViewPropButton text="Shortlist Property" img={shortlistIcon} onClick={clicked}></ViewPropButton> */}
-          <ShortlistCTA></ShortlistCTA>
+        <Box className="Heading-box">
+          <h6 className="prop-card-head">{property.title}</h6>
+          <ShortlistCTA />
         </Box>
 
+        {/* Image Labels */}
         <Box className="cta-container">
-          <OutlineCta text="Balcony view"></OutlineCta>
-          <OutlineCta text="Option 1"></OutlineCta>
-          <OutlineCta text="Option 2"></OutlineCta>
-          <OutlineCta text="Option 3"></OutlineCta>
-          <OutlineCta text="Option 4"></OutlineCta>
-          <OutlineCta text="Option 5"></OutlineCta>
+          {property.images?.map((image, index) => (
+            <OutlineCta
+              key={index}
+              text={image.label}
+              onClick={() => handleImageLabelClick(image.url)}
+            />
+          ))}
         </Box>
       </Container>
 
-      <Container maxWidth="lg">
-        <BootstrapCarousel id="carouselOne" img={cardImage} />
+      <Container maxWidth="lg" sx={{ mt: 2 }}>
+        {/* Show selected image */}
+        {selectedImageUrl && (
+          <img
+            src={selectedImageUrl}
+            alt="Selected"
+            style={{ width: "100%", height: "400px", objectFit: "cover", borderRadius: "8px" }}
+          />
+        )}
       </Container>
 
       <Box className="text-card-container">
         <Box className="text-card">
           <p className="Heading-text-card">Property Features</p>
+
           <p className="sub-Heading-1">Interior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
+          <p className="sub-Heading">{property.features.interior.join(", ")}</p>
 
           <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
+          <p className="sub-Heading">{property.features.exterior.join(", ")}</p>
+
+          <p className="sub-Heading-1">Basement</p>
+          <p className="sub-Heading">{property.features.basement}</p>
         </Box>
 
         <Box className="text-card">
           <p className="Heading-text-card">General Property Information</p>
-          <p className="sub-Heading-1">Interior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
 
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
+          <p className="sub-Heading-1">Address</p>
+          <p className="sub-Heading">{property.generalInfo.propertyAddress}</p>
 
-          <p className="sub-Heading-1">Interior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
+          <p className="sub-Heading-1">Property Type</p>
+          <p className="sub-Heading">{property.generalInfo.propertyType}</p>
 
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
-          <p className="sub-Heading-1">Exterior Features</p>
-          <p className="sub-Heading">
-            Fireplace, hardwood floors, granite countertops, stainless steel
-            appliances, central air conditioning, etc.
-          </p>
+          <p className="sub-Heading-1">Year Built</p>
+          <p className="sub-Heading">{property.generalInfo.yearBuilt}</p>
+
+          <p className="sub-Heading-1">Square Footage</p>
+          <p className="sub-Heading">{property.generalInfo.squareFootage}</p>
+
+          <p className="sub-Heading-1">Bedrooms</p>
+          <p className="sub-Heading">{property.generalInfo.numberOfBedrooms}</p>
+
+          <p className="sub-Heading-1">Bathrooms</p>
+          <p className="sub-Heading">{property.generalInfo.numberOfBathrooms}</p>
+
+          <p className="sub-Heading-1">Floors</p>
+          <p className="sub-Heading">{property.generalInfo.numberOfFloors}</p>
         </Box>
       </Box>
 
-      <Container maxWidth="lg">
-        <img src={mapImage} alt="" width="100%" />
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Box sx={{ mb: 2 }}>
+          <Typography gutterBottom>Set Nearby Search Radius (meters): {radius}</Typography>
+          <Slider
+            value={radius}
+            min={500}
+            max={5000}
+            step={100}
+            onChange={handleRadiusChange}
+            valueLabelDisplay="auto"
+          />
+        </Box>
+        <MapComponent
+          center={{ lat: property.latitude, lng: property.longitude }}
+          places={nearbyPlaces}
+        />
       </Container>
     </Box>
   );
 };
+
 export default PropertyDetails;

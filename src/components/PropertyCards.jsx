@@ -1,30 +1,19 @@
-// src/components/CustomButton.js
 import React from "react";
 import { Button, Container, Box, Grid, Typography } from "@mui/material";
 import BootstrapCarousel from "../components/BootstrapCarousel";
 import PropertyCardButton from "./PropertyCardButton";
 import ViewPropButton from "./ViewPropButton";
 import "../assets/style.css";
-import cardImage from "../assets/placeholderImage.png"
+import cardImage from "../assets/placeholderImage.png";
 
-
-
-
-const PropertyCards = ({ Heading, SubHeading, ...props }) => {
+const PropertyCards = ({ Heading, SubHeading, images }) => {
   return (
-    <Container
-      maxWidth="lg"
-      className="prop-card-main-container"
-     
-    >
-      <Box
-      className="prop-card-box"
-  
-      >
+    <Container maxWidth="lg" className="prop-card-main-container">
+      <Box className="prop-card-box">
         <Grid item xs={12} md={4} lg={4} className="carousel-img-container">
           <BootstrapCarousel
             id="carouselOne"
-            img={cardImage}
+            images={images && images.length > 0 ? images : [{ url: cardImage, label: "Placeholder" }]} // ✅ Dynamic image
           />
         </Grid>
 
@@ -33,35 +22,33 @@ const PropertyCards = ({ Heading, SubHeading, ...props }) => {
             <Typography
               display="block"
               fontWeight="bold"
-              // fontSize={24}
               gutterBottom
-              className="Heading-application"
+              className="Heading"
               sx={{
                 color: { sx: "white", md: "black" },
-                fontSize: { xs: 16, md: 20,lg:24 },
+                fontSize: { xs: 16, md: 20, lg: 24 },
               }}
             >
-              {/* Entire Bromo mountain view Cabin in Surabaya */}
               {Heading}
             </Typography>
-            <p
+            <Typography
+              display="block"
               className="sub-Heading"
-              
+              sx={{
+                color: { sx: "white", md: "black" },
+                fontSize: { xs: 12, md: 14, lg: 16 },
+              }}
             >
-              {/* Luxurious villa with stunning ocean views and private beach access. */}
               {SubHeading}
-            </p>
+            </Typography>
 
-            <Box height={{ xs: 125,md:100 }} className="card-btn-container">
+            <Box height={{ xs: 125, md: 100 }} className="card-btn-container">
               <PropertyCardButton text="Luxury" />
               <PropertyCardButton text="Beachfront" />
-              <PropertyCardButton text="Specious" />
+              <PropertyCardButton text="Spacious" />
             </Box>
-            <Box
-            className="view-prop-cta-cont"
-         
-            >
-              <ViewPropButton  text="View Property" to="/property-detail"/>
+            <Box className="view-prop-cta-cont">
+              <ViewPropButton text="View Property" to="/property-detail" />
             </Box>
           </Box>
         </Grid>
