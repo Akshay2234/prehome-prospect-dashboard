@@ -41,7 +41,7 @@ const PropertyDetails = () => {
 
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      const res = await axios.get(`https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`);
       setProperty(res.data);
       setSelectedImageUrl(res.data.images[0]?.url); // Show first image by default
       fetchNearbyPlaces(res.data.location);
@@ -52,7 +52,7 @@ const PropertyDetails = () => {
 
   const fetchNearbyPlaces = async (location) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/properties/nearby-places', {
+      const res = await axios.post('https://prehome-prospect-dashboard.onrender.com/api/properties/nearby-places', {
         location: location,
         type: 'restaurant',
         radius: radius

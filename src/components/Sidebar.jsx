@@ -33,13 +33,16 @@ export default function Sidebar() {
   const [notifications, setNotifications] = useState(5); // Example notification count
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detect if the screen is mobile
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleListItemClick = (text) => {
-    if(text.route=='auth'){
-      localStorage.removeItem('user_id')
-      localStorage.removeItem('authToken')
+    if (text.route === 'logout') {
+      localStorage.removeItem('user_id');
+      localStorage.removeItem('authToken');
+      navigate('/login');
+      return;
     }
+
     navigate(`/${text.route}`);
     setSelectedItem(text.name);
   };
@@ -59,7 +62,11 @@ export default function Sidebar() {
 
       {/* Menu Items */}
       <List>
-        {[{ name: 'Application', route: '' }, { name: 'Properties', route: 'available-property' }, { name: 'PreHome Help', route: 'prehome-help' }].map((text, index) => (
+        {[
+          { name: 'Dashboard', route: 'dashboard' },
+          { name: 'Properties', route: 'available-property' },
+          { name: 'PreHome Help', route: 'prehome-help' },
+        ].map((text, index) => (
           <ListItem
             button
             key={text.name}
@@ -86,7 +93,7 @@ export default function Sidebar() {
       <Box sx={{ p: 2 }}>
         <ListItem
           button
-          onClick={() => handleListItemClick({ name: 'Logout', route: 'auth' })}
+          onClick={() => handleListItemClick({ name: 'Logout', route: 'logout' })}
           sx={{
             cursor: 'pointer',
             backgroundColor: selectedItem === 'Logout' ? '#fdf0d9' : 'transparent',
@@ -139,7 +146,10 @@ export default function Sidebar() {
 
           {/* Logout Button for Mobile */}
           {isMobile && (
-            <IconButton sx={{ color: 'black', ml: 1 }}>
+            <IconButton
+              sx={{ color: 'black', ml: 1 }}
+              onClick={() => handleListItemClick({ name: 'Logout', route: 'logout' })}
+            >
               <MdLogout />
             </IconButton>
           )}
@@ -167,9 +177,6 @@ export default function Sidebar() {
           </Drawer>
         </Box>
       )}
-
-      {/* Main Content */}
-       
     </Box>
   );
 }

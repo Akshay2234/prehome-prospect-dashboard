@@ -15,7 +15,7 @@ const AvailablePropertyScreen = () => {
 
   const fetchProperties = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/properties");
+      const res = await axios.get("https://prehome-prospect-dashboard.onrender.com/api/properties");
       setProperties(res.data);
     } catch (err) {
       console.error("Error fetching properties:", err);

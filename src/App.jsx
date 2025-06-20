@@ -128,6 +128,7 @@ function AppContent() {
       >
         <Routes>
           <Route path="/" element={<DashboardScreen />} />
+              <Route path="/dashboard" element={<DashboardScreen />} />
           <Route path="/available-property" element={<AvailablePropertyScreen />} />
           <Route path="/prehome-help" element={<PrehomeHelp />} />
           {/* Dynamic route for individual property detail */}
