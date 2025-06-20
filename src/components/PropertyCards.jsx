@@ -4,7 +4,7 @@ import BootstrapCarousel from "../components/BootstrapCarousel";
 import PropertyCardButton from "./PropertyCardButton";
 import ViewPropButton from "./ViewPropButton";
 import "../assets/style.css";
-import cardImage from "../assets/placeholderImage.png";
+import cardImage from "../assets/PlaceholderImage.png";
 
 const PropertyCards = ({ Heading, SubHeading, images }) => {
   return (
