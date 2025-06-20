@@ -11,7 +11,7 @@ import SendIcon from "../assets/send.png";
 import "../assets/style.css";
 import ChatbotCta from "../components/ChatbotCta";
 import ChatbotOutlineCta from "../components/ChatbotOutlineCta";
-import ChatbotLargeCta from "../components/chatbotLargeCta";
+
 
 import { chatbotNodes } from "../data/chatbotData";
 import { useState, useRef, useEffect } from "react";
