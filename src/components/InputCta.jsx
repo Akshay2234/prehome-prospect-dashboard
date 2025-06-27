@@ -9,7 +9,7 @@ const InputCta = ({ id, handleNext, subHeading, subHeading2 }) => {
 
   const handleSubmit = () => {
     if (inputValue.trim() !== "") {
-      handleNext();
+      handleNext(inputValue);
     } else {
       alert("Please enter a value before submitting.");
     }
@@ -23,7 +23,7 @@ const InputCta = ({ id, handleNext, subHeading, subHeading2 }) => {
         <TextField
           fullWidth
           variant="outlined"
-          placeholder={subHeading2}
+          placeholder={subHeading2 || "Type here..."}
           value={inputValue}
           onChange={handleInputChange}
           sx={{ mt: 2, borderRadius: "15px", border: "1px solid grey" }}

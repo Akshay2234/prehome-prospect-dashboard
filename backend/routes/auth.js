@@ -1,31 +1,21 @@
-// backend/routes/auth.js
 const express = require('express');
 const router = express.Router();
-const User = require('../models/userModel');
-const jwt = require('jsonwebtoken');
+const {
+  sendOtp, verifyOtp, registerUser, loginUser,
+  googleLogin, facebookLogin, setPassword,
+  forgotPassword, verifyResetOtp, resetPassword
+} = require('../controllers/authController');
 
-// Login API
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+router.post('/send-otp', sendOtp);
+router.post('/verify-otp', verifyOtp);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.post('/google-login', googleLogin);
+router.post('/facebook-login', facebookLogin);
+router.post('/set-password', setPassword);
 
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user || user.password !== password) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    const token = jwt.sign({ id: user._id }, 'secretkey', { expiresIn: '1h' });
-
-    // 👇 IMPORTANT: Sending userId
-    res.json({
-      message: 'Login successful',
-      token,
-      userId: user._id, // 👉 Yeh zaroor bhejna
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+router.post('/forgot-password', forgotPassword);
+router.post('/verify-reset-otp', verifyResetOtp);
+router.post('/reset-password', resetPassword);
 
 module.exports = router;

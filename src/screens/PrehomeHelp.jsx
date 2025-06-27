@@ -12,9 +12,9 @@ import "../assets/style.css";
 import ChatbotCta from "../components/ChatbotCta";
 import ChatbotOutlineCta from "../components/ChatbotOutlineCta";
 
-
 import { chatbotNodes } from "../data/chatbotData";
 import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 
 const PrehomeHelp = () => {
   const [currentNode, setCurrentNode] = useState(chatbotNodes.root);
@@ -24,26 +24,49 @@ const PrehomeHelp = () => {
   const [userInput, setUserInput] = useState("");
   const chatContainerRef = useRef(null);
 
+  const userId = localStorage.getItem("user_id"); // You can use "user_email" instead
+
+  // Save chat messages to MongoDB
+  const saveChatToServer = async (newMessages) => {
+    if (!userId) return;
+
+    try {
+      await axios.post("http://localhost:5000/api/chat/save-chat", {
+        userId,
+        messages: newMessages,
+      });
+    } catch (error) {
+      console.error("Error saving chat:", error);
+    }
+  };
+
   const handleOptionClick = (option) => {
     const nextNode = chatbotNodes[option.nextId];
     if (nextNode) {
-      setChatHistory((prev) => [
-        ...prev,
+      const newMessages = [
         { message: option.text, type: "user" },
         { message: nextNode.message, type: "bot" },
-      ]);
+      ];
+      setChatHistory((prev) => [...prev, ...newMessages]);
       setCurrentNode(nextNode);
+      saveChatToServer(newMessages);
     }
   };
 
   const handleSend = () => {
     if (userInput.trim() === "") return;
-    setChatHistory((prev) => [
-      ...prev,
+
+    const newMessages = [
       { message: userInput, type: "user" },
-      { message: "Thank you for your query. Please select an option or start over.", type: "bot" },
-    ]);
+      {
+        message: "Thank you for your query. Please select an option or start over.",
+        type: "bot",
+      },
+    ];
+
+    setChatHistory((prev) => [...prev, ...newMessages]);
     setUserInput("");
+    saveChatToServer(newMessages);
   };
 
   useEffect(() => {
@@ -77,35 +100,42 @@ const PrehomeHelp = () => {
           </Container>
 
           {/* Chat Messages */}
-          <Box className="chat-card" ref={chatContainerRef}   sx={{
-    maxHeight: "400px",
-    overflowY: "auto",
-    paddingRight: "10px",
-    marginBottom: "20px",
-    display: "flex",        // Important
-    flexDirection: "column" // Important for vertical stacking
-  }}>
-         {chatHistory.map((item, index) => (
-  <Grid
-    key={index}
-    xs={12}
-    sm={12}
-    md={12}
-    lg={12}
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      marginBottom: 2,
-      alignItems: item.type === "bot" ? "flex-start" : "flex-end", // 👈 alignment condition
-    }}
-  >
-    {item.type === "bot" ? (
-      <ChatbotCta text={item.message} />
-    ) : (
-      <ChatbotCta text={item.message} className="chatbot-cta color-cta" />
-    )}
-  </Grid>
-))}
+          <Box
+            className="chat-card"
+            ref={chatContainerRef}
+            sx={{
+              maxHeight: "400px",
+              overflowY: "auto",
+              paddingRight: "10px",
+              marginBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {chatHistory.map((item, index) => (
+              <Grid
+                key={index}
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: 2,
+                  alignItems: item.type === "bot" ? "flex-start" : "flex-end",
+                }}
+              >
+                {item.type === "bot" ? (
+                  <ChatbotCta text={item.message} />
+                ) : (
+                  <ChatbotCta
+                    text={item.message}
+                    className="chatbot-cta color-cta"
+                  />
+                )}
+              </Grid>
+            ))}
 
             {/* Options */}
             {currentNode.options && (

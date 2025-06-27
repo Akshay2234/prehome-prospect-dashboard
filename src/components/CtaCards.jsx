@@ -9,9 +9,8 @@ const CtaCards = ({ subHeading, options, handleNext, text }) => {
         <Box className="subhead-text-cont" display="flex" justifyContent="space-between" alignItems="center">
           <p className="card-subhead">{subHeading}</p>
 
-          {/* ✅ Skip button functional */}
           <Button
-            onClick={handleNext}
+            onClick={() => handleNext("Skipped")}
             variant="text"
             sx={{ color: "#0086AD", textTransform: "none", cursor: "pointer" }}
           >
@@ -21,14 +20,16 @@ const CtaCards = ({ subHeading, options, handleNext, text }) => {
 
         <Grid item xs={12} md={6} lg={6}>
           <Box display="flex" justifyContent="space-between">
-            <ApplicationCta text="Option 1" value="1" handleNext={handleNext} />
-            <ApplicationCta text="Option 2" value="2" handleNext={handleNext} />
+            {options.slice(0, 2).map((opt, i) => (
+              <ApplicationCta key={i} text={opt} value={opt} handleNext={handleNext} />
+            ))}
           </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <Box display="flex" justifyContent="space-between">
-            <ApplicationCta text="Option 3" value="3" handleNext={handleNext} />
-            <ApplicationCta text="Option 4" value="4" handleNext={handleNext} />
+            {options.slice(2).map((opt, i) => (
+              <ApplicationCta key={i + 2} text={opt} value={opt} handleNext={handleNext} />
+            ))}
           </Box>
         </Grid>
       </Box>

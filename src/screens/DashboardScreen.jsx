@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { Container, Box, Slider, Button, Typography } from "@mui/material";
 import axios from "axios";
-import { Container, Box, Slider } from "@mui/material";
 
 import "../assets/style.css";
 import CtaCards from "../components/CtaCards";
@@ -19,55 +19,75 @@ const questions = [
 
 const DashboardScreen = () => {
   const [currentQuestionId, setCurrentQuestionId] = useState(1);
-
+  const [responses, setResponses] = useState([]);
   const userId = localStorage.getItem("user_id");
+  const userEmail = localStorage.getItem("user_email");
 
-  // Fetch previous progress
   useEffect(() => {
-    const fetchFormProgress = async () => {
+    const loadProgress = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/session/get-session/${userId}`);
-        if (response.data && response.data.formData && response.data.formData.step) {
-          setCurrentQuestionId(response.data.formData.step);
-        }
-      } catch (error) {
-        console.error("Error fetching form session:", error);
+        const res = await axios.get(`http://localhost:5000/api/form/load-progress/${userId}`);
+        const saved = res.data.responses || [];
+        setResponses(saved);
+        setCurrentQuestionId(saved.length + 1);
+      } catch (err) {
+        console.error("Failed to load form progress:", err);
       }
     };
-
-    if (userId) {
-      fetchFormProgress();
-    }
+    if (userId) loadProgress();
   }, [userId]);
 
-  const handleNext = async () => {
-    const nextStep = currentQuestionId + 1;
+  const handleNext = (answer = "") => {
+    const q = questions.find(q => q.id === currentQuestionId);
+    const resp = {
+      questionId: q.id,
+      question: q.subHeading,
+      answer: typeof answer === "string" ? answer : String(answer),
+    };
 
-    setCurrentQuestionId(nextStep);
+    const updated = [...responses, resp];
+    setResponses(updated);
+    const nextId = currentQuestionId + 1;
+    setCurrentQuestionId(nextId);
 
-    try {
-      await axios.post("http://localhost:5000/api/session/save-form", {
-        userId,
-        formData: { step: nextStep },
-      });
-    } catch (error) {
-      console.error("Error saving form progress:", error);
+    if (nextId > questions.length) {
+      saveProgress(updated, true);
     }
   };
 
-  const currentQuestion = questions.find((q) => q.id === currentQuestionId);
+  const saveProgress = async (data = responses, final = false) => {
+    try {
+      await axios.post("http://localhost:5000/api/form/save-progress", {
+        userId,
+        responses: data,
+      });
+      if (!final) alert("Progress saved!");
+    } catch (err) {
+      console.error("Error saving form:", err);
+      alert("Failed to save progress");
+    }
+  };
 
-  if (!currentQuestion) return <h2>No more questions</h2>;
+  const currentQuestion = questions.find(q => q.id === currentQuestionId);
+  if (!currentQuestion) return <h2>Thank you for completing the form!</h2>;
 
   return (
     <Container maxWidth="xl" sx={{ background: { md: "#ECECEC", xs: "#fff" } }}>
       <Container className="heading-container">
         <Box className="fixed-card">
-          <h4 className="Heading">Start your home ownership journey</h4>
+          {/* 👇 Greeting with email */}
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6" color="primary">Hey {userId}</Typography>
+            <h4 className="Heading">Start your home ownership journey</h4>
+          </Box>
+
           <Box display="flex" justifyContent="space-between">
             <p className="sub-heading">Personal Information</p>
-            <p className="precent-text">{Math.round(((currentQuestionId - 1) / questions.length) * 100)}% Complete</p>
+            <p className="precent-text">
+              {Math.round(((currentQuestionId - 1) / questions.length) * 100)}% Complete
+            </p>
           </Box>
+
           <Box display="flex">
             <Slider
               min={0}
@@ -77,20 +97,48 @@ const DashboardScreen = () => {
               sx={{
                 "& .MuiSlider-track": { backgroundColor: "#0086AD", height: 20, border: "none" },
                 "& .MuiSlider-rail": { backgroundColor: "#DEDEDE", height: 20 },
-                "& .MuiSlider-thumb": { backgroundColor: "#0086AD", border: "2px solid white", width: 25, height: 25, "&:hover, &:focus, &.Mui-active": { boxShadow: "none" } },
+                "& .MuiSlider-thumb": {
+                  backgroundColor: "#0086AD",
+                  border: "2px solid white",
+                  width: 25,
+                  height: 25,
+                  "&:hover, &:focus, &.Mui-active": { boxShadow: "none" }
+                },
               }}
             />
           </Box>
+
+          <Button
+            onClick={() => saveProgress()}
+            sx={{ mt: 2 }}
+            variant="outlined"
+            color="primary"
+          >
+            Save Progress
+          </Button>
         </Box>
       </Container>
 
       <Box className="question-section" sx={{ mt: 4, zIndex: 0 }}>
         {currentQuestion.type === "slider" ? (
-          <SliderCard id={currentQuestion.id} handleNext={handleNext} subHeading={currentQuestion.subHeading} />
+          <SliderCard
+            id={currentQuestion.id}
+            subHeading={currentQuestion.subHeading}
+            handleNext={handleNext}
+          />
         ) : currentQuestion.type === "input" ? (
-          <InputCta id={currentQuestion.id} handleNext={handleNext} subHeading={currentQuestion.subHeading} subHeading2={currentQuestion.subHeading} />
+          <InputCta
+            id={currentQuestion.id}
+            subHeading={currentQuestion.subHeading}
+            handleNext={handleNext}
+          />
         ) : (
-          <CtaCards subHeading={currentQuestion.subHeading} options={currentQuestion.options} handleNext={handleNext} text="Skip" />
+          <CtaCards
+            subHeading={currentQuestion.subHeading}
+            options={currentQuestion.options}
+            handleNext={(opt) => handleNext(opt)}
+            text="Skip"
+          />
         )}
       </Box>
     </Container>

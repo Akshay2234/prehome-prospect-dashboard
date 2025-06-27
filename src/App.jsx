@@ -1,100 +1,3 @@
-// import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-// import { Box, createTheme, ThemeProvider } from "@mui/material";
-// import Sidebar from "./components/Sidebar";
-// import AvailablePropertyScreen from "./screens/AvailablePropertyScreen";
-// import PropertyDetails from "./screens/PropertyDetails";
-// // import BottomNavigationBar from "./components/BottomNavigationBar";
-// // import AuthScreen from "./screens/AuthScreen";
-// // import SignUpPasswordScreen from "./screens/SignUpPasswordScreen";
-// // import LoginWithPasswordScreen from "./screens/LoginWithPasswordScreen";
-// // import OtpVerifyScreen from "./screens/OtpVerifyScreen";
-// // import ConvertNewUser from "./screens/ConvertNewUser";
-// // import AuthRoute from "./components/AuthRoute";
-// // import { GoogleOAuthProvider } from "@react-oauth/google";
-// import DashboardScreen from "./screens/DashboardScreen";
-// import PrehomeHelp from "./screens/PrehomeHelp";
-
-// function AppContent() {
-//   const location = useLocation();
-
-//   // Routes where the Sidebar should be hidden
-//   const hiddenSidebarRoutes = ["/login", "/auth", "/signup", "/verify","/convert-new-user"];
-
-//   return (
-//     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-//       {/* Conditionally render Sidebar */}
-//       {!hiddenSidebarRoutes.includes(location.pathname) && <Sidebar />}
-
-//       {/* Main Content */}
-//       <Box
-//         component="main"
-//         sx={{
-//           flexGrow: 1,
-//           p: hiddenSidebarRoutes.includes(location.pathname)?0:3,
-//           backgroundColor: "#f4f5f7", // Light background
-//           overflowY: "auto", // Scrollable content
-//           mt: hiddenSidebarRoutes.includes(location.pathname)?0:5,
-//           pb: { xs: 8, sm: 0 }, // Add padding to avoid overlapping BottomNavigationBar on mobile
-//         }}
-//       >
-//         <Routes>
-//           {/* <Route
-//             path="/"
-//             element={
-//               <AuthRoute>
-//                 <h1>Home Page</h1>
-//               </AuthRoute>
-//             }
-//           /> */}
-//           <Route path="/" element={<DashboardScreen/>} />
-//           {/* <Route path="/" element={<AuthRoute><DashboardScreen/></AuthRoute>} /> */}
-//           {/* <Route path="/auth" element={<AuthScreen />} /> */}
-//           {/* <Route path="/verify" element={<OtpVerifyScreen />} />
-//           <Route path="/signup" element={<SignUpPasswordScreen />} />
-//           <Route path="/login" element={<LoginWithPasswordScreen />} />
-//           <Route path="/convert-new-user" element={<ConvertNewUser />} /> */}
-//           <Route
-//             path="/available-property"
-//             element={
-//                 <AvailablePropertyScreen />
-//             }
-//           />
-//           <Route
-//             path="/property-detail"
-//             element={
-//                 <PropertyDetails />
-//             }
-//           />
-//           <Route path="/properties/:id" element={<PropertyDetails />} />
-
-//           <Route
-//             path="/prehome-help"
-//             element={
-//                 <PrehomeHelp />
-//             }
-//           />
-         
-//         </Routes>
-//       </Box>
-
-      
-      
-//     </Box>
-//   );
-// }
-
-// function App() {
-//   const theme = createTheme();
-//   return (
-//     <ThemeProvider theme={theme}>
-//         <Router>
-//           <AppContent />
-//         </Router>
-//     </ThemeProvider>
-//   );
-// }
-
-// export default App;
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
 import Sidebar from "./components/Sidebar";
@@ -102,19 +5,18 @@ import AvailablePropertyScreen from "./screens/AvailablePropertyScreen";
 import PropertyDetails from "./screens/PropertyDetails";
 import DashboardScreen from "./screens/DashboardScreen";
 import PrehomeHelp from "./screens/PrehomeHelp";
+import Login from "./screens/Auth/Login";
+import Signup from "./screens/Auth/signup";
+import SetPassword from "./screens/Auth/SetPassword";
 
 function AppContent() {
   const location = useLocation();
 
-  // Routes where the Sidebar should be hidden
-  const hiddenSidebarRoutes = ["/login", "/auth", "/signup", "/verify", "/convert-new-user"];
+  const hiddenSidebarRoutes = ["/login","/","/set-password", "/auth", "/signup", "/verify", "/convert-new-user"];
 
   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      {/* Conditionally render Sidebar */}
       {!hiddenSidebarRoutes.includes(location.pathname) && <Sidebar />}
-
-      {/* Main Content */}
       <Box
         component="main"
         sx={{
@@ -127,12 +29,14 @@ function AppContent() {
         }}
       >
         <Routes>
-          <Route path="/" element={<DashboardScreen />} />
-              <Route path="/dashboard" element={<DashboardScreen />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<DashboardScreen />} />
           <Route path="/available-property" element={<AvailablePropertyScreen />} />
           <Route path="/prehome-help" element={<PrehomeHelp />} />
-          {/* Dynamic route for individual property detail */}
           <Route path="/properties/:id" element={<PropertyDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/set-password" element={<SetPassword />} />
         </Routes>
       </Box>
     </Box>

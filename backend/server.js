@@ -7,7 +7,7 @@ const cors = require("cors");
 const propertyRoutes = require("./routes/propertyRoutes");
 const authRoutes = require("./routes/auth");
 const sessionRoutes = require("./routes/sessionRoutes");
-
+const chatRoutes = require("./routes/chatRoutes");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -16,6 +16,8 @@ app.use(express.json());
 app.use("/api/properties", propertyRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/session", sessionRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/form", require("./routes/formRoutes"));
 
 // Connect MongoDB
 mongoose.connect("mongodb+srv://pre_home:pre1234home@cluster0.qsxrc.mongodb.net/prehome", {

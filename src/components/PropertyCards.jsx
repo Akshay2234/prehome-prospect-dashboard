@@ -13,7 +13,7 @@ const PropertyCards = ({ Heading, SubHeading, images }) => {
         <Grid item xs={12} md={4} lg={4} className="carousel-img-container">
           <BootstrapCarousel
             id="carouselOne"
-            images={images && images.length > 0 ? images : [{ url: cardImage, label: "Placeholder" }]} // ✅ Dynamic image
+            images={images && images.length > 0 ? images : [{ url: cardImage, label: "Placeholder" }]} 
           />
         </Grid>
 
