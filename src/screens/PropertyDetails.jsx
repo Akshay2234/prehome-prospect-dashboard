@@ -2,7 +2,6 @@ import { Box, Typography, Container, useMediaQuery, Slider } from "@mui/material
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import OutlineCta from "../components/OutlineCta";
-import BootstrapCarousel from "../components/BootstrapCarousel";
 import LeftArrow from "../assets/Component 13.png";
 import ShortlistCTA from "../components/ShortListCta";
 import { useTheme } from "@mui/material/styles";
@@ -19,8 +18,21 @@ const PropertyDetails = () => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [radius, setRadius] = useState(2000);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [userId, setUserId] = useState(localStorage.getItem("user_id"));
 
-  const API_KEY = 'AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc';
+  // Watch for user_id changes in localStorage
+  useEffect(() => {
+    const checkUserChange = () => {
+      const currentUserId = localStorage.getItem("user_id");
+      if (currentUserId !== userId) {
+        setUserId(currentUserId);
+      }
+    };
+
+    const interval = setInterval(checkUserChange, 1000);
+
+    return () => clearInterval(interval);
+  }, [userId]);
 
   useEffect(() => {
     if (!id) {
@@ -41,9 +53,9 @@ const PropertyDetails = () => {
 
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      const res = await axios.get(`https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`);
       setProperty(res.data);
-      setSelectedImageUrl(res.data.images[0]?.url); // Show first image by default
+      setSelectedImageUrl(res.data.images[0]?.url);
       fetchNearbyPlaces(res.data.location);
     } catch (err) {
       console.error("Error fetching property:", err);
@@ -52,7 +64,7 @@ const PropertyDetails = () => {
 
   const fetchNearbyPlaces = async (location) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/properties/nearby-places', {
+      const res = await axios.post('https://prehome-prospect-dashboard.onrender.com/api/properties/nearby-places', {
         location: location,
         type: 'restaurant',
         radius: radius
@@ -80,8 +92,7 @@ const PropertyDetails = () => {
       </Container>
     );
   }
-console.log("nearbyPlaces", nearbyPlaces);
-  console.log("property", property);
+
   return (
     <Box className="property-main-box" sx={{ p: 2, backgroundColor: { xs: "#fff", md: "#ECECEC" }, minHeight: "100vh" }}>
       <Container maxWidth="lg">
@@ -99,7 +110,9 @@ console.log("nearbyPlaces", nearbyPlaces);
 
         <Box className="Heading-box">
           <h6 className="prop-card-head">{property.title}</h6>
-          <ShortlistCTA />
+          {userId && (
+            <ShortlistCTA propertyId={property._id} userId={userId} />
+          )}
         </Box>
 
         {/* Image Labels */}

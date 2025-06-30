@@ -31,7 +31,7 @@ const PrehomeHelp = () => {
     if (!userId) return;
 
     try {
-      await axios.post("http://localhost:5000/api/chat/save-chat", {
+      await axios.post("https://prehome-prospect-dashboard.onrender.com/api/chat/save-chat", {
         userId,
         messages: newMessages,
       });
