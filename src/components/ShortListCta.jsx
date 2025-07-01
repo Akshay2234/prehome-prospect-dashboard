@@ -16,7 +16,7 @@ const ShortlistCTA = ({ userId, propertyId }) => {
   useEffect(() => {
     const fetchUserActivity = async () => {
       try {
-        const res = await axios.get(`https://prehome-prospect-dashboard.onrender.com/api/activity/${userId}/${propertyId}`);
+        const res = await axios.get(`http://13.204.83.61:5000/api/activity/${userId}/${propertyId}`);
         if (res.data) {
           setIsShortlisted(res.data.shortlisted || false);
           setVisitDate(res.data.visitDate ? new Date(res.data.visitDate) : null);
@@ -44,7 +44,7 @@ const ShortlistCTA = ({ userId, propertyId }) => {
 
   const saveActivity = async (updatedFields) => {
     try {
-      await axios.post("https://prehome-prospect-dashboard.onrender.com/api/activity/save", {
+      await axios.post("http://13.204.83.61:5000/api/activity/save", {
         userId,
         propertyId,
         ...updatedFields,
