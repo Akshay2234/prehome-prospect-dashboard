@@ -12,7 +12,7 @@ const VerifyOtp = () => {
 
   const verifyOtp = async () => {
     try {
-      await axios.post('http://13.204.83.61:5000/api/auth/verify-otp', {
+      await axios.post('http://35.154.52.56:5000/api/auth/verify-otp', {
         email,
         otp,
         password,

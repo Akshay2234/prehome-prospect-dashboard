@@ -26,7 +26,7 @@ const DashboardScreen = () => {
   useEffect(() => {
     const loadProgress = async () => {
       try {
-        const res = await axios.get(`http://13.204.83.61:5000/api/form/load-progress/${userId}`);
+        const res = await axios.get(`http://35.154.52.56:5000/api/form/load-progress/${userId}`);
         const saved = res.data.responses || [];
         setResponses(saved);
         setCurrentQuestionId(saved.length + 1);
@@ -57,7 +57,7 @@ const DashboardScreen = () => {
 
   const saveProgress = async (data = responses, final = false) => {
     try {
-      await axios.post("http://13.204.83.61:5000/api/form/save-progress", {
+      await axios.post("http://35.154.52.56:5000/api/form/save-progress", {
         userId,
         responses: data,
       });

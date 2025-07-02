@@ -59,7 +59,7 @@ export default function Sidebar() {
       if (!userId) return;
 
       try {
-        const res = await axios.get(`http://13.204.83.61:5000/api/notifications/${userId}`);
+        const res = await axios.get(`http://35.154.52.56:5000/api/notifications/${userId}`);
         setNotifications(res.data || []);
       } catch (err) {
         console.error("Error fetching notifications:", err);

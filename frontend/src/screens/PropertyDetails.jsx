@@ -53,7 +53,7 @@ const PropertyDetails = () => {
 
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(`http://13.204.83.61:5000/api/properties/${id}`);
+      const res = await axios.get(`http://35.154.52.56:5000/api/properties/${id}`);
       setProperty(res.data);
       setSelectedImageUrl(res.data.images[0]?.url);
       fetchNearbyPlaces(res.data.location);
@@ -64,7 +64,7 @@ const PropertyDetails = () => {
 
   const fetchNearbyPlaces = async (location) => {
     try {
-      const res = await axios.post('http://13.204.83.61:5000/api/properties/nearby-places', {
+      const res = await axios.post('http://35.154.52.56:5000/api/properties/nearby-places', {
         location: location,
         type: 'restaurant',
         radius: radius
