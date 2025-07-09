@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Container, Box, TextField, Button } from "@mui/material";
+import { Container, Box, TextField } from "@mui/material";
 import "../assets/style.css";
 
 const InputCta = ({ id, handleNext, subHeading, subHeading2 }) => {
   const [inputValue, setInputValue] = useState("");
 
-  const handleInputChange = (e) => setInputValue(e.target.value);
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
 
-  const handleSubmit = () => {
+  const submitIfValid = () => {
     if (inputValue.trim() !== "") {
       handleNext(inputValue);
-    } else {
-      alert("Please enter a value before submitting.");
     }
   };
 
@@ -26,16 +26,10 @@ const InputCta = ({ id, handleNext, subHeading, subHeading2 }) => {
           placeholder={subHeading2 || "Type here..."}
           value={inputValue}
           onChange={handleInputChange}
+          onBlur={submitIfValid}
+          onKeyDown={(e) => e.key === "Enter" && submitIfValid()}
           sx={{ mt: 2, borderRadius: "15px", border: "1px solid grey" }}
         />
-
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          sx={{ mt: 3, backgroundColor: "#0086AD", "&:hover": { backgroundColor: "#005f7a" } }}
-        >
-          Submit
-        </Button>
       </Box>
     </Container>
   );

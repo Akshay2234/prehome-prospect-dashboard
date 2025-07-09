@@ -1,10 +1,17 @@
-// ✅ SliderCard.jsx
-import { useState } from "react";
-import { Container, Box, Slider, Grid, Typography, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Container, Box, Slider, Grid, Typography } from "@mui/material";
 import "../assets/style.css";
 
 const SliderCard = ({ id, handleNext, subHeading }) => {
   const [sliderValue, setSliderValue] = useState(50);
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      handleNext(sliderValue);
+    }, 500); // 0.5s delay to simulate auto-submit
+
+    return () => clearTimeout(debounce);
+  }, [sliderValue]);
 
   return (
     <Container maxWidth="lg" className="app-card-container">
@@ -47,18 +54,9 @@ const SliderCard = ({ id, handleNext, subHeading }) => {
             <Typography variant="h4" fontSize={20}>100</Typography>
           </Box>
         </Grid>
-
-        <Button
-          variant="contained"
-          onClick={() => handleNext(sliderValue)}
-          sx={{ mt: 3, backgroundColor: "#0086AD", "&:hover": { backgroundColor: "#005f7a" } }}
-        >
-          Submit
-        </Button>
       </Box>
     </Container>
   );
 };
 
 export default SliderCard;
-

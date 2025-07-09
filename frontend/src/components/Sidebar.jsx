@@ -28,7 +28,7 @@ import { useTheme } from '@mui/material/styles';
 import logo from '../assets/logo.png';
 import axios from 'axios';
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 export default function Sidebar() {
   const [selectedItem, setSelectedItem] = useState('Dashboard');
@@ -52,14 +52,13 @@ export default function Sidebar() {
     setSelectedItem(text.name);
   };
 
-  // ✅ Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
       const userId = localStorage.getItem("user_id");
       if (!userId) return;
 
       try {
-        const res = await axios.get(`http://35.154.52.56:5000/api/notifications/${userId}`);
+        const res = await axios.get(`http://localhost:5000/api/notifications/${userId}`);
         setNotifications(res.data || []);
       } catch (err) {
         console.error("Error fetching notifications:", err);
@@ -71,7 +70,6 @@ export default function Sidebar() {
     return () => clearInterval(interval);
   }, []);
 
-  // ✅ Handle outside click to close dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -84,50 +82,112 @@ export default function Sidebar() {
 
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar disableGutters sx={{ alignItems: 'center', justifyContent: 'center', p: 3 }}>
-        <img height={80} width="auto" src={logo} alt="Logo" />
+      <Toolbar
+        disableGutters
+        sx={{
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          px: 2,
+          pt: 2,
+        }}
+      >
+        <Box
+          component="img"
+          src={logo}
+          alt="Logo"
+          sx={{
+            width: '92px',
+            height: '70.4px',
+            objectFit: 'contain',
+          }}
+        />
       </Toolbar>
+
+      <Box sx={{ height: '16px' }} />
 
       <List>
         {[
-          { name: 'Dashboard', route: 'dashboard' },
-          { name: 'Properties', route: 'available-property' },
-          { name: 'PreHome Help', route: 'prehome-help' },
-        ].map((text, index) => (
-          <ListItem
-            button
-            key={text.name}
-            onClick={() => handleListItemClick(text)}
+          { name: 'Dashboard', route: 'dashboard', icon: <PeopleIcon /> },
+          { name: 'Properties', route: 'available-property', icon: <AssessmentIcon /> },
+          { name: 'PreHome Help', route: 'prehome-help', icon: <SettingsIcon /> },
+        ].map((item) => (
+          <Box
+            key={item.name}
             sx={{
-              cursor: 'pointer',
-              backgroundColor: selectedItem === text.name ? '#fdf0d9' : 'transparent',
+              mx: 2,
+              my: 0.5,
+              borderRadius: '12px',
+              backgroundColor: selectedItem === item.name ? '#fdf0d9' : 'transparent',
+              transition: 'background-color 0.3s ease',
+              '&:hover': {
+                backgroundColor: selectedItem === item.name ? '#fdf0d9' : '#f5f5f5',
+              },
             }}
           >
-            <ListItemIcon>
-              {index === 0 && <PeopleIcon />}
-              {index === 1 && <AssessmentIcon />}
-              {index === 2 && <SettingsIcon />}
-            </ListItemIcon>
-            <ListItemText sx={{ fontFamily: 'Poppins' }} primary={text.name} />
-          </ListItem>
+            <ListItem
+              button
+              onClick={() => handleListItemClick(item)}
+              sx={{
+                px: 2,
+                py: 1.2,
+                borderRadius: '12px',
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: '35px', color: '#000000' }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.name}
+                primaryTypographyProps={{
+                  className: 'poppins-bold-16',
+                  sx: {
+                    fontWeight: selectedItem === item.name ? 'bold' : 'normal',
+                    color: '#000000',
+                  },
+                }}
+              />
+            </ListItem>
+          </Box>
         ))}
       </List>
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <Box sx={{ p: 2 }}>
+      {/* Logout */}
+      <Box
+        sx={{
+          mx: 2,
+          mb: 2,
+          borderRadius: '12px',
+          backgroundColor: selectedItem === 'Logout' ? '#fdf0d9' : 'transparent',
+          transition: 'background-color 0.3s ease',
+          '&:hover': {
+            backgroundColor: '#f5f5f5',
+          },
+        }}
+      >
         <ListItem
           button
           onClick={() => handleListItemClick({ name: 'Logout', route: 'logout' })}
           sx={{
-            cursor: 'pointer',
-            backgroundColor: selectedItem === 'Logout' ? '#fdf0d9' : 'transparent',
+            px: 2,
+            py: 1.2,
+            borderRadius: '12px',
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon sx={{ minWidth: '35px', color: '#000000' }}>
             <MdLogout />
           </ListItemIcon>
-          <ListItemText sx={{ fontFamily: 'Poppins' }} primary="Logout" />
+          <ListItemText
+            primary="Logout"
+            primaryTypographyProps={{
+              className: 'poppins-bold-16',
+              sx: {
+                fontWeight: selectedItem === 'Logout' ? 'bold' : 'normal',
+                color: '#000000',
+              },
+            }}
+          />
         </ListItem>
       </Box>
     </Box>
@@ -142,6 +202,7 @@ export default function Sidebar() {
           width: isMobile ? '100%' : `calc(100% - ${drawerWidth}px)`,
           ml: isMobile ? 0 : `${drawerWidth}px`,
           backgroundColor: 'white',
+          boxShadow: 'none',
         }}
       >
         <Toolbar>
@@ -153,7 +214,6 @@ export default function Sidebar() {
 
           <Typography variant="h6" noWrap sx={{ flexGrow: 1, color: 'black' }} />
 
-          {/* ✅ Notification Bell with Dropdown */}
           <Box sx={{ position: 'relative' }} ref={dropdownRef}>
             <IconButton color="inherit" sx={{ color: 'black' }} onClick={() => setOpenDropdown(!openDropdown)}>
               <Badge badgeContent={notifications.length} color="error">
@@ -174,15 +234,15 @@ export default function Sidebar() {
                   p: 2,
                 }}
               >
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+                <Typography className="poppins-bold-16" sx={{ mb: 1 }}>
                   Notifications
                 </Typography>
                 {notifications.length === 0 ? (
-                  <Typography variant="body2">No notifications</Typography>
+                  <Typography className="poppins-bold-16">No notifications</Typography>
                 ) : (
                   notifications.map((note, idx) => (
                     <Box key={idx} sx={{ mb: 1, borderBottom: '1px solid #eee', pb: 1 }}>
-                      <Typography variant="body2">{note.message}</Typography>
+                      <Typography className="poppins-bold-16">{note.message}</Typography>
                       <Typography variant="caption" sx={{ color: 'gray' }}>
                         {new Date(note.createdAt).toLocaleString()}
                       </Typography>

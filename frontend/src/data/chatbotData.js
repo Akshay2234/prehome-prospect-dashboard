@@ -1,131 +1,136 @@
 export const chatbotNodes = {
   root: {
-    id: 'root',
-    message: 'Hello! How can I assist you today?',
+    id: "root",
+    message: `Hey there!\nWelcome to Prehome. India's first rent-to-own platform. \nBut first, we would love to know if you are:`,
     options: [
-      { text: 'Project Queries', nextId: 'projectQueries' },
-      { text: 'Pricing Information', nextId: 'pricingInfo' },
-      { text: 'Location Details', nextId: 'locationDetails' },
-      { text: 'Contact Support', nextId: 'contactSupport' },
+      { text: "Looking for a Home", nextId: "lookingHome" },
+      { text: "Selling a Home", nextId: "sellingHome" },
     ],
   },
-  projectQueries: {
-    id: 'projectQueries',
-    message: 'Which project are you interested in?',
+
+  // ---------------- Level 2 for "Looking for a Home" ----------------
+  lookingHome: {
+    id: "lookingHome",
+    message: "How can we help you in your homeownership journey?",
     options: [
-      { text: 'Project A', nextId: 'projectAOptions' },
-      { text: 'Project B', nextId: 'projectBOptions' },
-      { text: 'Project C', nextId: 'projectCOptions' },
+      { text: "Assess home budget according to your income", nextId: "assessBudget" },
+      { text: "Suggest homes for your preferences", nextId: "suggestHomes" },
+      { text: "Help in Renting vs buying decision", nextId: "rentVsBuy" },
     ],
   },
-  projectAOptions: {
-    id: 'projectAOptions',
-    message: 'What would you like to know about Project A?',
+
+  // Level 3 - "Assess home budget according to your income"
+  assessBudget: {
+    id: "assessBudget",
+    message: "You can use our Home Budget Calculator to estimate your budget.",
     options: [
-      { text: 'Balcony View', nextId: 'projectAView' },
-      { text: 'Floor Plans', nextId: 'projectAFloorPlans' },
+      { text: "Home Budget calculator", nextId: "openHomeBudgetLink" },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  projectAView: {
-    id: 'projectAView',
-    message: 'Project A offers a sea-facing balcony with 3BHK and 4BHK options.',
+  openHomeBudgetLink: {
+    id: "openHomeBudgetLink",
+    message: "Click here: https://prehome.in/monthly-budget-calculator/",
     options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  projectAFloorPlans: {
-    id: 'projectAFloorPlans',
-    message: 'Project A has floor plans starting from 1200 sq.ft to 1800 sq.ft.',
+
+  // Level 3 - "Suggest homes for your preferences"
+  suggestHomes: {
+    id: "suggestHomes",
+    message: "You can browse properties tailored to your needs.",
     options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
+      { text: "Properties listing page", nextId: "openPropertiesLink" },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  projectBOptions: {
-    id: 'projectBOptions',
-    message: 'What would you like to know about Project B?',
+  openPropertiesLink: {
+    id: "openPropertiesLink",
+    message: "Click here: https://prehome.in/",
     options: [
-      { text: 'Balcony View', nextId: 'projectBView' },
-      { text: 'Pricing', nextId: 'projectBPricing' },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  projectBView: {
-    id: 'projectBView',
-    message: 'Project B offers a city-facing balcony with 2BHK and 3BHK options.',
+
+  // Level 3 - "Help in Renting vs buying decision"
+  rentVsBuy: {
+    id: "rentVsBuy",
+    message: "Check out our blog on renting vs buying to make an informed decision.",
     options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
+      { text: "Renting vs buying blog", nextId: "openRentVsBuyBlog" },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  projectBPricing: {
-    id: 'projectBPricing',
-    message: 'Project B starts at 60 Lakhs onwards.',
+  openRentVsBuyBlog: {
+    id: "openRentVsBuyBlog",
+    message: "Click here: https://www.prehome.in/blogs/Building-Wealth-Renting-vs-Buying",
     options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  projectCOptions: {
-    id: 'projectCOptions',
-    message: 'What would you like to know about Project C?',
+
+  // ---------------- Level 2 for "Selling a Home" ----------------
+  sellingHome: {
+    id: "sellingHome",
+    message: "How can we help you see returns on your property?",
     options: [
-      { text: 'Amenities', nextId: 'projectCAmenities' },
-      { text: 'Availability', nextId: 'projectCAvailability' },
+      { text: "Calculate Rental income per month", nextId: "calculateRental" },
+      { text: "Calculate my future sale price", nextId: "calculateSalePrice" },
+      { text: "Property Management Services", nextId: "propertyManagement" },
     ],
   },
-  projectCAmenities: {
-    id: 'projectCAmenities',
-    message: 'Project C offers swimming pool, gym, and clubhouse.',
+
+  calculateRental: {
+    id: "calculateRental",
+    message: "You can estimate rental income using our seller tools.",
     options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
+      { text: "Go to Seller Tools", nextId: "dummySellerLink" },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  projectCAvailability: {
-    id: 'projectCAvailability',
-    message: 'Project C currently has limited 3BHK availability.',
+
+  calculateSalePrice: {
+    id: "calculateSalePrice",
+    message: "Estimate your property's resale value using our calculator.",
     options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
+      { text: "Go to Seller Tools", nextId: "dummySellerLink" },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  pricingInfo: {
-    id: 'pricingInfo',
-    message: 'Are you looking for pricing of a specific project?',
+
+  dummySellerLink: {
+    id: "dummySellerLink",
+    message: "Click here: https://prehome.in/seller-tools",
     options: [
-      { text: 'Yes', nextId: 'projectQueries' },
-      { text: 'No, just browsing', nextId: 'thankYou' },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  locationDetails: {
-    id: 'locationDetails',
-    message: 'Our projects are located in the following cities:',
+
+  propertyManagement: {
+    id: "propertyManagement",
+    message: `Here’s what we offer:\n- Rent Agreement generation\n- Property Check every quarter\n- Repairs and Maintenance\n- Rent and Security Deposit transfers`,
     options: [
-      { text: 'Delhi', nextId: 'delhiProjects' },
-      { text: 'Mumbai', nextId: 'mumbaiProjects' },
+      { text: "Start Over", nextId: "root" },
+      { text: "All Good", nextId: "endChat" },
     ],
   },
-  delhiProjects: {
-    id: 'delhiProjects',
-    message: 'In Delhi, we have projects in Dwarka and Rohini.',
+
+  // ---------------- End Chat ----------------
+  endChat: {
+    id: "endChat",
+    message: "Thank you for your inputs. Our team will reach out to you soon. Meanwhile, visit www.prehome.in for more information.",
     options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
-    ],
-  },
-  mumbaiProjects: {
-    id: 'mumbaiProjects',
-    message: 'In Mumbai, we have projects in Andheri and Powai.',
-    options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
-    ],
-  },
-  contactSupport: {
-    id: 'contactSupport',
-    message: 'You can reach our support at +91-99999-88888.',
-    options: [
-      { text: 'Back to Main Menu', nextId: 'root' },
-    ],
-  },
-  thankYou: {
-    id: 'thankYou',
-    message: 'Thank you for your time! Feel free to explore more.',
-    options: [
-      { text: 'Start Over', nextId: 'root' },
+      { text: "Start Over", nextId: "root" },
     ],
   },
 };

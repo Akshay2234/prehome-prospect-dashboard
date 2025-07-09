@@ -1,42 +1,86 @@
 const axios = require("axios");
 const Property = require("../models/propertyModel");
+const UserActivity = require("../models/UserActivity");
 
-// GET all properties
+// GET all properties (with optional user enrichment)
 exports.getProperties = async (req, res) => {
   try {
+    const { userId } = req.query;
     const properties = await Property.find();
+
+    if (userId) {
+      const activities = await UserActivity.find({ userId });
+
+      const activityMap = {};
+      activities.forEach((activity) => {
+        activityMap[activity.propertyId] = {
+          shortlisted: activity.shortlisted,
+          visitDate: activity.visitDate,
+        };
+      });
+
+      const enrichedProperties = properties.map((property) => {
+        const activity = activityMap[property._id] || {};
+        return {
+          ...property.toObject(),
+          shortlisted: activity.shortlisted || false,
+          visitDate: activity.visitDate || null,
+        };
+      });
+
+      return res.json(enrichedProperties);
+    }
+
     res.json(properties);
   } catch (err) {
+    console.error("Failed to fetch properties:", err);
     res.status(500).json({ error: "Failed to fetch properties" });
   }
 };
 
-// GET property by ID with latitude and longitude
+// GET property by ID (with optional user enrichment and geocoding)
 exports.getPropertyById = async (req, res) => {
+  const userId = req.query.userId;
+
   try {
     const property = await Property.findById(req.params.id);
     if (!property) {
       return res.status(404).json({ error: "Property not found" });
     }
 
-    // Call Google Geocoding API to get latitude and longitude
-       const API_KEY = "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc";
+    let shortlisted = false;
+    let visitDate = null;
 
+    if (userId) {
+      const activity = await UserActivity.findOne({
+        userId,
+        propertyId: property._id,
+      });
+      if (activity) {
+        shortlisted = activity.shortlisted;
+        visitDate = activity.visitDate;
+      }
+    }
+
+    const API_KEY = "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc";
     const geoResponse = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
       params: { address: property.location, key: API_KEY },
     });
 
-    if (geoResponse.data.status === "OK" && geoResponse.data.results.length > 0) {
-      const { lat, lng } = geoResponse.data.results[0].geometry.location;
+    const coordinates =
+      geoResponse.data.status === "OK" && geoResponse.data.results.length > 0
+        ? geoResponse.data.results[0].geometry.location
+        : {};
 
-      // Send the property along with latitude and longitude
-      res.json({ ...property._doc, latitude: lat, longitude: lng });
-    } else {
-      // If geocoding fails, just send the property without coordinates
-      res.json(property);
-    }
+    res.json({
+      ...property.toObject(),
+      latitude: coordinates.lat || null,
+      longitude: coordinates.lng || null,
+      shortlisted,
+      visitDate,
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching property:", err);
     res.status(500).json({ error: "Failed to fetch property" });
   }
 };

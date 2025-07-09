@@ -1,59 +1,310 @@
-import React from "react";
-import { Button, Container, Box, Grid, Typography } from "@mui/material";
-import BootstrapCarousel from "../components/BootstrapCarousel";
-import PropertyCardButton from "./PropertyCardButton";
-import ViewPropButton from "./ViewPropButton";
-import "../assets/style.css";
-import cardImage from "../assets/PlaceholderImage.png";
+import React, { useState } from "react";
+import { Box, Typography, Button } from "@mui/material";
+import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const PropertyCards = ({ Heading, SubHeading, images }) => {
+const PropertyCards = ({
+  Heading,
+  propertyId,
+  SubHeading,
+  images = [],
+  status,
+  visitDate,
+  description,
+  tags = [],
+}) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const getStatusBadge = () => {
+    if (status === "visited") {
+      return (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 24,
+            left: 24,
+            background: "#7BE495",
+            color: "#222",
+            fontWeight: "bold",
+            px: 3,
+            py: 1,
+            borderRadius: "30px",
+            fontSize: 22,
+            zIndex: 2,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          }}
+        >
+          Property Visited
+        </Box>
+      );
+    }
+
+    if (status === "scheduled" && visitDate) {
+      const formattedDate = new Date(visitDate).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+
+      return (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 24,
+            left: 24,
+            background: "#C7F6FE",
+            color: "#222",
+            fontWeight: "bold",
+            px: 3,
+            py: 1,
+            borderRadius: "30px",
+            fontSize: 22,
+            zIndex: 2,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          }}
+        >
+          Visit Scheduled on {formattedDate}
+        </Box>
+      );
+    }
+
+    if (status === "shortlisted") {
+      return (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 24,
+            left: 24,
+            background: "#FFD580",
+            color: "#222",
+            fontWeight: "bold",
+            px: 3,
+            py: 1,
+            borderRadius: "30px",
+            fontSize: 22,
+            zIndex: 2,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          }}
+        >
+          Shortlisted
+        </Box>
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <Container maxWidth="lg" className="prop-card-main-container">
-      <Box className="prop-card-box">
-        <Grid item xs={12} md={4} lg={4} className="carousel-img-container">
-          <BootstrapCarousel
-            id="carouselOne"
-            images={images && images.length > 0 ? images : [{ url: cardImage, label: "Placeholder" }]} 
-          />
-        </Grid>
+    <Box
+      sx={{
+        display: "flex",
+        overflow: "hidden",
+        mb: 5,
+        minHeight: 370,
+        alignItems: "stretch",
+        boxShadow: "none",
+      }}
+    >
+      {/* Image Section */}
+      <Box
+        sx={{
+          position: "relative",
+          width: 500,
+          minWidth: 290,
+          height: 350,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 0,
+        }}
+      >
+        {getStatusBadge()}
 
-        <Grid item xs={12} md={5} lg={5} sx={{ padding: "2%" }}>
-          <Box className="card-content" justifyContent="space-between">
-            <Typography
-              display="block"
-              fontWeight="bold"
-              gutterBottom
-              className="Heading"
-              sx={{
-                color: { sx: "white", md: "black" },
-                fontSize: { xs: 16, md: 20, lg: 24 },
+        {images && images.length > 0 ? (
+          <>
+            <img
+              src={images[currentImageIndex].url}
+              alt={images[currentImageIndex].label || "Property"}
+              style={{
+                width: "90%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "10%",
+                display: "block",
               }}
-            >
-              {Heading}
-            </Typography>
-            <Typography
-              display="block"
-              className="sub-Heading"
-              sx={{
-                color: { sx: "white", md: "black" },
-                fontSize: { xs: 12, md: 14, lg: 16 },
-              }}
-            >
-              {SubHeading}
-            </Typography>
-
-            <Box height={{ xs: 125, md: 100 }} className="card-btn-container">
-              <PropertyCardButton text="Luxury" />
-              <PropertyCardButton text="Beachfront" />
-              <PropertyCardButton text="Spacious" />
-            </Box>
-            <Box className="view-prop-cta-cont">
-              <ViewPropButton text="View Property" to="/property-detail" />
-            </Box>
+            />
+            {images.length > 1 && (
+              <>
+                <Box
+                  onClick={prevImage}
+                  sx={{
+                    position: "absolute",
+                    left: 30,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "#BDBDBD",
+                    borderRadius: "50%",
+                    width: 60,
+                    height: 60,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    zIndex: 2,
+                    "&:hover": { background: "#A9A9A9" },
+                  }}
+                >
+                  <ChevronLeft color="#222" size={32} />
+                </Box>
+                <Box
+                  onClick={nextImage}
+                  sx={{
+                    position: "absolute",
+                    right: 30,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "#BDBDBD",
+                    borderRadius: "50%",
+                    width: 60,
+                    height: 60,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    zIndex: 2,
+                    "&:hover": { background: "#A9A9A9" },
+                  }}
+                >
+                  <ChevronRight color="#222" size={32} />
+                </Box>
+              </>
+            )}
+          </>
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "#D9D9D9",
+            }}
+          >
+            <ImageIcon size={64} color="#aaa" />
           </Box>
-        </Grid>
+        )}
       </Box>
-    </Container>
+
+      {/* Content Section */}
+      <Box
+        sx={{
+          flex: 1,
+          px: 5,
+          py: 4,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        {/* Title */}
+        <Typography
+          sx={{
+            fontFamily: "Poppins",
+            fontWeight: 700,
+            fontSize: "24px",
+            color: "#222",
+            mb: 1,
+          }}
+        >
+          {Heading}
+        </Typography>
+
+        {/* Subtitle */}
+        <Typography
+          sx={{
+            fontFamily: "Poppins",
+            fontWeight: 400,
+            fontSize: "16px",
+            color: "#222",
+            mb: 1,
+          }}
+        >
+          {SubHeading}
+        </Typography>
+
+        {/* Description */}
+        <Typography
+          sx={{
+            fontFamily: "Poppins",
+            fontWeight: 400,
+            fontSize: "16px",
+            color: "#222",
+            mb: 2,
+          }}
+        >
+          {description}
+        </Typography>
+
+        {/* Tags */}
+        <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", mb: 3 }}>
+          {tags.map((tag, idx) => (
+            <Box
+              key={idx}
+              sx={{
+                background: "#FFE7B2",
+                color: "#000",
+                fontFamily: "Poppins",
+                fontWeight: 600,
+                fontSize: "14px",
+                borderRadius: "20px",
+                px: 2,
+                py: 0.5,
+              }}
+            >
+              {tag}
+            </Box>
+          ))}
+        </Box>
+
+        {/* View Property Button */}
+        <Link to={`/property/${propertyId}`} style={{ textDecoration: "none" }}>
+          <Button
+            variant="contained"
+            sx={{
+              background: "#008CBA",
+              color: "#fff",
+              fontFamily: "Poppins",
+              fontWeight: 400,
+              fontSize: "16px",
+              textTransform: "none",
+              borderRadius: "24px",
+              px: 4,
+              py: 1,
+              width: 200,
+              boxShadow: "none",
+              "&:hover": {
+                background: "#0077A3",
+              },
+            }}
+          >
+            View Property
+          </Button>
+        </Link>
+      </Box>
+    </Box>
   );
 };
 

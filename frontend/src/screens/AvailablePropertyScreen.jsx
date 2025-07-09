@@ -1,21 +1,24 @@
 import { Box, Typography, Container } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-
-import "../assets/style.css";
 import PropertyCards from "../components/PropertyCards";
+import "../assets/style.css";
 
 const AvailablePropertyScreen = () => {
   const [properties, setProperties] = useState([]);
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    fetchProperties();
-  }, []);
+    if (userId) {
+      fetchProperties();
+    } else {
+      console.warn("User ID not found in localStorage");
+    }
+  }, [userId]);
 
   const fetchProperties = async () => {
     try {
-      const res = await axios.get("http://35.154.52.56:5000/api/properties");
+      const res = await axios.get(`http://localhost:5000/api/properties?userId=${userId}`);
       setProperties(res.data);
     } catch (err) {
       console.error("Error fetching properties:", err);
@@ -23,29 +26,63 @@ const AvailablePropertyScreen = () => {
   };
 
   return (
-    <Box width="lg">
-      <Typography
-        variant="h5"
-        fontWeight="bold"
-        sx={{ margin: "50px 0 0 25px", display: { xs: "none", md: "block" } }}
+  <Box sx={{ background: "#ECECEC", minHeight: "100vh", width: "100%" }}>
+      {/* Header */}
+      <Box
+        sx={{
+          width: "100%",
+          background: "#ECECEC",
+          px: { xs: 2, md: 6 },
+          py: 4,
+          mb: 3,
+        }}
       >
-        Available Properties
-      </Typography>
+        <Typography variant="h5" fontWeight="bold" sx={{ color: "#222" }}>
+          Available Properties
+        </Typography>
+      </Box>
 
       <Container maxWidth="lg">
-        {properties.map((property) => (
-          <Link
-            key={property._id}
-            to={`/properties/${property._id}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <PropertyCards
-              Heading={property.title}
-              SubHeading={`Located at ${property.location}`}
-              images={property.images} // ✅ Pass images here
-            />
-          </Link>
-        ))}
+        {properties.map((property) => {
+       let status = "";
+  let visitDate = "";
+
+  if (property.shortlisted && property.visitDate) {
+    // Show scheduled if both exist
+    status = "scheduled";
+    visitDate = property.visitDate;
+  } else if (property.shortlisted && !property.visitDate) {
+    // Show shortlisted if only shortlisted is true
+    status = "shortlisted";
+  }
+          return (
+            <Box
+              key={property._id}
+              sx={{
+                backgroundColor: "#fff",
+                borderRadius: "24px",
+                boxShadow: "0px 2px 12px rgba(0, 0, 0, 0.05)",
+                pt: { xs: 2, md: 3 },
+                pb: { xs: 2, md: 2 },
+                px: { xs: 1, md: 1 },
+                mb: 4,
+              }}
+            >
+              <PropertyCards
+                propertyId={property._id}
+                Heading={property.title}
+                SubHeading={
+                  property.generalInfo?.propertyAddress || property.location
+                }
+                images={property.images}
+                status={status}
+                visitDate={property.visitDate}
+                description={property.description}
+                tags={property.tags}
+              />
+            </Box>
+          );
+        })}
       </Container>
     </Box>
   );

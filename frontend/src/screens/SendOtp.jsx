@@ -9,7 +9,7 @@ const SendOtp = () => {
 
   const sendOtp = async () => {
     try {
-      await axios.post('http://35.154.52.56:5000/api/auth/send-otp', { email });
+      await axios.post('http://localhost:5000/api/auth/send-otp', { email });
       alert('OTP sent to your email');
       navigate('/verify', { state: { email } });
     } catch (error) {

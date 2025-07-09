@@ -1,4 +1,10 @@
-import { Box, Typography, Container, useMediaQuery, Slider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Container,
+  useMediaQuery,
+  Slider,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import OutlineCta from "../components/OutlineCta";
@@ -19,8 +25,8 @@ const PropertyDetails = () => {
   const [radius, setRadius] = useState(2000);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
+  const [selectedView, setSelectedView] = useState(null);
 
-  // Watch for user_id changes in localStorage
   useEffect(() => {
     const checkUserChange = () => {
       const currentUserId = localStorage.getItem("user_id");
@@ -28,19 +34,15 @@ const PropertyDetails = () => {
         setUserId(currentUserId);
       }
     };
-
     const interval = setInterval(checkUserChange, 1000);
-
     return () => clearInterval(interval);
   }, [userId]);
 
   useEffect(() => {
     if (!id) {
-      console.warn("No property ID found. Redirecting...");
       navigate("/available-property");
       return;
     }
-
     fetchProperty();
   }, [id]);
 
@@ -48,15 +50,24 @@ const PropertyDetails = () => {
     if (property) {
       fetchNearbyPlaces(property.location);
     }
-    // eslint-disable-next-line
   }, [radius, property]);
+
+  useEffect(() => {
+    if (property?.features?.views?.length > 0) {
+      const defaultView =
+        property.features.views.find((v) => v.selected)?.label ||
+        property.features.views[0].label;
+      setSelectedView(defaultView);
+    }
+  }, [property]);
 
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(`http://35.154.52.56:5000/api/properties/${id}`);
+      const res = await axios.get(
+        `http://localhost:5000/api/properties/${id}`
+      );
       setProperty(res.data);
       setSelectedImageUrl(res.data.images[0]?.url);
-      fetchNearbyPlaces(res.data.location);
     } catch (err) {
       console.error("Error fetching property:", err);
     }
@@ -64,14 +75,17 @@ const PropertyDetails = () => {
 
   const fetchNearbyPlaces = async (location) => {
     try {
-      const res = await axios.post('http://35.154.52.56:5000/api/properties/nearby-places', {
-        location: location,
-        type: 'restaurant',
-        radius: radius
-      });
+      const res = await axios.post(
+        "http://localhost:5000/api/properties/nearby-places",
+        {
+          location: location,
+          type: "restaurant",
+          radius: radius,
+        }
+      );
       setNearbyPlaces(res.data);
     } catch (error) {
-      console.error('Error fetching nearby places:', error);
+      console.error("Error fetching nearby places:", error);
     }
   };
 
@@ -94,29 +108,146 @@ const PropertyDetails = () => {
   }
 
   return (
-    <Box className="property-main-box" sx={{ p: 2, backgroundColor: { xs: "#fff", md: "#ECECEC" }, minHeight: "100vh" }}>
-      <Container maxWidth="lg">
-        <Box className="navigation-box">
-          <img src={LeftArrow} alt="Back" />
-          <Typography variant="h5" fontWeight="bold" sx={{ display: { xs: "none", md: "block", lg: "block" } }}>
-            Property Details
-          </Typography>
-          {isMobile && (
-            <Typography fontWeight="bold" fontSize={16} padding="8% 0">
-              About The Property
+    <Box
+      className="property-main-box"
+      sx={{
+        backgroundColor: "#ECECEC",
+        minHeight: "100vh",
+        p: 0,
+      }}
+    >
+      <Container maxWidth="lg" sx={{ pt: 4, pb: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "flex-start", md: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <img
+                src={LeftArrow}
+                alt="Back"
+                style={{ cursor: "pointer", marginRight: 12 }}
+                onClick={() => navigate("/available-property")}
+              />
+              <Typography variant="h5" fontWeight={700}>
+                Property Details
+              </Typography>
+            </Box>
+            <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
+              {property.title}
             </Typography>
-          )}
-        </Box>
+            <Box className="cta-container">
+              {(property.features?.views || []).map((view, idx) => {
+                const isSelected = view.label === selectedView;
+                return (
+                  <Box
+                    key={idx}
+                    onClick={() => setSelectedView(view.label)}
+                    sx={{
+                      px: 3,
+                      py: 1,
+                      borderRadius: "30px",
+                      border: isSelected ? "none" : "2px solid #222",
+                      backgroundColor: isSelected ? "#7BD1E6" : "transparent",
+                      color: isSelected ? "#fff" : "#222",
+                      fontWeight: 600,
+                      fontSize: 16,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease-in-out",
+                      "&:hover": {
+                        backgroundColor: isSelected ? "#7BD1E6" : "#f0f0f0",
+                      },
+                    }}
+                  >
+                    {view.label}
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
 
-        <Box className="Heading-box">
-          <h6 className="prop-card-head">{property.title}</h6>
-          {userId && (
-            <ShortlistCTA propertyId={property._id} userId={userId} />
-          )}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: { xs: "flex-start", md: "flex-end" },
+              gap: 2,
+              minWidth: 320,
+            }}
+          >
+            {!property.visitDate && (
+              <>
+                <ShortlistCTA propertyId={property._id} userId={userId} />
+                <OutlineCta
+                  text="Schedule Visit"
+                  onClick={() => {}}
+                  sx={{
+                    background: "#0086AD",
+                    color: "#fff",
+                    fontWeight: 600,
+                    fontSize: 20,
+                    borderRadius: "30px",
+                    px: 4,
+                    py: 1.5,
+                    mt: 1,
+                    width: 220,
+                  }}
+                />
+              </>
+            )}
+            {property.shortlisted && property.visitDate && (
+              <>
+                <Box
+                  sx={{
+                    background: "#FFD580",
+                    color: "#222",
+                    fontWeight: "bold",
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: "30px",
+                    fontSize: 20,
+                    mb: 1,
+                    width: 220,
+                    textAlign: "center",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  Shortlisted
+                </Box>
+                <Box
+                  sx={{
+                    background: "#C7F6FE",
+                    color: "#222",
+                    fontWeight: "bold",
+                    px: 3,
+                    py: 1.5,
+                    borderRadius: "30px",
+                    fontSize: 18,
+                    width: 320,
+                    textAlign: "center",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  Property Visit on{" "}
+                  {new Date(property.visitDate).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </Box>
+              </>
+            )}
+          </Box>
         </Box>
 
         {/* Image Labels */}
-        <Box className="cta-container">
+        <Box className="cta-container" sx={{ mb: 2 }}>
           {property.images?.map((image, index) => (
             <OutlineCta
               key={index}
@@ -125,62 +256,61 @@ const PropertyDetails = () => {
             />
           ))}
         </Box>
-      </Container>
 
-      <Container maxWidth="lg" sx={{ mt: 2 }}>
-        {/* Show selected image */}
+        {/* Selected Image */}
         {selectedImageUrl && (
-          <img
-            src={selectedImageUrl}
-            alt="Selected"
-            style={{ width: "100%", height: "400px", objectFit: "cover", borderRadius: "8px" }}
-          />
+          <Box sx={{ mt: 2 }}>
+            <img
+              src={selectedImageUrl}
+              alt="Selected"
+              style={{
+                width: "100%",
+                height: "400px",
+                objectFit: "cover",
+                borderRadius: "16px",
+              }}
+            />
+          </Box>
         )}
       </Container>
 
+      {/* Feature Cards */}
       <Box className="text-card-container">
         <Box className="text-card">
           <p className="Heading-text-card">Property Features</p>
-
           <p className="sub-Heading-1">Interior Features</p>
           <p className="sub-Heading">{property.features.interior.join(", ")}</p>
-
           <p className="sub-Heading-1">Exterior Features</p>
           <p className="sub-Heading">{property.features.exterior.join(", ")}</p>
-
           <p className="sub-Heading-1">Basement</p>
           <p className="sub-Heading">{property.features.basement}</p>
         </Box>
 
         <Box className="text-card">
           <p className="Heading-text-card">General Property Information</p>
-
           <p className="sub-Heading-1">Address</p>
           <p className="sub-Heading">{property.generalInfo.propertyAddress}</p>
-
           <p className="sub-Heading-1">Property Type</p>
           <p className="sub-Heading">{property.generalInfo.propertyType}</p>
-
           <p className="sub-Heading-1">Year Built</p>
           <p className="sub-Heading">{property.generalInfo.yearBuilt}</p>
-
           <p className="sub-Heading-1">Square Footage</p>
           <p className="sub-Heading">{property.generalInfo.squareFootage}</p>
-
           <p className="sub-Heading-1">Bedrooms</p>
           <p className="sub-Heading">{property.generalInfo.numberOfBedrooms}</p>
-
           <p className="sub-Heading-1">Bathrooms</p>
           <p className="sub-Heading">{property.generalInfo.numberOfBathrooms}</p>
-
           <p className="sub-Heading-1">Floors</p>
           <p className="sub-Heading">{property.generalInfo.numberOfFloors}</p>
         </Box>
       </Box>
 
+      {/* Nearby Slider and Map */}
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Box sx={{ mb: 2 }}>
-          <Typography gutterBottom>Set Nearby Search Radius (meters): {radius}</Typography>
+          <Typography gutterBottom>
+            Set Nearby Search Radius (meters): {radius}
+          </Typography>
           <Slider
             value={radius}
             min={500}

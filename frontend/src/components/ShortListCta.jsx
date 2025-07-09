@@ -16,7 +16,7 @@ const ShortlistCTA = ({ userId, propertyId }) => {
   useEffect(() => {
     const fetchUserActivity = async () => {
       try {
-        const res = await axios.get(`http://35.154.52.56:5000/api/activity/${userId}/${propertyId}`);
+        const res = await axios.get(`http://localhost:5000/api/activity/${userId}/${propertyId}`);
         if (res.data) {
           setIsShortlisted(res.data.shortlisted || false);
           setVisitDate(res.data.visitDate ? new Date(res.data.visitDate) : null);
@@ -35,7 +35,6 @@ const ShortlistCTA = ({ userId, propertyId }) => {
       fetchUserActivity();
     }
 
-    // Reset state when user or property changes
     return () => {
       setIsShortlisted(false);
       setVisitDate(null);
@@ -44,7 +43,7 @@ const ShortlistCTA = ({ userId, propertyId }) => {
 
   const saveActivity = async (updatedFields) => {
     try {
-      await axios.post("http://35.154.52.56:5000/api/activity/save", {
+      await axios.post("http://localhost:5000/api/activity/save", {
         userId,
         propertyId,
         ...updatedFields,
@@ -81,7 +80,7 @@ const ShortlistCTA = ({ userId, propertyId }) => {
   const formattedDate = visitDate ? format(visitDate, "MMMM d, yyyy") : null;
 
   return (
-    <div className="cta-container-shortlist">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {!isShortlisted ? (
         <button onClick={handleShortlistClick} className="view-prop-btn">
           <ViewPropButton
@@ -92,16 +91,59 @@ const ShortlistCTA = ({ userId, propertyId }) => {
         </button>
       ) : (
         <>
-          <button onClick={handleScheduleVisitClick} className="view-prop-btn">
-            <FaCheckDouble style={{ marginRight: 8 }} />
+          <button
+            onClick={handleScheduleVisitClick}
+            className="view-prop-btn"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: "10px 24px",
+              fontSize: "16px",
+              borderRadius: "30px",
+              backgroundColor: "#0086AD",
+              color: "#fff",
+              fontWeight: 600,
+              cursor: "pointer",
+              border: "none"
+            }}
+          >
+            <FaCheckDouble />
             Schedule Visit
           </button>
-          <PropertyCardButton text="shortlisted" />
+
+          <div
+            style={{
+              background: "#FFD580",
+              color: "#222",
+              fontWeight: "bold",
+              padding: "10px 24px",
+              borderRadius: "30px",
+              fontSize: 16,
+              width: "fit-content",
+              textAlign: "center",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+            }}
+          >
+            Shortlisted
+          </div>
         </>
       )}
 
       {visitDate && (
-        <div style={{ marginTop: "8px", fontWeight: "bold", color: "#333" }}>
+        <div
+          style={{
+            background: "#C7F6FE",
+            color: "#222",
+            fontWeight: "bold",
+            padding: "10px 24px",
+            borderRadius: "30px",
+            fontSize: 16,
+            width: "fit-content",
+            textAlign: "center",
+          }}
+        >
           Property Visit on {formattedDate}
         </div>
       )}

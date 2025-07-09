@@ -33,7 +33,7 @@ function AppContent() {
           <Route path="/dashboard" element={<DashboardScreen />} />
           <Route path="/available-property" element={<AvailablePropertyScreen />} />
           <Route path="/prehome-help" element={<PrehomeHelp />} />
-          <Route path="/properties/:id" element={<PropertyDetails />} />
+          <Route path="/property/:id" element={<PropertyDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/set-password" element={<SetPassword />} />
