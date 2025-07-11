@@ -11,22 +11,24 @@ exports.getProperties = async (req, res) => {
     if (userId) {
       const activities = await UserActivity.find({ userId });
 
-      const activityMap = {};
-      activities.forEach((activity) => {
-        activityMap[activity.propertyId] = {
-          shortlisted: activity.shortlisted,
-          visitDate: activity.visitDate,
-        };
-      });
+const activityMap = {};
+activities.forEach((activity) => {
+  activityMap[activity.propertyId] = {
+    shortlisted: activity.shortlisted,
+    visitDate: activity.visitDate,
+    status: activity.status, // ✅ Include this
+  };
+});
 
-      const enrichedProperties = properties.map((property) => {
-        const activity = activityMap[property._id] || {};
-        return {
-          ...property.toObject(),
-          shortlisted: activity.shortlisted || false,
-          visitDate: activity.visitDate || null,
-        };
-      });
+const enrichedProperties = properties.map((property) => {
+  const activity = activityMap[property._id] || {};
+  return {
+    ...property.toObject(),
+    shortlisted: activity.shortlisted || false,
+    visitDate: activity.visitDate || null,
+    status: activity.status || "", // ✅ Add status here
+  };
+});
 
       return res.json(enrichedProperties);
     }

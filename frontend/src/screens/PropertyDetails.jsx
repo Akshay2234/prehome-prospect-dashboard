@@ -28,7 +28,7 @@ const PropertyDetails = () => {
   const [selectedView, setSelectedView] = useState(null);
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [visitDate, setVisitDate] = useState(null);
- const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     const checkUserChange = () => {
@@ -63,38 +63,32 @@ const PropertyDetails = () => {
       setSelectedView(defaultView);
     }
   }, [property]);
-const fetchProperty = async () => {
-  try {
-    const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
-    setProperty(res.data);
-    setSelectedImageUrl(res.data.images[0]?.url);
 
-    // Fetch User Activity separately
-    const userActivity = await axios.get(
-      `http://localhost:5000/api/activity/${userId}/${res.data._id}`
-    );
+  const fetchProperty = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      setProperty(res.data);
+      setSelectedImageUrl(res.data.images[0]?.url);
 
-    if (userActivity.data) {
-      setIsShortlisted(userActivity.data.shortlisted || false);
-      setVisitDate(userActivity.data.visitDate ? new Date(userActivity.data.visitDate) : null);
-      setStatus(userActivity.data.status || "");
+      const userActivity = await axios.get(
+        `http://localhost:5000/api/activity/${userId}/${res.data._id}`
+      );
+
+      if (userActivity.data) {
+        setIsShortlisted(userActivity.data.shortlisted || false);
+        setVisitDate(userActivity.data.visitDate ? new Date(userActivity.data.visitDate) : null);
+        setStatus(userActivity.data.status || "");
+      }
+    } catch (err) {
+      console.error("Error fetching property or user activity:", err);
     }
-  } catch (err) {
-    console.error("Error fetching property or user activity:", err);
-  }
-};
-
-
+  };
 
   const fetchNearbyPlaces = async (location) => {
     try {
       const res = await axios.post(
         "http://localhost:5000/api/properties/nearby-places",
-        {
-          location: location,
-          type: "restaurant",
-          radius: radius,
-        }
+        { location, type: "restaurant", radius }
       );
       setNearbyPlaces(res.data);
     } catch (error) {
@@ -121,14 +115,7 @@ const fetchProperty = async () => {
   }
 
   return (
-    <Box
-      className="property-main-box"
-      sx={{
-        backgroundColor: "#ECECEC",
-        minHeight: "100vh",
-        p: 0,
-      }}
-    >
+    <Box sx={{ backgroundColor: "#ECECEC", minHeight: "100vh", p: 0 }}>
       <Container maxWidth="lg" sx={{ pt: 4, pb: 4 }}>
         <Box
           sx={{
@@ -148,143 +135,68 @@ const fetchProperty = async () => {
                 style={{ cursor: "pointer", marginRight: 12 }}
                 onClick={() => navigate("/available-property")}
               />
-              <Typography variant="h5" fontWeight={700}>
-                Property Details
-              </Typography>
+              <Typography variant="h5" fontWeight={700}>Property Details</Typography>
             </Box>
-            {/* <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
-              {property.title}
-            </Typography> */}
+
             <Box
-  sx={{
-    display: 'flex',
-    flexDirection: { xs: 'column', sm: 'row' },
-    alignItems: { xs: 'flex-start', sm: 'center' },
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    gap: 2,
-    mb: 2,
-  }}
->
-  <Typography
-    variant="h4"
-    fontWeight={700}
-    sx={{ mr: 2, flexShrink: 0 }}
-  >
-    {property.title}
-  </Typography>
-{status === "Visited" && (
-  <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
-    <Box
-      sx={{
-        background: "#DAF7A6",
-        color: "#222",
-        fontWeight: 600,
-        px: 3,
-        py: 1.2,
-        borderRadius: "20px",
-        fontSize: 16,
-        textAlign: "center",
-        minWidth: 160,
-        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-      }}
-    >
-      Property Visited
-    </Box>
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "flex-start", sm: "center" },
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              <Typography variant="h4" fontWeight={700} sx={{ mr: 2, flexShrink: 0 }}>
+                {property.title}
+              </Typography>
 
-    {visitDate && (
-      <Box
-        sx={{
-          background: "#C7F6FE",
-          color: "#222",
-          fontWeight: 600,
-          px: 3,
-          py: 1.2,
-          borderRadius: "20px",
-          fontSize: 16,
-          textAlign: "center",
-          minWidth: 200,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-        }}
-      >
-        Property Visit on{" "}
-        {new Date(visitDate).toLocaleDateString("en-IN", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        })}
-      </Box>
-    )}
-  </Box>
-)}
-
-{status === "Visit Scheduled" && (
-  <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
-    <Box
-      sx={{
-        background: "#FFD580",
-        color: "#222",
-        fontWeight: 600,
-        px: 3,
-        py: 1.2,
-        borderRadius: "20px",
-        fontSize: 16,
-        textAlign: "center",
-        minWidth: 160,
-        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-      }}
-    >
-      Shortlisted
-    </Box>
-
-    {visitDate && (
-      <Box
-        sx={{
-          background: "#C7F6FE",
-          color: "#222",
-          fontWeight: 600,
-          px: 3,
-          py: 1.2,
-          borderRadius: "20px",
-          fontSize: 16,
-          textAlign: "center",
-          minWidth: 200,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-        }}
-      >
-        Property Visit on{" "}
-        {new Date(visitDate).toLocaleDateString("en-IN", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        })}
-      </Box>
-    )}
-  </Box>
-)}
-
-{status === "Interested" && (
-  <Box
-    sx={{
-      background: "#FFD580",
-      color: "#222",
-      fontWeight: 600,
-      px: 3,
-      py: 1.2,
-      borderRadius: "20px",
-      fontSize: 16,
-      textAlign: "center",
-      minWidth: 160,
-      boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-    }}
-  >
-    Shortlisted
-  </Box>
-)}
-
-
-
-</Box>
+              {status === "Visited" && (
+                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      background: "#DAF7A6",
+                      color: "#222",
+                      fontWeight: 600,
+                      px: 3,
+                      py: 1.2,
+                      borderRadius: "20px",
+                      fontSize: 16,
+                      textAlign: "center",
+                      minWidth: 160,
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                    }}
+                  >
+                    Property Visited
+                  </Box>
+                  {visitDate && (
+                    <Box
+                      sx={{
+                        background: "#C7F6FE",
+                        color: "#222",
+                        fontWeight: 600,
+                        px: 3,
+                        py: 1.2,
+                        borderRadius: "20px",
+                        fontSize: 16,
+                        textAlign: "center",
+                        minWidth: 200,
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                      }}
+                    >
+                      Property Visit on{" "}
+                      {new Date(visitDate).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
 
             <Box className="cta-container">
               {(property.features?.views || []).map((view, idx) => {
@@ -325,116 +237,73 @@ const fetchProperty = async () => {
               minWidth: 320,
             }}
           >
-            {/* {isShortlisted && visitDate ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 2,
-                  flexWrap: "wrap",
-                  justifyContent: isMobile ? "flex-start" : "flex-end",
-                  alignItems: "center",
-                }}
-              >
-                <Box
-                  sx={{
-                    background: "#FFD580",
-                    color: "#222",
-                    fontWeight: "bold",
-                    px: 4,
-                    py: 1.5,
-                    borderRadius: "30px",
-                    fontSize: 20,
-                    width: 220,
-                    textAlign: "center",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                  }}
-                >
-                  Shortlisted
-                </Box>
-                <Box
-                  sx={{
-                    background: "#C7F6FE",
-                    color: "#222",
-                    fontWeight: "bold",
-                    px: 3,
-                    py: 1.5,
-                    borderRadius: "30px",
-                    fontSize: 18,
-                    width: 320,
-                    textAlign: "center",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                  }}
-                >
-                  Property Visit on{" "}
-                  {new Date(visitDate).toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </Box>
-              </Box>
-            ) : ( */}
-            {isShortlisted && visitDate ? (
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "row",
-      gap: 1,
-      flexWrap: "wrap",
-      justifyContent: isMobile ? "flex-start" : "flex-end",
-      alignItems: "center",
-      width: "100%",
-    }}
-  >
-    <Box
-      sx={{
-        background: "#FFD580",
-        color: "#222",
-        fontWeight: 600,
-        px: 3,
-        py: 1.2,
-        borderRadius: "20px",
-        fontSize: 16,
-        textAlign: "center",
-        minWidth: 140,
-        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-      }}
-    >
-      Shortlisted
-    </Box>
-    <Box
-      sx={{
-        background: "#C7F6FE",
-        color: "#222",
-        fontWeight: 600,
-        px: 3,
-        py: 1.2,
-        borderRadius: "20px",
-        fontSize: 16,
-        textAlign: "center",
-        minWidth: 200,
-        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-      }}
-    >
-      Property Visit on{" "}
-      {new Date(visitDate).toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })}
-    </Box>
-  </Box>
-) : (
-
+            {status !== "Visited" && (
               <>
-                {!isShortlisted && (
-                  <ShortlistCTA
-                    propertyId={property._id}
-                    userId={userId}
-                    onShortlistSuccess={() => setIsShortlisted(true)}
-                  />
+                {(isShortlisted || visitDate) && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: 1,
+                      flexWrap: "wrap",
+                      justifyContent: isMobile ? "flex-start" : "flex-end",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    {isShortlisted && (
+                      <Box
+                        sx={{
+                          background: "#FFD580",
+                          color: "#222",
+                          fontWeight: 600,
+                          px: 3,
+                          py: 1.2,
+                          borderRadius: "20px",
+                          fontSize: 16,
+                          textAlign: "center",
+                          minWidth: 140,
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                        }}
+                      >
+                        Shortlisted
+                      </Box>
+                    )}
+                    {visitDate && (
+                      <Box
+                        sx={{
+                          background: "#C7F6FE",
+                          color: "#222",
+                          fontWeight: 600,
+                          px: 3,
+                          py: 1.2,
+                          borderRadius: "20px",
+                          fontSize: 16,
+                          textAlign: "center",
+                          minWidth: 200,
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                        }}
+                      >
+                        Property Visit on{" "}
+                        {new Date(visitDate).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </Box>
+                    )}
+                  </Box>
                 )}
+
+                <ShortlistCTA
+                  propertyId={property._id}
+                  userId={userId}
+                  onUpdate={(updated) => {
+                    setIsShortlisted(updated.shortlisted || false);
+                    setVisitDate(updated.visitDate ? new Date(updated.visitDate) : null);
+                    setStatus(updated.status || "");
+                  }}
+                />
               </>
             )}
           </Box>

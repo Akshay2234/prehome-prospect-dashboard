@@ -26,7 +26,7 @@ const AvailablePropertyScreen = () => {
   };
 
   return (
-  <Box sx={{ background: "#ECECEC", minHeight: "100vh", width: "100%" }}>
+    <Box sx={{ background: "#ECECEC", minHeight: "100vh", width: "100%" }}>
       {/* Header */}
       <Box
         sx={{
@@ -44,17 +44,19 @@ const AvailablePropertyScreen = () => {
 
       <Container maxWidth="lg">
         {properties.map((property) => {
-       let status = "";
-  let visitDate = "";
+          let status = "";
+          let visitDate = "";
 
-  if (property.shortlisted && property.visitDate) {
-    // Show scheduled if both exist
-    status = "scheduled";
-    visitDate = property.visitDate;
-  } else if (property.shortlisted && !property.visitDate) {
-    // Show shortlisted if only shortlisted is true
-    status = "shortlisted";
-  }
+          if (property.status?.toLowerCase() === "visited") {
+            status = "visited";
+            visitDate = property.visitDate;
+          } else if (property.shortlisted && property.visitDate) {
+            status = "scheduled";
+            visitDate = property.visitDate;
+          } else if (property.shortlisted && !property.visitDate) {
+            status = "shortlisted";
+          }
+  console.log("Property Status:", status, "Visit Date:", visitDate);
           return (
             <Box
               key={property._id}
@@ -76,7 +78,7 @@ const AvailablePropertyScreen = () => {
                 }
                 images={property.images}
                 status={status}
-                visitDate={property.visitDate}
+                visitDate={visitDate}
                 description={property.description}
                 tags={property.tags}
               />

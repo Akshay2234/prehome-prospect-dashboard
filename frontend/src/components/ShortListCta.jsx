@@ -11,6 +11,7 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [visitDate, setVisitDate] = useState(null);
+  const [status, setStatus] = useState(""); // Added status tracking
 
   useEffect(() => {
     const fetchUserActivity = async () => {
@@ -19,6 +20,7 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
         if (res.data) {
           setIsShortlisted(res.data.shortlisted || false);
           setVisitDate(res.data.visitDate ? new Date(res.data.visitDate) : null);
+          setStatus(res.data.status || ""); // Set current status
         }
       } catch (err) {
         console.error("Error fetching user activity:", err);
@@ -38,15 +40,18 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
         ...updatedFields,
       });
 
-      // Notify parent if needed
       if (onUpdate) onUpdate(res.data);
+
+      // Update local state after successful save
+      if (updatedFields.shortlisted !== undefined) setIsShortlisted(updatedFields.shortlisted);
+      if (updatedFields.visitDate) setVisitDate(new Date(updatedFields.visitDate));
+      if (updatedFields.status) setStatus(updatedFields.status);
     } catch (err) {
       console.error("Error saving activity:", err);
     }
   };
 
   const handleShortlistClick = () => {
-    setIsShortlisted(true);
     saveActivity({ shortlisted: true, status: "Interested" });
   };
 
@@ -55,9 +60,8 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
   };
 
   const handleDateSelect = (date) => {
-    setVisitDate(date);
-    setShowCalendar(false);
     saveActivity({ visitDate: date, status: "Visit Scheduled" });
+    setShowCalendar(false);
   };
 
   const isDateSelectable = (date) => {
@@ -73,7 +77,7 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      {!isShortlisted ? (
+      {!isShortlisted && (
         <button onClick={handleShortlistClick} className="view-prop-btn">
           <ViewPropButton
             text="Shortlist Property"
@@ -81,29 +85,33 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
             className="view-prop-btn icon-margin"
           />
         </button>
-      ) : (
+      )}
+
+      {isShortlisted && (
         <>
-          <button
-            onClick={handleScheduleVisitClick}
-            className="view-prop-btn"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-              padding: "10px 24px",
-              fontSize: "16px",
-              borderRadius: "30px",
-              backgroundColor: "#0086AD",
-              color: "#fff",
-              fontWeight: 600,
-              cursor: "pointer",
-              border: "none"
-            }}
-          >
-            <FaCheckDouble />
-            Schedule Visit
-          </button>
+          {status !== "Visited" && (
+            <button
+              onClick={handleScheduleVisitClick}
+              className="view-prop-btn"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+                padding: "10px 24px",
+                fontSize: "16px",
+                borderRadius: "30px",
+                backgroundColor: "#0086AD",
+                color: "#fff",
+                fontWeight: 600,
+                cursor: "pointer",
+                border: "none"
+              }}
+            >
+              <FaCheckDouble />
+              {visitDate ? "Reschedule Visit" : "Schedule Visit"}
+            </button>
+          )}
 
           <div
             style={{
