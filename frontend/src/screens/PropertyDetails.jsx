@@ -173,7 +173,8 @@ const fetchProperty = async () => {
   >
     {property.title}
   </Typography>
-  {status === "Visited" && (
+{status === "Visited" && (
+  <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
     <Box
       sx={{
         background: "#DAF7A6",
@@ -188,23 +189,100 @@ const fetchProperty = async () => {
         boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
       }}
     >
-     Property Visited
+      Property Visited
     </Box>
-  )}
 
-  {status === "Interested" && (
-  <Box sx={{ ...styles, background: "#FFD580" }}>Shortlisted</Box>
-)}
-
-{status === "Visit Scheduled" && visitDate && (
-  <Box sx={{ ...styles, background: "#C7F6FE" }}>
-    Property Visit on {new Date(visitDate).toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })}
+    {visitDate && (
+      <Box
+        sx={{
+          background: "#C7F6FE",
+          color: "#222",
+          fontWeight: 600,
+          px: 3,
+          py: 1.2,
+          borderRadius: "20px",
+          fontSize: 16,
+          textAlign: "center",
+          minWidth: 200,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+        }}
+      >
+        Property Visit on{" "}
+        {new Date(visitDate).toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
+      </Box>
+    )}
   </Box>
 )}
+
+{status === "Visit Scheduled" && (
+  <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
+    <Box
+      sx={{
+        background: "#FFD580",
+        color: "#222",
+        fontWeight: 600,
+        px: 3,
+        py: 1.2,
+        borderRadius: "20px",
+        fontSize: 16,
+        textAlign: "center",
+        minWidth: 160,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+      }}
+    >
+      Shortlisted
+    </Box>
+
+    {visitDate && (
+      <Box
+        sx={{
+          background: "#C7F6FE",
+          color: "#222",
+          fontWeight: 600,
+          px: 3,
+          py: 1.2,
+          borderRadius: "20px",
+          fontSize: 16,
+          textAlign: "center",
+          minWidth: 200,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+        }}
+      >
+        Property Visit on{" "}
+        {new Date(visitDate).toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
+      </Box>
+    )}
+  </Box>
+)}
+
+{status === "Interested" && (
+  <Box
+    sx={{
+      background: "#FFD580",
+      color: "#222",
+      fontWeight: 600,
+      px: 3,
+      py: 1.2,
+      borderRadius: "20px",
+      fontSize: 16,
+      textAlign: "center",
+      minWidth: 160,
+      boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+    }}
+  >
+    Shortlisted
+  </Box>
+)}
+
+
 
 </Box>
 
