@@ -20,7 +20,7 @@ const Login = () => {
   // Email/Password Login
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      const response = await axios.post("http://13.234.66.207:5000/api/auth/login", { email, password });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user_id", response.data.userId);
       navigate("/dashboard");
@@ -33,7 +33,7 @@ const Login = () => {
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
-      const response = await axios.post("http://localhost:5000/api/auth/google-login", { email: decoded.email });
+      const response = await axios.post("http://13.234.66.207:5000/api/auth/google-login", { email: decoded.email });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user_id", response.data.userId);
       localStorage.setItem("user_email", decoded.email);
@@ -50,7 +50,7 @@ const Login = () => {
   // Facebook Login
   const handleFacebookResponse = async ({ provider, data }) => {
     try {
-      const fbResponse = await axios.post("http://localhost:5000/api/auth/facebook-login", {
+      const fbResponse = await axios.post("http://13.234.66.207:5000/api/auth/facebook-login", {
         userID: data.id
       });
       localStorage.setItem("token", fbResponse.data.token);
@@ -64,7 +64,7 @@ const Login = () => {
   // Forgot Password Step 1: Send OTP
   const handleForgotSubmit = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/forgot-password", { email: forgotEmail });
+      const res = await axios.post("http://13.234.66.207:5000/api/auth/forgot-password", { email: forgotEmail });
       setForgotMessage(res.data.message || "OTP sent to email");
       setForgotStep(2);
     } catch {
@@ -75,7 +75,7 @@ const Login = () => {
   // Step 2: Verify OTP
   const handleVerifyOtp = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/verify-reset-otp", { email: forgotEmail, otp });
+      const res = await axios.post("http://13.234.66.207:5000/api/auth/verify-reset-otp", { email: forgotEmail, otp });
       setForgotMessage(res.data.message || "OTP verified");
       setForgotStep(3);
     } catch {
@@ -86,7 +86,7 @@ const Login = () => {
   // Step 3: Reset Password
   const handleResetPassword = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/reset-password", { email: forgotEmail, password: newPassword });
+      const res = await axios.post("http://13.234.66.207:5000/api/auth/reset-password", { email: forgotEmail, password: newPassword });
       setForgotMessage(res.data.message || "Password reset successfully");
       setTimeout(() => {
         setShowForgot(false);

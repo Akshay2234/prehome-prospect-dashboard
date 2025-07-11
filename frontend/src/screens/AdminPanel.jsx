@@ -9,7 +9,7 @@ const AdminPanel = () => {
   const [editingPropertyId, setEditingPropertyId] = useState(null);
   const [activityStatus, setActivityStatus] = useState({});
 
-  const API_BASE = "http://localhost:5000/api";
+  const API_BASE = "http://13.234.66.207:5000/api";
 
   useEffect(() => {
     fetchProperties();

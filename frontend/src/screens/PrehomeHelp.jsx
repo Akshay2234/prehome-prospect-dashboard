@@ -31,7 +31,7 @@ const PrehomeHelp = () => {
     if (!userId) return;
 
     try {
-      await axios.post("http://localhost:5000/api/chat/save-chat", {
+      await axios.post("http://13.234.66.207:5000/api/chat/save-chat", {
         userId,
         messages: newMessages,
       });
