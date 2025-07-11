@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { FaCheckDouble } from 'react-icons/fa';
 import ViewPropButton from './ViewPropButton';
 import shortlistIcon from "../assets/event_upcoming.png";
-import PropertyCardButton from './PropertyCardButton';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import { addMonths, isSameMonth, isSameYear, format } from 'date-fns';
 
-const ShortlistCTA = ({ userId, propertyId }) => {
+const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [visitDate, setVisitDate] = useState(null);
@@ -20,34 +19,27 @@ const ShortlistCTA = ({ userId, propertyId }) => {
         if (res.data) {
           setIsShortlisted(res.data.shortlisted || false);
           setVisitDate(res.data.visitDate ? new Date(res.data.visitDate) : null);
-        } else {
-          setIsShortlisted(false);
-          setVisitDate(null);
         }
       } catch (err) {
         console.error("Error fetching user activity:", err);
-        setIsShortlisted(false);
-        setVisitDate(null);
       }
     };
 
     if (userId && propertyId) {
       fetchUserActivity();
     }
-
-    return () => {
-      setIsShortlisted(false);
-      setVisitDate(null);
-    };
   }, [userId, propertyId]);
 
   const saveActivity = async (updatedFields) => {
     try {
-      await axios.post("http://localhost:5000/api/activity/save", {
+      const res = await axios.post("http://localhost:5000/api/activity/save", {
         userId,
         propertyId,
         ...updatedFields,
       });
+
+      // Notify parent if needed
+      if (onUpdate) onUpdate(res.data);
     } catch (err) {
       console.error("Error saving activity:", err);
     }
@@ -55,7 +47,7 @@ const ShortlistCTA = ({ userId, propertyId }) => {
 
   const handleShortlistClick = () => {
     setIsShortlisted(true);
-    saveActivity({ shortlisted: true });
+    saveActivity({ shortlisted: true, status: "Interested" });
   };
 
   const handleScheduleVisitClick = () => {
@@ -65,7 +57,7 @@ const ShortlistCTA = ({ userId, propertyId }) => {
   const handleDateSelect = (date) => {
     setVisitDate(date);
     setShowCalendar(false);
-    saveActivity({ visitDate: date });
+    saveActivity({ visitDate: date, status: "Visit Scheduled" });
   };
 
   const isDateSelectable = (date) => {

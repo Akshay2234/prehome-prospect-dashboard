@@ -1,4 +1,3 @@
-// models/UserActivity.js
 const mongoose = require("mongoose");
 
 const userActivitySchema = new mongoose.Schema({
@@ -19,6 +18,11 @@ const userActivitySchema = new mongoose.Schema({
   visitDate: {
     type: Date,
     default: null
+  },
+  status: {
+    type: String,
+    enum: ["Interested", "Visit Scheduled", "Visited"],
+    default: ""
   }
 });
 

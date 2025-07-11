@@ -113,7 +113,7 @@ const PropertyCards = ({
         overflow: "hidden",
         mb: 5,
         minHeight: 370,
-        alignItems: "stretch",
+        alignItems: "flex-start",
         boxShadow: "none",
       }}
     >
@@ -212,11 +212,11 @@ const PropertyCards = ({
       <Box
         sx={{
           flex: 1,
-          px: 5,
-          py: 4,
+          px: { xs: 3, md: 5 },
+          py: { xs: 3, md: 4 },
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
         {/* Title */}
@@ -224,9 +224,11 @@ const PropertyCards = ({
           sx={{
             fontFamily: "Poppins",
             fontWeight: 700,
-            fontSize: "24px",
-            color: "#222",
-            mb: 1,
+            fontSize: "26px",
+            color: "#1A1A1A",
+            lineHeight: 1.4,
+            mb: 1.5,
+            py: 1,        
           }}
         >
           {Heading}
@@ -237,9 +239,11 @@ const PropertyCards = ({
           sx={{
             fontFamily: "Poppins",
             fontWeight: 400,
-            fontSize: "16px",
-            color: "#222",
-            mb: 1,
+            fontSize: "18px",
+            color: "#4F4F4F",
+            lineHeight: 1.5,
+            mb: 1.5,
+            py: 1,
           }}
         >
           {SubHeading}
@@ -251,15 +255,17 @@ const PropertyCards = ({
             fontFamily: "Poppins",
             fontWeight: 400,
             fontSize: "16px",
-            color: "#222",
-            mb: 2,
+            color: "#333",
+            lineHeight: 1.6,
+            mb: 2.5,
+            py: 1,
           }}
         >
           {description}
         </Typography>
 
         {/* Tags */}
-        <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", mb: 3 }}>
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
           {tags.map((tag, idx) => (
             <Box
               key={idx}
@@ -268,10 +274,10 @@ const PropertyCards = ({
                 color: "#000",
                 fontFamily: "Poppins",
                 fontWeight: 600,
-                fontSize: "14px",
+                fontSize: "15px",
                 borderRadius: "20px",
-                px: 2,
-                py: 0.5,
+                px: 3,
+                py: 1,
               }}
             >
               {tag}
@@ -287,13 +293,15 @@ const PropertyCards = ({
               background: "#008CBA",
               color: "#fff",
               fontFamily: "Poppins",
-              fontWeight: 400,
+              fontWeight: 600,
               fontSize: "16px",
               textTransform: "none",
               borderRadius: "24px",
               px: 4,
-              py: 1,
-              width: 200,
+              py: 1.25,
+              mt: 10,
+              width: 280,
+              height: 50,
               boxShadow: "none",
               "&:hover": {
                 background: "#0077A3",

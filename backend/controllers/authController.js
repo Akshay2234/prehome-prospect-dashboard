@@ -4,10 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
-// JWT Secret Key
 const JWT_SECRET = 'prehome_secret_key';
 
-// Nodemailer setup
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -19,7 +17,6 @@ const transporter = nodemailer.createTransport({
 // ====================== Send OTP ======================
 const sendOtp = async (req, res) => {
   const { email } = req.body;
-
   const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
   try {
@@ -64,7 +61,6 @@ const registerUser = async (req, res) => {
     if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     await User.create({ email, password: hashedPassword });
 
     res.status(201).json({ message: 'User registered successfully' });
@@ -74,13 +70,17 @@ const registerUser = async (req, res) => {
   }
 };
 
-// ====================== Login User ======================
+// ====================== Login User (with block check) ======================
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+
+    if (user.isBlocked) {
+      return res.status(403).json({ message: 'Your account has been blocked. Please contact support.' });
+    }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) return res.status(400).json({ message: 'Invalid credentials' });
@@ -94,17 +94,18 @@ const loginUser = async (req, res) => {
   }
 };
 
-// ====================== Google Login ======================
-// backend/controllers/authController.js
+// ====================== Google Login (with block check) ======================
 const googleLogin = async (req, res) => {
   const { email } = req.body;
 
   try {
     let user = await User.findOne({ email });
-
-    // If user does not exist, create a new one with isGoogleUser flag
     if (!user) {
       user = await User.create({ email, isGoogleUser: true });
+    }
+
+    if (user.isBlocked) {
+      return res.status(403).json({ message: 'Your account has been blocked. Please contact support.' });
     }
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
@@ -112,6 +113,31 @@ const googleLogin = async (req, res) => {
     res.status(200).json({ message: 'Google login successful', token, userId: user._id });
   } catch (err) {
     console.error('Google login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// ====================== Facebook Login (with block check) ======================
+const facebookLogin = async (req, res) => {
+  const { userID } = req.body;
+
+  try {
+    if (!userID) return res.status(400).json({ message: 'Facebook userID is required' });
+
+    let user = await User.findOne({ facebookId: userID });
+    if (!user) {
+      user = await User.create({ facebookId: userID });
+    }
+
+    if (user.isBlocked) {
+      return res.status(403).json({ message: 'Your account has been blocked. Please contact support.' });
+    }
+
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({ message: 'Facebook login successful', token, userId: user._id });
+  } catch (err) {
+    console.error('Facebook login error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -135,28 +161,7 @@ const setPassword = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-const facebookLogin = async (req, res) => {
-  const { userID } = req.body;
 
-  try {
-    if (!userID) {
-      return res.status(400).json({ message: 'Facebook userID is required' });
-    }
-
-    let user = await User.findOne({ facebookId: userID });
-
-    if (!user) {
-      user = await User.create({ facebookId: userID });
-    }
-
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(200).json({ message: 'Facebook login successful', token, userId: user._id });
-  } catch (err) {
-    console.error('Facebook login error:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
 // ====================== Forgot Password: Send OTP ======================
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -181,7 +186,7 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-// ====================== Verify Password Reset OTP ======================
+// ====================== Verify Reset OTP ======================
 const verifyResetOtp = async (req, res) => {
   const { email, otp } = req.body;
 
@@ -197,7 +202,7 @@ const verifyResetOtp = async (req, res) => {
   }
 };
 
-// ====================== Reset Password (after verifying OTP) ======================
+// ====================== Reset Password ======================
 const resetPassword = async (req, res) => {
   const { email, password } = req.body;
 
@@ -215,9 +220,15 @@ const resetPassword = async (req, res) => {
   }
 };
 
-
 module.exports = {
-  sendOtp, verifyOtp, registerUser, loginUser,
-  googleLogin, facebookLogin, setPassword,
-  forgotPassword, verifyResetOtp, resetPassword
+  sendOtp,
+  verifyOtp,
+  registerUser,
+  loginUser,
+  googleLogin,
+  facebookLogin,
+  setPassword,
+  forgotPassword,
+  verifyResetOtp,
+  resetPassword,
 };

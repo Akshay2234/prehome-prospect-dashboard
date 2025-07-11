@@ -8,11 +8,14 @@ import PrehomeHelp from "./screens/PrehomeHelp";
 import Login from "./screens/Auth/Login";
 import Signup from "./screens/Auth/signup";
 import SetPassword from "./screens/Auth/SetPassword";
+import AdminPanel from "./screens/AdminPanel";
 
 function AppContent() {
   const location = useLocation();
 
-  const hiddenSidebarRoutes = ["/login","/","/set-password", "/auth", "/signup", "/verify", "/convert-new-user"];
+  const hiddenSidebarRoutes = [
+    "/login", "/", "/set-password", "/auth", "/signup", "/verify", "/convert-new-user"
+  ];
 
   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
@@ -37,11 +40,15 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/set-password" element={<SetPassword />} />
+
+          {/* ✅ Admin Panel Route */}
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </Box>
     </Box>
   );
 }
+
 
 function App() {
   const theme = createTheme();

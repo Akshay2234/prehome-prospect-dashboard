@@ -26,6 +26,9 @@ const PropertyDetails = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [userId, setUserId] = useState(localStorage.getItem("user_id"));
   const [selectedView, setSelectedView] = useState(null);
+  const [isShortlisted, setIsShortlisted] = useState(false);
+  const [visitDate, setVisitDate] = useState(null);
+ const [status, setStatus] = useState("");
 
   useEffect(() => {
     const checkUserChange = () => {
@@ -60,18 +63,28 @@ const PropertyDetails = () => {
       setSelectedView(defaultView);
     }
   }, [property]);
+const fetchProperty = async () => {
+  try {
+    const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
+    setProperty(res.data);
+    setSelectedImageUrl(res.data.images[0]?.url);
 
-  const fetchProperty = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/api/properties/${id}`
-      );
-      setProperty(res.data);
-      setSelectedImageUrl(res.data.images[0]?.url);
-    } catch (err) {
-      console.error("Error fetching property:", err);
+    // Fetch User Activity separately
+    const userActivity = await axios.get(
+      `http://localhost:5000/api/activity/${userId}/${res.data._id}`
+    );
+
+    if (userActivity.data) {
+      setIsShortlisted(userActivity.data.shortlisted || false);
+      setVisitDate(userActivity.data.visitDate ? new Date(userActivity.data.visitDate) : null);
+      setStatus(userActivity.data.status || "");
     }
-  };
+  } catch (err) {
+    console.error("Error fetching property or user activity:", err);
+  }
+};
+
+
 
   const fetchNearbyPlaces = async (location) => {
     try {
@@ -139,9 +152,62 @@ const PropertyDetails = () => {
                 Property Details
               </Typography>
             </Box>
-            <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
+            {/* <Typography variant="h4" fontWeight={700} sx={{ mb: 2 }}>
               {property.title}
-            </Typography>
+            </Typography> */}
+            <Box
+  sx={{
+    display: 'flex',
+    flexDirection: { xs: 'column', sm: 'row' },
+    alignItems: { xs: 'flex-start', sm: 'center' },
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: 2,
+    mb: 2,
+  }}
+>
+  <Typography
+    variant="h4"
+    fontWeight={700}
+    sx={{ mr: 2, flexShrink: 0 }}
+  >
+    {property.title}
+  </Typography>
+  {status === "Visited" && (
+    <Box
+      sx={{
+        background: "#DAF7A6",
+        color: "#222",
+        fontWeight: 600,
+        px: 3,
+        py: 1.2,
+        borderRadius: "20px",
+        fontSize: 16,
+        textAlign: "center",
+        minWidth: 160,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+      }}
+    >
+     Property Visited
+    </Box>
+  )}
+
+  {status === "Interested" && (
+  <Box sx={{ ...styles, background: "#FFD580" }}>Shortlisted</Box>
+)}
+
+{status === "Visit Scheduled" && visitDate && (
+  <Box sx={{ ...styles, background: "#C7F6FE" }}>
+    Property Visit on {new Date(visitDate).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })}
+  </Box>
+)}
+
+</Box>
+
             <Box className="cta-container">
               {(property.features?.views || []).map((view, idx) => {
                 const isSelected = view.label === selectedView;
@@ -181,28 +247,17 @@ const PropertyDetails = () => {
               minWidth: 320,
             }}
           >
-            {!property.visitDate && (
-              <>
-                <ShortlistCTA propertyId={property._id} userId={userId} />
-                <OutlineCta
-                  text="Schedule Visit"
-                  onClick={() => {}}
-                  sx={{
-                    background: "#0086AD",
-                    color: "#fff",
-                    fontWeight: 600,
-                    fontSize: 20,
-                    borderRadius: "30px",
-                    px: 4,
-                    py: 1.5,
-                    mt: 1,
-                    width: 220,
-                  }}
-                />
-              </>
-            )}
-            {property.shortlisted && property.visitDate && (
-              <>
+            {/* {isShortlisted && visitDate ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 2,
+                  flexWrap: "wrap",
+                  justifyContent: isMobile ? "flex-start" : "flex-end",
+                  alignItems: "center",
+                }}
+              >
                 <Box
                   sx={{
                     background: "#FFD580",
@@ -212,7 +267,6 @@ const PropertyDetails = () => {
                     py: 1.5,
                     borderRadius: "30px",
                     fontSize: 20,
-                    mb: 1,
                     width: 220,
                     textAlign: "center",
                     boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
@@ -235,18 +289,79 @@ const PropertyDetails = () => {
                   }}
                 >
                   Property Visit on{" "}
-                  {new Date(property.visitDate).toLocaleDateString("en-IN", {
+                  {new Date(visitDate).toLocaleDateString("en-IN", {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
                   })}
                 </Box>
+              </Box>
+            ) : ( */}
+            {isShortlisted && visitDate ? (
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 1,
+      flexWrap: "wrap",
+      justifyContent: isMobile ? "flex-start" : "flex-end",
+      alignItems: "center",
+      width: "100%",
+    }}
+  >
+    <Box
+      sx={{
+        background: "#FFD580",
+        color: "#222",
+        fontWeight: 600,
+        px: 3,
+        py: 1.2,
+        borderRadius: "20px",
+        fontSize: 16,
+        textAlign: "center",
+        minWidth: 140,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+      }}
+    >
+      Shortlisted
+    </Box>
+    <Box
+      sx={{
+        background: "#C7F6FE",
+        color: "#222",
+        fontWeight: 600,
+        px: 3,
+        py: 1.2,
+        borderRadius: "20px",
+        fontSize: 16,
+        textAlign: "center",
+        minWidth: 200,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+      }}
+    >
+      Property Visit on{" "}
+      {new Date(visitDate).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })}
+    </Box>
+  </Box>
+) : (
+
+              <>
+                {!isShortlisted && (
+                  <ShortlistCTA
+                    propertyId={property._id}
+                    userId={userId}
+                    onShortlistSuccess={() => setIsShortlisted(true)}
+                  />
+                )}
               </>
             )}
           </Box>
         </Box>
 
-        {/* Image Labels */}
         <Box className="cta-container" sx={{ mb: 2 }}>
           {property.images?.map((image, index) => (
             <OutlineCta
@@ -257,7 +372,6 @@ const PropertyDetails = () => {
           ))}
         </Box>
 
-        {/* Selected Image */}
         {selectedImageUrl && (
           <Box sx={{ mt: 2 }}>
             <img
@@ -274,7 +388,6 @@ const PropertyDetails = () => {
         )}
       </Container>
 
-      {/* Feature Cards */}
       <Box className="text-card-container">
         <Box className="text-card">
           <p className="Heading-text-card">Property Features</p>
@@ -305,7 +418,6 @@ const PropertyDetails = () => {
         </Box>
       </Box>
 
-      {/* Nearby Slider and Map */}
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Box sx={{ mb: 2 }}>
           <Typography gutterBottom>
