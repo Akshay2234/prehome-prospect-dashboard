@@ -37,7 +37,10 @@ const propertySchema = new mongoose.Schema({
     numberOfFloors: Number,
   },
   location: String, // For location summary
-  mapUrl: String, // Property map image
+radius: {
+    type: Number,
+    default: 1000,
+  },
 });
 
 const Property = mongoose.model("Property", propertySchema);

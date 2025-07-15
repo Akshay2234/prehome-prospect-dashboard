@@ -156,7 +156,7 @@ const progressPercent = Math.min(100, Math.round((currentSectionIndex / formSect
   useEffect(() => {
     const loadProgress = async () => {
       try {
-        const res = await axios.get(`http://13.234.66.207:5000/api/form/load-progress/${userId}`);
+        const res = await axios.get(`http://localhost:5000/api/form/load-progress/${userId}`);
         const saved = res.data.responses || [];
         setResponses(saved);
 
@@ -196,7 +196,7 @@ const progressPercent = Math.min(100, Math.round((currentSectionIndex / formSect
       setResponses(updatedResponses);
       setSectionAnswers({});
 
-      axios.post("http://13.234.66.207:5000/api/form/save-progress", {
+      axios.post("http://localhost:5000/api/form/save-progress", {
         userId,
         responses: updatedResponses,
       }).then(() => {

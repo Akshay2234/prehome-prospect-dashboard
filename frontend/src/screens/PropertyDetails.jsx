@@ -66,12 +66,12 @@ const PropertyDetails = () => {
 
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(`http://13.234.66.207:5000/api/properties/${id}`);
+      const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
       setProperty(res.data);
       setSelectedImageUrl(res.data.images[0]?.url);
 
       const userActivity = await axios.get(
-        `http://13.234.66.207:5000/api/activity/${userId}/${res.data._id}`
+        `http://localhost:5000/api/activity/${userId}/${res.data._id}`
       );
 
       if (userActivity.data) {
@@ -87,7 +87,7 @@ const PropertyDetails = () => {
   const fetchNearbyPlaces = async (location) => {
     try {
       const res = await axios.post(
-        "http://13.234.66.207:5000/api/properties/nearby-places",
+        "http://localhost:5000/api/properties/nearby-places",
         { location, type: "restaurant", radius }
       );
       setNearbyPlaces(res.data);
