@@ -12,7 +12,7 @@ const VerifyOtp = () => {
 
   const verifyOtp = async () => {
     try {
-      await axios.post('http://localhost:5000/api/auth/verify-otp', {
+      await axios.post('https://prehome-prospect-dashboard.onrender.com/api/auth/verify-otp', {
         email,
         otp,
         password,

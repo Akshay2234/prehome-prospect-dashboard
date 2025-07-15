@@ -33,7 +33,7 @@ const AdminPanel = () => {
     radius: 1000, // ✅ Added radius
   });
 
-  const API_BASE = "http://localhost:5000/api";
+  const API_BASE = "https://prehome-prospect-dashboard.onrender.com/api";
 
   useEffect(() => {
     fetchProperties();
