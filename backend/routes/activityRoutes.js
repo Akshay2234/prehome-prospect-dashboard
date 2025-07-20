@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../middleware/upload");
 const UserActivity = require("../models/UserActivity");
 const Notification = require("../models/notificationModel");
 
@@ -95,6 +96,23 @@ router.patch("/status", async (req, res) => {
     res.status(200).json({ message: "Status updated", activity });
   } catch (err) {
     console.error("Error updating status:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+// DELETE: Delete a user's activity on a property
+router.delete("/:userId/:propertyId", async (req, res) => {
+  const { userId, propertyId } = req.params;
+
+  try {
+    const result = await UserActivity.findOneAndDelete({ userId, propertyId });
+
+    if (!result) {
+      return res.status(404).json({ message: "Activity not found" });
+    }
+
+    res.status(200).json({ message: "Activity deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting activity:", error);
     res.status(500).json({ message: "Server error" });
   }
 });

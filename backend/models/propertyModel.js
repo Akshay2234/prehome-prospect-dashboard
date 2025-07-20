@@ -13,12 +13,14 @@ const propertySchema = new mongoose.Schema({
     type: [String], // For 3-4 tags like "Balcony View", "Option 1"
     required: false,
   },
-  images: [
-    {
-      url: String, // Image URL
-      label: String, // For image description like "Balcony View", "Option 1", etc. (These labels appear on the second page)
-    },
-  ],
+images: [
+  {
+    url: String,        // Optional if using URL
+    label: String,      // Descriptive text
+    filename: String,   // For uploaded image file name
+  }
+],
+
   features: {
     interior: [String], // Interior features array
     exterior: [String], // Exterior features array

@@ -8,6 +8,8 @@ import PrehomeHelp from "./screens/PrehomeHelp";
 import Login from "./screens/Auth/Login";
 import Signup from "./screens/Auth/signup";
 import SetPassword from "./screens/Auth/SetPassword";
+import AdminLogin from "./screens/AdminLogin";
+import AdminSignup from "./screens/AdminSignup";
 import AdminPanel from "./screens/AdminPanel";
 
 function AppContent() {
@@ -42,7 +44,9 @@ function AppContent() {
           <Route path="/set-password" element={<SetPassword />} />
 
           {/* ✅ Admin Panel Route */}
-          <Route path="/admin" element={<AdminPanel />} />
+           <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-signup" element={<AdminSignup />} />
+        <Route path="/admin-panel" element={<AdminPanel />} />
         </Routes>
       </Box>
     </Box>

@@ -13,7 +13,7 @@ const AdminPanel = () => {
     title: "",
     description: "",
     tags: [],
-    images: [{ url: "", label: "" }],
+    images: [],
     features: {
       interior: [],
       exterior: [],
@@ -33,7 +33,8 @@ const AdminPanel = () => {
     radius: 1000, // ✅ Added radius
   });
 
-  const API_BASE = "https://prehome-prospect-dashboard.onrender.com/api";
+  const API_BASE = "http://localhost:5000/api";
+  const UPLOADS_BASE = "http://localhost:5000";
 
   useEffect(() => {
     fetchProperties();
@@ -164,6 +165,46 @@ const AdminPanel = () => {
       console.error("Failed to update status:", err);
     }
   };
+const deleteStatus = async (userId, propertyId) => {
+  if (!window.confirm("Are you sure you want to delete this status?")) return;
+
+  try {
+    await axios.delete(`${API_BASE}/activity/${userId}/${propertyId}`);
+    alert("Status deleted!");
+
+    setActivityStatus((prev) => {
+      const updated = { ...prev };
+      if (updated[userId]) {
+        delete updated[userId][propertyId];
+      }
+      return updated;
+    });
+  } catch (err) {
+    console.error("Failed to delete status:", err);
+    alert("Error deleting status");
+  }
+};
+const handleUpload = async (e) => {
+  const formData = new FormData();
+  formData.append("image", e.target.files[0]);
+
+  try {
+    const res = await axios.post("http://localhost:5000/api/admin/upload-image", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    const newImage = {
+      url: res.data.imageUrl, // returned from server
+      label: "", // or you can prompt the user for label
+    };
+    setForm((prev) => ({
+      ...prev,
+      images: [...prev.images, newImage],
+    }));
+  } catch (err) {
+    console.error("Upload error:", err);
+  }
+};
+
 
   return (
     <div style={{ padding: 20, fontFamily: "Poppins, sans-serif" }}>
@@ -183,23 +224,58 @@ const AdminPanel = () => {
             <input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
             <input placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
             <input placeholder="Tags (comma-separated)" value={form.tags.join(",")} onChange={e => setForm({ ...form, tags: e.target.value.split(",").map(tag => tag.trim()) })} />
+<h4>Images</h4>
+{form.images.map((img, idx) => (
+  <div key={idx}>
+    {img.url && (
+      <img
+       src={img.url.startsWith("http") ? img.url : `${UPLOADS_BASE}${img.url}`}
+        alt={img.label || "Image"}
+        style={{ width: "100px", height: "auto", marginBottom: "8px" }}
+      />
+    )}
+    <input
+      type="text"
+      placeholder="Image Label"
+      value={img.label}
+      onChange={(e) => {
+        const newImages = [...form.images];
+        newImages[idx].label = e.target.value;
+        setForm({ ...form, images: newImages });
+      }}
+    />
+  </div>
+))}
+<input
+  type="file"
+  onChange={async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-            <h4>Images</h4>
-            {form.images.map((img, idx) => (
-              <div key={idx}>
-                <input placeholder="Image URL" value={img.url} onChange={e => {
-                  const newImages = [...form.images];
-                  newImages[idx].url = e.target.value;
-                  setForm({ ...form, images: newImages });
-                }} />
-                <input placeholder="Image Label" value={img.label} onChange={e => {
-                  const newImages = [...form.images];
-                  newImages[idx].label = e.target.value;
-                  setForm({ ...form, images: newImages });
-                }} />
-              </div>
-            ))}
-            <button onClick={() => setForm({ ...form, images: [...form.images, { url: "", label: "" }] })}>+ Add Image</button>
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(`${API_BASE}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const uploadedUrl = res.data.imageUrl;
+
+      setForm((prev) => ({
+        ...prev,
+        images: [...prev.images, { url: uploadedUrl, label: "" }],
+      }));
+    } catch (error) {
+      console.error("Image upload failed", error);
+    }
+  }}
+/>
+
+
+
 
             <h4>Features</h4>
             <input placeholder="Interior Features (comma-separated)" value={form.features.interior.join(",")} onChange={e => setForm({ ...form, features: { ...form.features, interior: e.target.value.split(",") } })} />
@@ -284,22 +360,26 @@ const AdminPanel = () => {
               {properties.map((property) => (
                 <div key={property._id} style={{ marginBottom: 8 }}>
                   <div><em>{property.title}</em></div>
-                  <select
-                    value={activityStatus[user._id]?.[property._id] || ""}
-                    onChange={(e) => handleStatusChange(user._id, property._id, e.target.value)}
-                    style={{ width: "70%" }}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Interested">Interested</option>
-                    <option value="Visit Scheduled">Visit Scheduled</option>
-                    <option value="Visited">Visited</option>
-                  </select>
-                  <button
-                    onClick={() => saveStatus(user._id, property._id)}
-                    style={{ marginLeft: 5 }}
-                  >
-                    Save
-                  </button>
+                 <select
+  value={activityStatus[user._id]?.[property._id] || ""}
+  onChange={(e) => handleStatusChange(user._id, property._id, e.target.value)}
+  style={{ width: "60%" }}
+>
+  <option value="">Select Status</option>
+  <option value="Visited">Visited</option>
+</select>
+
+<button onClick={() => saveStatus(user._id, property._id)} style={{ marginLeft: 5 }}>
+  Save
+</button>
+
+<button
+  onClick={() => deleteStatus(user._id, property._id)}
+  style={{ marginLeft: 5, color: "red" }}
+>
+  Delete
+</button>
+
                 </div>
               ))}
             </div>

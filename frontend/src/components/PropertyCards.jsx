@@ -135,16 +135,21 @@ const PropertyCards = ({
         {images && images.length > 0 ? (
           <>
             <img
-              src={images[currentImageIndex].url}
-              alt={images[currentImageIndex].label || "Property"}
-              style={{
-                width: "90%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "10%",
-                display: "block",
-              }}
-            />
+  src={
+    images[currentImageIndex].url.startsWith("http")
+      ? images[currentImageIndex].url
+      : `http://localhost:5000${images[currentImageIndex].url}`
+  }
+  alt={images[currentImageIndex].label || "Property"}
+  style={{
+    width: "90%",
+    height: "100%",
+    objectFit: "cover",
+    borderRadius: "10%",
+    display: "block",
+  }}
+/>
+
             {images.length > 1 && (
               <>
                 <Box
