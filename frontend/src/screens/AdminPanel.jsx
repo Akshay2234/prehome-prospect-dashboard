@@ -33,8 +33,8 @@ const AdminPanel = () => {
     radius: 1000, // ✅ Added radius
   });
 
-  const API_BASE = "http://localhost:5000/api";
-  const UPLOADS_BASE = "http://localhost:5000";
+  const API_BASE = "https://prehome-prospect-dashboard.onrender.com/api";
+  const UPLOADS_BASE = "https://prehome-prospect-dashboard.onrender.com";
 
   useEffect(() => {
     fetchProperties();
@@ -189,7 +189,7 @@ const handleUpload = async (e) => {
   formData.append("image", e.target.files[0]);
 
   try {
-    const res = await axios.post("http://localhost:5000/api/admin/upload-image", formData, {
+    const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/admin/upload-image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     const newImage = {
