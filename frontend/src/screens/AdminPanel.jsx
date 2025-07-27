@@ -30,11 +30,11 @@ const AdminPanel = () => {
     },
     location: "",
     mapUrl: "",
-    radius: 1000, // ✅ Added radius
+    radius: "", // ✅ Added radius
   });
 
-  const API_BASE = "https://prehome-prospect-dashboard.onrender.com/api";
-  const UPLOADS_BASE = "https://prehome-prospect-dashboard.onrender.com";
+  const API_BASE = "http://localhost:5000/api";
+  const UPLOADS_BASE = "http://localhost:5000";
 
   useEffect(() => {
     fetchProperties();
@@ -189,7 +189,7 @@ const handleUpload = async (e) => {
   formData.append("image", e.target.files[0]);
 
   try {
-    const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/admin/upload-image", formData, {
+    const res = await axios.post("http://localhost:5000/api/admin/upload-image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     const newImage = {
@@ -287,7 +287,27 @@ const handleUpload = async (e) => {
 
             <h4>General Info</h4>
             <input placeholder="Property Address" value={form.generalInfo.propertyAddress} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, propertyAddress: e.target.value } })} />
-            <input placeholder="Property Type" value={form.generalInfo.propertyType} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, propertyType: e.target.value } })} />
+          <select
+  value={form.generalInfo.propertyType}
+  onChange={e =>
+    setForm({
+      ...form,
+      generalInfo: {
+        ...form.generalInfo,
+        propertyType: e.target.value,
+      },
+    })
+  }
+>
+  <option value="">Select Property Type</option>
+  <option value="hospital">Hospital</option>
+  <option value="restaurant">Restaurant</option>
+  <option value="school">School</option>
+  <option value="mall">Mall</option>
+  <option value="park">Park</option>
+  <option value="gym">Gym</option>
+</select>
+
             <input type="number" placeholder="Year Built" value={form.generalInfo.yearBuilt} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, yearBuilt: parseInt(e.target.value) } })} />
             <input placeholder="Square Footage" value={form.generalInfo.squareFootage} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, squareFootage: e.target.value } })} />
             <input type="number" placeholder="Bedrooms" value={form.generalInfo.numberOfBedrooms} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, numberOfBedrooms: parseInt(e.target.value) } })} />

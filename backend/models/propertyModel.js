@@ -10,39 +10,45 @@ const propertySchema = new mongoose.Schema({
     required: false,
   },
   tags: {
-    type: [String], // For 3-4 tags like "Balcony View", "Option 1"
+    type: [String],
     required: false,
   },
-images: [
-  {
-    url: String,        // Optional if using URL
-    label: String,      // Descriptive text
-    filename: String,   // For uploaded image file name
-  }
-],
+  images: [
+    {
+      url: String,
+      label: String,
+      filename: String,
+    }
+  ],
 
   features: {
-    interior: [String], // Interior features array
-    exterior: [String], // Exterior features array
+    interior: [String],
+    exterior: [String],
     basement: {
-      type: String, // 'Finished' or 'Unfinished'
+      type: String,
       enum: ["Finished", "Unfinished"],
     },
   },
+
   generalInfo: {
     propertyAddress: String,
-    propertyType: String,
+    propertyType: {
+      type: String,
+      enum: ["hospital", "restaurant", "school", "mall", "park", "gym"], // dropdown values
+    },
     yearBuilt: Number,
     squareFootage: String,
     numberOfBedrooms: Number,
     numberOfBathrooms: Number,
     numberOfFloors: Number,
   },
-  location: String, // For location summary
-radius: {
+
+  location: String, // optional textual location
+
+  radius: {
     type: Number,
-    default: 1000,
-  },
+    default: 1000, // in meters
+  }
 });
 
 const Property = mongoose.model("Property", propertySchema);

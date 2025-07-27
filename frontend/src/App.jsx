@@ -5,12 +5,13 @@ import AvailablePropertyScreen from "./screens/AvailablePropertyScreen";
 import PropertyDetails from "./screens/PropertyDetails";
 import DashboardScreen from "./screens/DashboardScreen";
 import PrehomeHelp from "./screens/PrehomeHelp";
-import Login from "./screens/Auth/Login";
-import Signup from "./screens/Auth/signup";
-import SetPassword from "./screens/Auth/SetPassword";
+import Login from "./screens/Login";
+import Signup from "./screens/signup";
+import SetPassword from "./screens/SetPassword";
 import AdminLogin from "./screens/AdminLogin";
 import AdminSignup from "./screens/AdminSignup";
 import AdminPanel from "./screens/AdminPanel";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute"; // 👈 import it
 
 function AppContent() {
   const location = useLocation();
@@ -42,11 +43,16 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/set-password" element={<SetPassword />} />
+          <Route path="/application-screen" element={<DashboardScreen />} />
 
           {/* ✅ Admin Panel Route */}
            <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-signup" element={<AdminSignup />} />
-        <Route path="/admin-panel" element={<AdminPanel />} />
+        <Route path="/admin-panel" element={
+  <ProtectedAdminRoute>
+    <AdminPanel />
+  </ProtectedAdminRoute>
+} />
         </Routes>
       </Box>
     </Box>

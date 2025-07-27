@@ -66,13 +66,13 @@ const PropertyDetails = () => {
 
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(`https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`);
+      const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
       setProperty(res.data);
-     setSelectedImageUrl(`https://prehome-prospect-dashboard.onrender.com${res.data.images[0]?.url}`);
+     setSelectedImageUrl(`http://localhost:5000${res.data.images[0]?.url}`);
 ;
 
       const userActivity = await axios.get(
-        `https://prehome-prospect-dashboard.onrender.com/api/activity/${userId}/${res.data._id}`
+        `http://localhost:5000/api/activity/${userId}/${res.data._id}`
       );
 
       if (userActivity.data) {
@@ -88,7 +88,7 @@ const PropertyDetails = () => {
   const fetchNearbyPlaces = async (location) => {
     try {
       const res = await axios.post(
-        "https://prehome-prospect-dashboard.onrender.com/api/properties/nearby-places",
+        "http://localhost:5000/api/properties/nearby-places",
         { location, type: "restaurant", radius }
       );
       setNearbyPlaces(res.data);
@@ -315,7 +315,7 @@ const PropertyDetails = () => {
             <OutlineCta
               key={index}
               text={image.label}
-             onClick={() => handleImageLabelClick(`https://prehome-prospect-dashboard.onrender.com${image.url}`)}
+             onClick={() => handleImageLabelClick(`http://localhost:5000${image.url}`)}
             />
           ))}
         </Box>

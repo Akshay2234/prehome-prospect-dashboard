@@ -58,7 +58,7 @@ export default function Sidebar() {
       if (!userId) return;
 
       try {
-        const res = await axios.get(`https://prehome-prospect-dashboard.onrender.com/api/notifications/${userId}`);
+        const res = await axios.get(`http://localhost:5000/api/notifications/${userId}`);
         setNotifications(res.data || []);
       } catch (err) {
         console.error("Error fetching notifications:", err);
