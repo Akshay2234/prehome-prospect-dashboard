@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Box, Typography, Slider, Button } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 import axios from "axios";
 
 import "../assets/style.css";
@@ -142,27 +142,32 @@ const formSections = [
 // ------------------- Component --------------------
 const DashboardScreen = () => {
   const userId = localStorage.getItem("user_id");
-  const userEmail = localStorage.getItem("user_email");
 
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [responses, setResponses] = useState([]);
   const [sectionAnswers, setSectionAnswers] = useState({});
 
   const section = formSections[currentSectionIndex];
-  const allQuestions = formSections.flatMap(s => s.questions);
-const progressPercent = Math.min(100, Math.round((currentSectionIndex / formSections.length) * 100));
-
+  const allQuestions = formSections.flatMap((s) => s.questions);
+  const progressPercent = Math.min(
+    100,
+    Math.round((currentSectionIndex / formSections.length) * 100)
+  );
 
   useEffect(() => {
     const loadProgress = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/form/load-progress/${userId}`);
+        const res = await axios.get(
+          `http://localhost:5000/api/form/load-progress/${userId}`
+        );
         const saved = res.data.responses || [];
         setResponses(saved);
 
         if (saved.length > 0) {
           const lastId = saved[saved.length - 1].questionId;
-          const index = formSections.findIndex(sec => sec.questions.some(q => q.id === lastId));
+          const index = formSections.findIndex((sec) =>
+            sec.questions.some((q) => q.id === lastId)
+          );
           setCurrentSectionIndex(index + 1);
         }
       } catch (err) {
@@ -177,7 +182,7 @@ const progressPercent = Math.min(100, Math.round((currentSectionIndex / formSect
     const updated = { ...sectionAnswers, [question.id]: value };
     setSectionAnswers(updated);
 
-    const allAnswered = section.questions.every(q =>
+    const allAnswered = section.questions.every((q) =>
       !q.conditionalOn || updated[q.conditionalOn.id] === q.conditionalOn.value
         ? updated[q.id] !== undefined && updated[q.id] !== ""
         : true
@@ -185,8 +190,11 @@ const progressPercent = Math.min(100, Math.round((currentSectionIndex / formSect
 
     if (allAnswered) {
       const newResponses = section.questions
-        .filter(q => !q.conditionalOn || updated[q.conditionalOn.id] === q.conditionalOn.value)
-        .map(q => ({
+        .filter(
+          (q) =>
+            !q.conditionalOn || updated[q.conditionalOn.id] === q.conditionalOn.value
+        )
+        .map((q) => ({
           questionId: q.id,
           question: q.label,
           answer: String(updated[q.id]),
@@ -196,19 +204,24 @@ const progressPercent = Math.min(100, Math.round((currentSectionIndex / formSect
       setResponses(updatedResponses);
       setSectionAnswers({});
 
-      axios.post("http://localhost:5000/api/form/save-progress", {
-        userId,
-        responses: updatedResponses,
-      }).then(() => {
-        setCurrentSectionIndex(prev => prev + 1);
-      }).catch(err => {
-        console.error("Failed to save:", err);
-      });
+      axios
+        .post("http://localhost:5000/api/form/save-progress", {
+          userId,
+          responses: updatedResponses,
+        })
+        .then(() => {
+          setCurrentSectionIndex((prev) => prev + 1);
+        })
+        .catch((err) => {
+          console.error("Failed to save:", err);
+        });
     }
   };
 
   const renderQuestion = (q) => {
-    const shouldShow = !q.conditionalOn || sectionAnswers[q.conditionalOn.id] === q.conditionalOn.value;
+    const shouldShow =
+      !q.conditionalOn ||
+      sectionAnswers[q.conditionalOn.id] === q.conditionalOn.value;
     if (!shouldShow) return null;
 
     if (q.inputType === "slider") {
@@ -262,130 +275,127 @@ const progressPercent = Math.min(100, Math.round((currentSectionIndex / formSect
   }
 
   return (
-  <Container maxWidth="xl" sx={{ backgroundColor: "#ECECEC", minHeight: "100vh", pt: 7 }}>
-
-    
-<Box
-  className="fixed-card"
-  sx={{
-    background: "#fff",
-    borderRadius: "32px",
-    p: { xs: 2, md: 3},
-     pt: 10,
-    // mt: 6,
-    mb: 0,
-    boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
-    width: "100%",
-    maxWidth: "1128px",
-    minHeight: "164px",
-    mx: "auto", // centers it horizontally
-  }}
->
-
-    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: 700,
-          color: "#222",
-          fontFamily: "Poppins, sans-serif",
-        }}
-      >
-        Start your home ownership journey
-      </Typography>
-      <Typography
-        sx={{
-          fontWeight: 600,
-          color: "#7BA1A7",
-          fontSize: 20,
-          fontFamily: "Poppins, sans-serif",
-        }}
-      >
-        {progressPercent}% Complete
-      </Typography>
-    </Box>
-
-    <Box display="flex" alignItems="center" mb={2}>
-      <Typography
-        sx={{
-          fontWeight: 500,
-          color: "#222",
-          fontSize: 20,
-          fontFamily: "Poppins, sans-serif",
-          mr: 3,
-        }}
-      >
-        {section.sectionName}
-      </Typography>
-    </Box>
-
-    {/* Custom Progress Bar */}
-    <Box sx={{ position: "relative", width: "100%", mt: 1 }}>
+    <Container
+      maxWidth="xl"
+      sx={{ backgroundColor: "#ECECEC", minHeight: "100vh", pt: 7 }}
+    >
       <Box
+        className="fixed-card"
         sx={{
+          background: "#fff",
+          borderRadius: "32px",
+          p: { xs: 2, md: 3 },
+          pt: 10,
+          mb: 0,
+          boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
           width: "100%",
-          height: 20,
-          background: "#D6EEF5",
-          borderRadius: "16px",
-          position: "relative",
+          maxWidth: "1128px",
+          minHeight: "164px",
+          mx: "auto",
         }}
       >
-        <Box
-          sx={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            height: "100%",
-            width: `${progressPercent}%`,
-            background: "#0086AD",
-            borderRadius: "16px",
-            transition: "width 0.4s",
-            zIndex: 1,
-          }}
-        />
-        {/* Dots for each section */}
-        {formSections.map((sec, idx) => {
-          if (idx === 0) return null;
-          return (
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 600,
+              fontSize: 24,
+              color: "#222",
+              fontFamily: "Poppins, sans-serif",
+            }}
+          >
+            Start your home ownership journey
+          </Typography>
+          <Typography
+            sx={{
+              fontWeight: 600,
+              color: "#7BA1A7",
+              fontSize: 16,
+              fontFamily: "Poppins, sans-serif",
+            }}
+          >
+            {progressPercent}% Complete
+          </Typography>
+        </Box>
+
+        <Box display="flex" alignItems="center" mb={2}>
+          <Typography
+            sx={{
+              fontWeight: 500,
+              color: "#222",
+              fontSize: 16,
+              fontFamily: "Poppins, sans-serif",
+              mr: 3,
+            }}
+          >
+            {section.sectionName}
+          </Typography>
+        </Box>
+
+        {/* Custom Progress Bar */}
+        <Box sx={{ position: "relative", width: "100%", mt: 1 }}>
+          <Box
+            sx={{
+              width: "100%",
+              height: 20,
+              background: "#D6EEF5",
+              borderRadius: "16px",
+              position: "relative",
+            }}
+          >
             <Box
-              key={sec.sectionId}
               sx={{
                 position: "absolute",
-                left: `${(idx / (formSections.length - 1)) * 100}%`,
+                left: 0,
+                top: 0,
+                height: "100%",
+                width: `calc(${progressPercent}% + 60px)`,
+                background: "#0086AD",
+                borderRadius: "16px",
+                transition: "width 0.4s",
+                zIndex: 1,
+              }}
+            />
+            {formSections.map((sec, idx) => {
+              if (idx === 0) return null;
+              return (
+                <Box
+                  key={sec.sectionId}
+                  sx={{
+                    position: "absolute",
+                    left: `${(idx / (formSections.length - 0.97)) * 100}%`,
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: 16,
+                    height: 16,
+                    background: "#fff",
+                    borderRadius: "50%",
+                    zIndex: 2,
+                    border: "3px solid #D6EEF5",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                  }}
+                />
+              );
+            })}
+            <Box
+              sx={{
+                position: "absolute",
+                left: `calc(${progressPercent}% + 45px)`,
                 top: "50%",
-                transform: "translate(-50%, -50%)",
+                transform: "translateY(-50%)",
                 width: 16,
                 height: 16,
                 background: "#fff",
                 borderRadius: "50%",
-                zIndex: 2,
-                border: "3px solid #D6EEF5",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                zIndex: 3,
+                border: "4px solid #0086AD",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                transition: "left 0.4s",
               }}
             />
-          );
-        })}
-        {/* Progress Dot */}
-        <Box
-          sx={{
-            position: "absolute",
-            left: `calc(${progressPercent}% - 8px)`,
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: 16,
-            height: 16,
-            background: "#fff",
-            borderRadius: "50%",
-            zIndex: 3,
-            border: "4px solid #0086AD",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-            transition: "left 0.4s",
-          }}
-        />
+          </Box>
+        </Box>
       </Box>
-    </Box>
-  </Box>
-
 
       <Box className="question-section" sx={{ mt: 4, zIndex: 0 }}>
         {section.questions.map(renderQuestion)}

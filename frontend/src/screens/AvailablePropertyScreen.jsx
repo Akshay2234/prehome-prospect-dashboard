@@ -28,16 +28,16 @@ const AvailablePropertyScreen = () => {
   return (
     <Box sx={{ background: "#ECECEC", minHeight: "100vh", width: "100%" }}>
       {/* Header */}
-      <Box
+           <Box
         sx={{
           width: "100%",
           background: "#ECECEC",
-          px: { xs: 2, md: 6 },
+          px: { xs: 2, md: 5 },
           py: 4,
-          mb: 3,
+          mt: 2,
         }}
       >
-        <Typography variant="h5" fontWeight="bold" sx={{ color: "#222" }}>
+        <Typography variant="h5" fontWeight="bold" sx={{ color: "#222",fontFamily:"Poppins" }}>
           Available Properties
         </Typography>
       </Box>
@@ -60,15 +60,7 @@ const AvailablePropertyScreen = () => {
           return (
             <Box
               key={property._id}
-              sx={{
-                backgroundColor: "#fff",
-                borderRadius: "24px",
-                boxShadow: "0px 2px 12px rgba(0, 0, 0, 0.05)",
-                pt: { xs: 2, md: 3 },
-                pb: { xs: 2, md: 2 },
-                px: { xs: 1, md: 1 },
-                mb: 4,
-              }}
+              className="prop-cards-parent"
             >
               <PropertyCards
                 propertyId={property._id}

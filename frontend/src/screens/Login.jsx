@@ -1,22 +1,10 @@
-import {
-  Divider,
-  Typography,
-  Container,
-  IconButton,
-  Box,
-  TextField,
-} from "@mui/material";
+import { useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
-import icon from "./logo.png";
-import ViewPropButton from "../components/ViewPropButton";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
-import { useState } from "react";
-import axios from "axios";
 
 const LoginSignup = () => {
   const [email, setEmail] = useState("");
@@ -109,154 +97,180 @@ const LoginSignup = () => {
   };
 
   return (
-    <Box className="main-box-login">
-      {!showForgot ? (
-        <Container maxWidth="xs" className="login-container">
-          <div className="img-container">
-            <img src={icon} alt="logo" style={{ height: "100px", margin: "5% 0" }} />
-          </div>
+    <div style={styles.container}>
+      <div style={styles.formBox}>
+        <h2 style={styles.heading}>{showForgot ? "Forgot Password" : "Login"}</h2>
 
-          <Typography variant="h5" gutterBottom>
-            <Box className="login-heading">Log In or Sign Up With Prehome</Box>
-          </Typography>
-
-          <Box className="login-btn-cotainer">
-            <GoogleLogin
-              onSuccess={handleGoogleLoginSuccess}
-              onError={() => alert("Google login failed")}
-              width="330"
+        {!showForgot ? (
+          <>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={styles.input}
             />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={styles.input}
+            />
+            <p style={styles.forgotText}>
+              <span onClick={() => setShowForgot(true)} style={styles.forgotLink}>Forgot Password?</span>
+            </p>
+            <button onClick={handleLogin} style={styles.button}>Login</button>
 
-            <Box mt={2}>
-              <LoginSocialFacebook
-                appId="997130395950749"
-                onResolve={handleFacebookResponse}
-                onReject={() => alert("Facebook Login Failed")}
-              >
-                <FacebookLoginButton text="Continue With Facebook" />
-              </LoginSocialFacebook>
-            </Box>
-          </Box>
-
-          <Divider className="login-divider" sx={{ my: 3 }}>Or</Divider>
-
-          <p className="login-mail-text">Email Id</p>
-          <TextField
-            className="login-textfield"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-          />
-
-          <p className="login-mail-text">Password</p>
-          <TextField
-            className="login-textfield"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-          />
-
-          <Link onClick={() => setShowForgot(true)} className="login-link">
-            Forgot Password
-          </Link>
-
-          <ViewPropButton
-            style={{ width: "358px" }}
-            text="Continue"
-            onClick={handleLogin}
-          />
-
-          <p>
-            Don&apos;t have an account?{" "}
-            <Link to="/signup" className="signup-link">Sign Up</Link>
-          </p>
-        </Container>
-      ) : (
-        <Container maxWidth="xs" className="login-container">
-          <Typography variant="h5" gutterBottom>
-            Forgot Password
-          </Typography>
-
-          {forgotStep === 1 && (
-            <>
-              <TextField
-                className="login-textfield"
-                type="email"
-                placeholder="Enter Email"
-                value={forgotEmail}
-                onChange={(e) => setForgotEmail(e.target.value)}
-                fullWidth
-              />
-              <ViewPropButton
-                style={{ width: "358px" }}
-                text="Send OTP"
-                onClick={handleForgotSubmit}
-              />
-            </>
-          )}
-
-          {forgotStep === 2 && (
-            <>
-              <TextField
-                className="login-textfield"
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                fullWidth
-              />
-              <ViewPropButton
-                style={{ width: "358px" }}
-                text="Verify OTP"
-                onClick={handleVerifyOtp}
-              />
-            </>
-          )}
-
-          {forgotStep === 3 && (
-            <>
-              <TextField
-                className="login-textfield"
-                type="password"
-                placeholder="Enter New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                fullWidth
-              />
-              <ViewPropButton
-                style={{ width: "358px" }}
-                text="Reset Password"
-                onClick={handleResetPassword}
-              />
-            </>
-          )}
-
-          <Typography sx={{ mt: 2, color: "blue", textAlign: "center" }}>
-            {forgotMessage}
-          </Typography>
-
-          <p style={{ textAlign: "center" }}>
-            <span
-              onClick={() => {
-                setShowForgot(false);
-                setForgotStep(1);
-                setForgotEmail("");
-                setOtp("");
-                setNewPassword("");
-                setForgotMessage("");
-              }}
-              style={{ cursor: "pointer", color: "#1976d2", textDecoration: "underline" }}
+            <p style={styles.orText}>OR</p>
+            <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={() => alert("Google login failed")} />
+            <p style={styles.orText}>OR</p>
+            <LoginSocialFacebook
+              appId="997130395950749"
+              onResolve={handleFacebookResponse}
+              onReject={() => alert("Facebook Login Failed")}
             >
-              Back to Login
-            </span>
-          </p>
-        </Container>
-      )}
-    </Box>
+              <FacebookLoginButton text="Continue With Facebook" />
+            </LoginSocialFacebook>
+
+            <p style={styles.signupText}>
+              Don&apos;t have an account?{" "}
+              <Link to="/signup" style={styles.signupLink}>Sign Up</Link>
+            </p>
+          </>
+        ) : (
+          <>
+            {forgotStep === 1 && (
+              <>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  style={styles.input}
+                />
+                <button onClick={handleForgotSubmit} style={styles.button}>Send OTP</button>
+              </>
+            )}
+            {forgotStep === 2 && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  style={styles.input}
+                />
+                <button onClick={handleVerifyOtp} style={styles.button}>Verify OTP</button>
+              </>
+            )}
+            {forgotStep === 3 && (
+              <>
+                <input
+                  type="password"
+                  placeholder="Enter New Password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  style={styles.input}
+                />
+                <button onClick={handleResetPassword} style={styles.button}>Reset Password</button>
+              </>
+            )}
+
+            <p style={styles.info}>{forgotMessage}</p>
+            <p style={styles.forgotText}>
+              <span
+                onClick={() => {
+                  setShowForgot(false);
+                  setForgotStep(1);
+                  setForgotEmail("");
+                  setOtp("");
+                  setNewPassword("");
+                  setForgotMessage("");
+                }}
+                style={styles.forgotLink}
+              >
+                Back to Login
+              </span>
+            </p>
+          </>
+        )}
+      </div>
+    </div>
   );
+};
+
+const styles = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "#f4f5f7",
+  },
+  formBox: {
+    padding: "30px",
+    borderRadius: "10px",
+    backgroundColor: "#fff",
+    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+    display: "flex",
+    flexDirection: "column",
+    width: "300px",
+  },
+  heading: {
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  input: {
+    padding: "10px",
+    marginBottom: "10px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+  },
+  forgotText: {
+    textAlign: "right",
+    marginBottom: "15px",
+    fontSize: "14px",
+  },
+  forgotLink: {
+    color: "#1976d2",
+    textDecoration: "underline",
+    fontWeight: "normal",
+    cursor: "pointer",
+  },
+  button: {
+    padding: "10px",
+    borderRadius: "5px",
+    border: "none",
+    backgroundColor: "#1976d2",
+    color: "#fff",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  orText: {
+    textAlign: "center",
+    margin: "15px 0",
+    fontSize: "14px",
+    color: "#999",
+  },
+  signupText: {
+    marginTop: "15px",
+    textAlign: "center",
+    fontSize: "14px",
+  },
+  signupLink: {
+    color: "#1976d2",
+    textDecoration: "none",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+  info: {
+    textAlign: "center",
+    color: "#1976d2",
+    fontSize: "14px",
+    marginTop: "10px",
+  }
 };
 
 export default LoginSignup;

@@ -104,7 +104,7 @@ const PrehomeHelp = () => {
             className="chat-card"
             ref={chatContainerRef}
             sx={{
-              maxHeight: "400px",
+              maxHeight: { xs: "450px", md: "370px" },
               overflowY: "auto",
               paddingRight: "10px",
               marginBottom: "20px",
@@ -147,7 +147,7 @@ const PrehomeHelp = () => {
                 sx={{ display: "flex", flexDirection: "column", marginBottom: 2 }}
               >
                 <ChatbotCta text="Select one of the following:" />
-                <Box className="cta-container mt-3">
+                <Box className="cta-container-chatbot mt-3">
                   {currentNode.options.map((option, idx) => (
                     <ChatbotOutlineCta
                       key={idx}

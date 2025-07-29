@@ -1,16 +1,8 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Stepper,
-  Step,
-  StepLabel,
-  CircularProgress,
-} from "@mui/material";
 import axios from "axios";
+import AuthInput from "../../components/Auth/AuthInput";
+import AuthButton from "../../components/Auth/AuthButton";
+import { useNavigate } from "react-router-dom";
 
 const steps = ["Enter Email", "Verify OTP", "Set Password"];
 
@@ -23,12 +15,15 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
   const sendOtp = async () => {
     setLoading(true);
     try {
       await axios.post("/api/auth/send-otp", { email });
       setActiveStep(1);
       setError("");
+      alert("OTP sent to your email");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send OTP");
     } finally {
@@ -42,6 +37,7 @@ const Signup = () => {
       await axios.post("/api/auth/verify-otp", { email, otp });
       setActiveStep(2);
       setError("");
+      alert("OTP verified! Set your password.");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP");
     } finally {
@@ -49,7 +45,8 @@ const Signup = () => {
     }
   };
 
-  const setNewPassword = async () => {
+  const setNewPassword = async (e) => {
+    e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -60,11 +57,13 @@ const Signup = () => {
       await axios.post("/api/auth/set-password", { email, password });
       setError("");
       alert("Signup successful!");
+      // Reset state or navigate to login
       setActiveStep(0);
       setEmail("");
       setOtp("");
       setPassword("");
       setConfirmPassword("");
+      navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
     } finally {
@@ -77,74 +76,57 @@ const Signup = () => {
       case 0:
         return (
           <>
-            <TextField
-              fullWidth
-              label="Email"
+            <AuthInput
+              type="email"
+              placeholder="Enter Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              margin="normal"
             />
-            <Button
-              variant="contained"
-              color="primary"
+            <AuthButton
+              text={loading ? "Sending..." : "Send OTP"}
               onClick={sendOtp}
-              disabled={loading || !email}
-              fullWidth
-            >
-              {loading ? <CircularProgress size={24} /> : "Send OTP"}
-            </Button>
+              disabled={!email || loading}
+              type="button"
+            />
           </>
         );
       case 1:
         return (
           <>
-            <TextField
-              fullWidth
-              label="OTP"
+            <AuthInput
+              type="text"
+              placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              margin="normal"
             />
-            <Button
-              variant="contained"
-              color="primary"
+            <AuthButton
+              text={loading ? "Verifying..." : "Verify OTP"}
               onClick={verifyOtp}
-              disabled={loading || !otp}
-              fullWidth
-            >
-              {loading ? <CircularProgress size={24} /> : "Verify OTP"}
-            </Button>
+              disabled={!otp || loading}
+              type="button"
+            />
           </>
         );
       case 2:
         return (
-          <>
-            <TextField
-              fullWidth
+          <form onSubmit={setNewPassword}>
+            <AuthInput
               type="password"
-              label="Password"
+              placeholder="Enter Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              margin="normal"
             />
-            <TextField
-              fullWidth
+            <AuthInput
               type="password"
-              label="Confirm Password"
+              placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              margin="normal"
             />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={setNewPassword}
-              disabled={loading || !password || !confirmPassword}
-              fullWidth
-            >
-              {loading ? <CircularProgress size={24} /> : "Set Password"}
-            </Button>
-          </>
+            <AuthButton
+              text={loading ? "Creating..." : "Create Account"}
+              disabled={!password || !confirmPassword || loading}
+            />
+          </form>
         );
       default:
         return null;
@@ -152,26 +134,15 @@ const Signup = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 5, p: 3, border: "1px solid #ccc", borderRadius: 2 }}>
-        <Typography variant="h4" gutterBottom align="center">
-          Signup
-        </Typography>
-        <Stepper activeStep={activeStep} alternativeLabel>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <Box sx={{ mt: 3 }}>{renderStepContent()}</Box>
-        {error && (
-          <Typography color="error" align="center" sx={{ mt: 2 }}>
-            {error}
-          </Typography>
-        )}
-      </Box>
-    </Container>
+    <div className="auth-container">
+      <h2>Sign Up</h2>
+      {renderStepContent()}
+      {error && (
+        <p style={{ color: "red", textAlign: "center", marginTop: "1rem" }}>
+          {error}
+        </p>
+      )}
+    </div>
   );
 };
 
