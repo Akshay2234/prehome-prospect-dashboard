@@ -35,6 +35,7 @@ const propertySchema = new mongoose.Schema({
     propertyType: {
       type: String,
       enum: ["hospital", "restaurant", "school", "mall", "park", "gym"], // dropdown values
+      default:[]
     },
     yearBuilt: Number,
     squareFootage: String,

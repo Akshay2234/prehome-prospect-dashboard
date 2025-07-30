@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { GoogleMap, Marker, useLoadScript, InfoWindow } from '@react-google-maps/api';
 
-const MapComponent = ({ center, places }) => {
+const MapComponent = ({ center, places = [] }) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc',
   });
@@ -24,9 +24,24 @@ const MapComponent = ({ center, places }) => {
 
   if (!isLoaded) return <div>Loading...</div>;
 
-  const getMarkerIcon = (placeTypes) => {
+  const getMarkerIcon = (placeTypes = []) => {
     if (placeTypes.includes('restaurant')) {
-      return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCaJTjwWq0EegGyFhxCf0_VSFIz_lO5rv5eQ&s';
+      return 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png';
+    }
+    if (placeTypes.includes('hospital')) {
+      return 'https://maps.google.com/mapfiles/ms/icons/hospitals.png';
+    }
+    if (placeTypes.includes('school')) {
+      return 'https://maps.google.com/mapfiles/ms/icons/schools.png';
+    }
+    if (placeTypes.includes('gym')) {
+      return 'https://maps.google.com/mapfiles/ms/icons/fitness.png';
+    }
+    if (placeTypes.includes('shopping_mall') || placeTypes.includes('mall')) {
+      return 'https://maps.google.com/mapfiles/ms/icons/shopping.png';
+    }
+    if (placeTypes.includes('park')) {
+      return 'https://maps.google.com/mapfiles/ms/icons/green-dot.png';
     }
     return 'https://maps.google.com/mapfiles/ms/icons/red-dot.png';
   };
@@ -38,8 +53,16 @@ const MapComponent = ({ center, places }) => {
       zoom={zoom}
       onLoad={handleOnLoad}
     >
-      <Marker position={mapCenter} />
+      {/* Property marker */}
+      <Marker
+        position={mapCenter}
+        title="Property Location"
+        icon={{
+          url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        }}
+      />
 
+      {/* Nearby places */}
       {places.map((place, index) => (
         <Marker
           key={index}
@@ -53,6 +76,7 @@ const MapComponent = ({ center, places }) => {
         />
       ))}
 
+      {/* Info window */}
       {selectedPlace && (
         <InfoWindow
           position={{ lat: selectedPlace.latitude, lng: selectedPlace.longitude }}
@@ -60,7 +84,11 @@ const MapComponent = ({ center, places }) => {
         >
           <div>
             <h4>{selectedPlace.name}</h4>
-            {selectedPlace.types && <p>Types: {selectedPlace.types.join(', ')}</p>}
+            {selectedPlace.types && (
+              <p>
+                <strong>Types:</strong> {selectedPlace.types.join(', ')}
+              </p>
+            )}
           </div>
         </InfoWindow>
       )}

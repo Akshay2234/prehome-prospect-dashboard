@@ -29,7 +29,7 @@ const PropertyDetails = () => {
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [visitDate, setVisitDate] = useState(null);
   const [status, setStatus] = useState("");
-  const [clickedIndex, setClickedIndex] = useState(null); // moved down like file 2
+  const [clickedIndex, setClickedIndex] = useState(null);
 
   useEffect(() => {
     const checkUserChange = () => {
@@ -51,10 +51,10 @@ const PropertyDetails = () => {
   }, [id]);
 
   useEffect(() => {
-    if (property) {
-      fetchNearbyPlaces(property.location);
+    if (property?.generalInfo?.propertyType) {
+      fetchNearbyPlaces(property.location, property.generalInfo.propertyType);
     }
-  }, [radius, property]);
+  }, [property, radius]);
 
   useEffect(() => {
     if (property?.features?.views?.length > 0) {
@@ -91,13 +91,26 @@ const PropertyDetails = () => {
     }
   };
 
-  const fetchNearbyPlaces = async (location) => {
+  // Updated fetchNearbyPlaces to loop through multiple types
+  const fetchNearbyPlaces = async (location, propertyTypes) => {
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/properties/nearby-places",
-        { location, type: "restaurant", radius }
+      const types = Array.isArray(propertyTypes)
+        ? propertyTypes
+        : [propertyTypes];
+
+      const results = await Promise.all(
+        types.map(async (type) => {
+          const res = await axios.post(
+            "http://localhost:5000/api/properties/nearby-places",
+            { location, type, radius }
+          );
+          return res.data;
+        })
       );
-      setNearbyPlaces(res.data);
+
+      // Flatten all arrays into a single array
+      const merged = results.flat();
+      setNearbyPlaces(merged);
     } catch (error) {
       console.error("Error fetching nearby places:", error);
     }
@@ -110,7 +123,6 @@ const PropertyDetails = () => {
   const handleImageLabelClick = (url, index) => {
     setSelectedImageUrl(url);
     setClickedIndex(index);
-    console.log("Clicked image URL:", url);
   };
 
   if (!property) {
@@ -241,30 +253,6 @@ const PropertyDetails = () => {
                     {isShortlisted && (
                       <Box className="prop-details-shortlist-cta">Shortlisted</Box>
                     )}
-                    {visitDate && (
-                      <Box
-                        sx={{
-                          background: "#D4EDF4",
-                          color: "#3E3E3E",
-                          fontWeight: 600,
-                          px: 3,
-                          py: 1.2,
-                          borderRadius: "20px",
-                          fontSize: 16,
-                          textAlign: "center",
-                          minWidth: 200,
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                          display: "none",
-                        }}
-                      >
-                        Property Visit on{" "}
-                        {new Date(visitDate).toLocaleDateString("en-IN", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </Box>
-                    )}
                   </Box>
                 )}
 
@@ -325,7 +313,11 @@ const PropertyDetails = () => {
           <p className="sub-Heading-1">Address</p>
           <p className="sub-Heading">{property.generalInfo.propertyAddress}</p>
           <p className="sub-Heading-1">Property Type</p>
-          <p className="sub-Heading">{property.generalInfo.propertyType}</p>
+          <p className="sub-Heading">
+  {Array.isArray(property.generalInfo.propertyType)
+    ? property.generalInfo.propertyType.join(", ")
+    : property.generalInfo.propertyType}
+</p>
           <p className="sub-Heading-1">Year Built</p>
           <p className="sub-Heading">{property.generalInfo.yearBuilt}</p>
           <p className="sub-Heading-1">Square Footage</p>
@@ -340,7 +332,7 @@ const PropertyDetails = () => {
       </Box>
 
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Box sx={{ mb: 2, display: "none" }}>
+        <Box sx={{ display: "none" }}>
           <Typography gutterBottom>
             Set Nearby Search Radius (meters): {radius}
           </Typography>
