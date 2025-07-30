@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import AuthInput from "../../components/Auth/AuthInput";
-import AuthButton from "../../components/Auth/AuthButton";
+import AuthInput from "../components/AuthInput";
+import AuthButton from "../components/AuthButton";
 import { useNavigate } from "react-router-dom";
 
 const steps = ["Enter Email", "Verify OTP", "Set Password"];

@@ -29,7 +29,7 @@ const PropertyDetails = () => {
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [visitDate, setVisitDate] = useState(null);
   const [status, setStatus] = useState("");
-  const [clickedIndex, setClickedIndex] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null); // moved down like file 2
 
   useEffect(() => {
     const checkUserChange = () => {
@@ -67,9 +67,11 @@ const PropertyDetails = () => {
 
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      const res = await axios.get(
+        `http://localhost:5000/api/properties/${id}`
+      );
       setProperty(res.data);
-      setSelectedImageUrl(`http://localhost:5000${res.data.images[0]?.url}`);
+      setSelectedImageUrl(res.data.images[0]?.url);
 
       const userActivity = await axios.get(
         `http://localhost:5000/api/activity/${userId}/${res.data._id}`
@@ -77,7 +79,11 @@ const PropertyDetails = () => {
 
       if (userActivity.data) {
         setIsShortlisted(userActivity.data.shortlisted || false);
-        setVisitDate(userActivity.data.visitDate ? new Date(userActivity.data.visitDate) : null);
+        setVisitDate(
+          userActivity.data.visitDate
+            ? new Date(userActivity.data.visitDate)
+            : null
+        );
         setStatus(userActivity.data.status || "");
       }
     } catch (err) {
@@ -104,6 +110,7 @@ const PropertyDetails = () => {
   const handleImageLabelClick = (url, index) => {
     setSelectedImageUrl(url);
     setClickedIndex(index);
+    console.log("Clicked image URL:", url);
   };
 
   if (!property) {
@@ -117,7 +124,7 @@ const PropertyDetails = () => {
   }
 
   return (
-    <Box sx={{ backgroundColor:{xs:"#fff",sm:"#fff",md: "#fff",lg:"#ECECEC"}, minHeight: "100vh", p: 0 }}>
+    <Box sx={{ backgroundColor: { xs: "#fff", sm: "#fff", md: "#fff", lg: "#ECECEC" }, minHeight: "100vh", p: 0 }}>
       <Container maxWidth="lg" sx={{ pt: 4, pb: 4 }}>
         <Box
           sx={{
@@ -125,7 +132,7 @@ const PropertyDetails = () => {
             flexDirection: { xs: "column", md: "row" },
             alignItems: { xs: "flex-start", md: "center" },
             justifyContent: "space-between",
-            gap:{ xs: 0, md: 2 },
+            gap: { xs: 0, md: 2 },
             mb: { xs: 0, md: 2 },
           }}
         >
@@ -137,50 +144,48 @@ const PropertyDetails = () => {
                 style={{ cursor: "pointer", marginRight: 12 }}
                 onClick={() => navigate("/available-property")}
               />
-              <Typography fontWeight={600} sx={{ fontSize: {xs:16,md:24} }}>
+              <Typography fontWeight={600} sx={{ fontSize: { xs: 16, md: 24 } }}>
                 Property Details
               </Typography>
             </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                alignItems: { xs: "flex-start", sm: "center" },
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: 2,
-                mb: 2,
-                width: "100%",
-              }}
-            >
-              <Typography
-                fontWeight={600}
-                sx={{ mr: 2, flexShrink: 0, fontSize:{xs:16,md:24} }}
-              >
-                {property.title}
-              </Typography>
-
-              {status === "Visited" && (
-                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
-                  <Box className="prop-details-prop-visited">
-                    Property Visited
-                  </Box>
-                  {visitDate && (
-                    <Box className="prop-details-prop-visit-date">
-                      Property Visit on{" "}
-                      {new Date(visitDate).toLocaleDateString("en-IN", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </Box>
-                  )}
-                </Box>
-              )}
-            </Box>
-
             <Box className="cta-container">
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: { xs: "flex-start", sm: "center" },
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: 2,
+                  mb: 2,
+                  width: "100%",
+                }}
+              >
+                <Typography
+                  fontWeight={600}
+                  sx={{ mr: 2, flexShrink: 0, fontSize: { xs: 16, md: 24 } }}
+                >
+                  {property.title}
+                </Typography>
+
+                {status === "Visited" && (
+                  <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center" }}>
+                    <Box className="prop-details-prop-visited">Property Visited</Box>
+                    {visitDate && (
+                      <Box className="prop-details-prop-visit-date">
+                        Property Visit on{" "}
+                        {new Date(visitDate).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </Box>
+                    )}
+                  </Box>
+                )}
+              </Box>
+
               {(property.features?.views || []).map((view, idx) => {
                 const isSelected = view.label === selectedView;
                 return (
@@ -216,7 +221,7 @@ const PropertyDetails = () => {
               flexDirection: "column",
               alignItems: { xs: "flex-start", md: "flex-end" },
               gap: 2,
-              minWidth: 320,
+              mb: 2,
             }}
           >
             {status !== "Visited" && (
@@ -234,9 +239,7 @@ const PropertyDetails = () => {
                     }}
                   >
                     {isShortlisted && (
-                      <Box className="prop-details-shortlist-cta">
-                        Shortlisted
-                      </Box>
+                      <Box className="prop-details-shortlist-cta">Shortlisted</Box>
                     )}
                     {visitDate && (
                       <Box
@@ -285,7 +288,7 @@ const PropertyDetails = () => {
               key={index}
               text={image.label}
               isClicked={clickedIndex === index}
-              onClick={() => handleImageLabelClick(`http://localhost:5000${image.url}`, index)}
+              onClick={() => handleImageLabelClick(image.url, index)}
             />
           ))}
         </Box>
@@ -350,8 +353,15 @@ const PropertyDetails = () => {
             valueLabelDisplay="auto"
           />
         </Box>
-        <Box sx={{ boxShadow: "1px 1px 10px 0px rgba(1, 29, 80, 0.6)", marginBottom: "1%", borderRadius: "16px" }}>
+        <Box
+          sx={{
+            boxShadow: "1px 1px 10px 0px rgba(1, 29, 80, 0.6)",
+            marginBottom: "1%",
+            borderRadius: "16px",
+          }}
+        >
           <MapComponent
+            sx={{ border: "1px solid grey" }}
             center={{ lat: property.latitude, lng: property.longitude }}
             places={nearbyPlaces}
           />
