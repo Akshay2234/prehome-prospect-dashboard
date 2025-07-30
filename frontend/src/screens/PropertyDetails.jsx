@@ -68,13 +68,13 @@ const PropertyDetails = () => {
   const fetchProperty = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/properties/${id}`
+        `https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`
       );
       setProperty(res.data);
       setSelectedImageUrl(res.data.images[0]?.url);
 
       const userActivity = await axios.get(
-        `http://localhost:5000/api/activity/${userId}/${res.data._id}`
+        `https://prehome-prospect-dashboard.onrender.com/api/activity/${userId}/${res.data._id}`
       );
 
       if (userActivity.data) {
@@ -101,7 +101,7 @@ const PropertyDetails = () => {
       const results = await Promise.all(
         types.map(async (type) => {
           const res = await axios.post(
-            "http://localhost:5000/api/properties/nearby-places",
+            "https://prehome-prospect-dashboard.onrender.com/api/properties/nearby-places",
             { location, type, radius }
           );
           return res.data;

@@ -20,7 +20,7 @@ const LoginSignup = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      const response = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/login", { email, password });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user_id", response.data.userId);
       navigate("/application-screen");
@@ -32,7 +32,7 @@ const LoginSignup = () => {
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
-      const response = await axios.post("http://localhost:5000/api/auth/google-login", { email: decoded.email });
+      const response = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/google-login", { email: decoded.email });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user_id", response.data.userId);
       localStorage.setItem("user_email", decoded.email);
@@ -48,7 +48,7 @@ const LoginSignup = () => {
 
   const handleFacebookResponse = async ({ data }) => {
     try {
-      const fbResponse = await axios.post("http://localhost:5000/api/auth/facebook-login", {
+      const fbResponse = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/facebook-login", {
         userID: data.id
       });
       localStorage.setItem("token", fbResponse.data.token);
@@ -61,7 +61,7 @@ const LoginSignup = () => {
 
   const handleForgotSubmit = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/forgot-password", { email: forgotEmail });
+      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/forgot-password", { email: forgotEmail });
       setForgotMessage(res.data.message || "OTP sent to email");
       setForgotStep(2);
     } catch {
@@ -71,7 +71,7 @@ const LoginSignup = () => {
 
   const handleVerifyOtp = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/verify-reset-otp", { email: forgotEmail, otp });
+      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/verify-reset-otp", { email: forgotEmail, otp });
       setForgotMessage(res.data.message || "OTP verified");
       setForgotStep(3);
     } catch {
@@ -81,7 +81,7 @@ const LoginSignup = () => {
 
   const handleResetPassword = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/reset-password", { email: forgotEmail, password: newPassword });
+      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/reset-password", { email: forgotEmail, password: newPassword });
       setForgotMessage(res.data.message || "Password reset successfully");
       setTimeout(() => {
         setShowForgot(false);
