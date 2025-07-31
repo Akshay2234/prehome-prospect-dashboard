@@ -65,31 +65,31 @@ const PropertyDetails = () => {
     }
   }, [property]);
 
-  const fetchProperty = async () => {
-    try {
-      const res = await axios.get(
-        `https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`
-      );
-      setProperty(res.data);
-      setSelectedImageUrl(res.data.images[0]?.url);
+ const fetchProperty = async () => {
+  try {
+    const res = await axios.get(
+      `https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`
+    );
 
-      const userActivity = await axios.get(
-        `https://prehome-prospect-dashboard.onrender.com/api/activity/${userId}/${res.data._id}`
-      );
+    const propertyData = res.data;
 
-      if (userActivity.data) {
-        setIsShortlisted(userActivity.data.shortlisted || false);
-        setVisitDate(
-          userActivity.data.visitDate
-            ? new Date(userActivity.data.visitDate)
-            : null
-        );
-        setStatus(userActivity.data.status || "");
-      }
-    } catch (err) {
-      console.error("Error fetching property or user activity:", err);
-    }
-  };
+    // Convert all image URLs to absolute URLs if they are relative
+    const fixedImages = propertyData.images.map((img) => ({
+      ...img,
+      url: img.url.startsWith("http")
+        ? img.url
+        : `https://prehome-prospect-dashboard.onrender.com${img.url}`,
+    }));
+
+    propertyData.images = fixedImages;
+
+    setProperty(propertyData);
+    setSelectedImageUrl(fixedImages[0]?.url);
+  } catch (err) {
+    console.error("Error fetching property:", err);
+  }
+};
+
 
   // Updated fetchNearbyPlaces to loop through multiple types
   const fetchNearbyPlaces = async (location, propertyTypes) => {
@@ -120,10 +120,14 @@ const PropertyDetails = () => {
     setRadius(newValue);
   };
 
-  const handleImageLabelClick = (url, index) => {
-    setSelectedImageUrl(url);
-    setClickedIndex(index);
-  };
+ const handleImageLabelClick = (url, index) => {
+  const fullUrl = url.startsWith("http")
+    ? url
+    : `https://prehome-prospect-dashboard.onrender.com${url}`;
+  setSelectedImageUrl(fullUrl);
+  setClickedIndex(index);
+};
+
 
   if (!property) {
     return (

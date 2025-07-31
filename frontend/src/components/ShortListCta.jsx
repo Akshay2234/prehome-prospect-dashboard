@@ -6,6 +6,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import { addMonths, isSameMonth, isSameYear, format } from 'date-fns';
+import {
+  Box,
+  Button,
+} from "@mui/material";
 
 const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
   const [isShortlisted, setIsShortlisted] = useState(false);
@@ -87,19 +91,29 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
         </button>
       )}
 
+<Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: { xs: "flex-start", md: "flex-end" },
+              gap: 2,
+              // minWidth: 320,
+            }}
+          >
+          
       {isShortlisted && (
         <>
           {status !== "Visited" && (
             <button
               onClick={handleScheduleVisitClick}
-              className="view-prop-btn"
+              // className="view-prop-btn"
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
                 padding: "10px 24px",
-                fontSize: "16px",
+                fontSize: {xs:12,md:16},
                 borderRadius: "30px",
                 backgroundColor: "#0086AD",
                 color: "#fff",
@@ -113,43 +127,47 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
             </button>
           )}
 
-          <div
-            style={{
+          <Button
+            sx={{
               background: "#FFD580",
               color: "#222",
               fontWeight: "bold",
               padding: "10px 24px",
               borderRadius: "30px",
-              fontSize: 16,
+              fontSize: {xs:12,md:14},
+               textTransform:"capitalize",
+fontFamily:"Poppins",
               width: "fit-content",
               textAlign: "center",
               boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
             }}
           >
             Shortlisted
-          </div>
+          </Button>
         </>
       )}
 
       {visitDate && (
-        <div
-          style={{
+        <Button
+          sx={{
             background: "#C7F6FE",
-            color: "#222",
+            color: "#3E3E3E",
             fontWeight: "bold",
             padding: "10px 24px",
             borderRadius: "30px",
-            fontSize: 16,
+            fontSize: {xs:12,md:14},
+            textTransform:"capitalize",
+fontFamily:"Poppins",
             width: "fit-content",
             textAlign: "center",
           }}
         >
           Property Visit on {formattedDate}
-        </div>
+        </Button>
       )}
-
+</Box>
       {showCalendar && (
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "10px",position:"absolute",top:"280px" }}>
           <DatePicker
             selected={visitDate}
             onChange={handleDateSelect}

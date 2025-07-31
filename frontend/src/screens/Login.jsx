@@ -1,10 +1,22 @@
+import {
+  Divider,
+  Typography,
+  Container,
+  IconButton,
+  Box,
+  TextField,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
+import icon from "../assets/logo.png";
+import ViewPropButton from "../components/ViewPropButton";
 
 const LoginSignup = () => {
   const [email, setEmail] = useState("");
@@ -18,9 +30,11 @@ const LoginSignup = () => {
 
   const navigate = useNavigate();
 
+  const apiBase = "https://prehome-prospect-dashboard.onrender.com/api/auth";
+
   const handleLogin = async () => {
     try {
-      const response = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/login", { email, password });
+      const response = await axios.post(`${apiBase}/login`, { email, password });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user_id", response.data.userId);
       navigate("/application-screen");
@@ -32,7 +46,9 @@ const LoginSignup = () => {
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
-      const response = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/google-login", { email: decoded.email });
+      const response = await axios.post(`${apiBase}/google-login`, {
+        email: decoded.email,
+      });
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user_id", response.data.userId);
       localStorage.setItem("user_email", decoded.email);
@@ -48,8 +64,8 @@ const LoginSignup = () => {
 
   const handleFacebookResponse = async ({ data }) => {
     try {
-      const fbResponse = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/facebook-login", {
-        userID: data.id
+      const fbResponse = await axios.post(`${apiBase}/facebook-login`, {
+        userID: data.id,
       });
       localStorage.setItem("token", fbResponse.data.token);
       localStorage.setItem("user_id", fbResponse.data.userId);
@@ -61,7 +77,9 @@ const LoginSignup = () => {
 
   const handleForgotSubmit = async () => {
     try {
-      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/forgot-password", { email: forgotEmail });
+      const res = await axios.post(`${apiBase}/forgot-password`, {
+        email: forgotEmail,
+      });
       setForgotMessage(res.data.message || "OTP sent to email");
       setForgotStep(2);
     } catch {
@@ -71,7 +89,10 @@ const LoginSignup = () => {
 
   const handleVerifyOtp = async () => {
     try {
-      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/verify-reset-otp", { email: forgotEmail, otp });
+      const res = await axios.post(`${apiBase}/verify-reset-otp`, {
+        email: forgotEmail,
+        otp,
+      });
       setForgotMessage(res.data.message || "OTP verified");
       setForgotStep(3);
     } catch {
@@ -81,7 +102,10 @@ const LoginSignup = () => {
 
   const handleResetPassword = async () => {
     try {
-      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/reset-password", { email: forgotEmail, password: newPassword });
+      const res = await axios.post(`${apiBase}/reset-password`, {
+        email: forgotEmail,
+        password: newPassword,
+      });
       setForgotMessage(res.data.message || "Password reset successfully");
       setTimeout(() => {
         setShowForgot(false);
@@ -97,88 +121,116 @@ const LoginSignup = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formBox}>
-        <h2 style={styles.heading}>{showForgot ? "Forgot Password" : "Login"}</h2>
+    <Box className="main-box-login" sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <Container maxWidth="xs" className="login-container" sx={{ padding: 4, backgroundColor: "white", borderRadius: "16px", boxShadow: 3 }}>
+        <div className="img-container" style={{ textAlign: "center" }}>
+          <img src={icon} alt="logo" style={{ height: "100px", margin: "5% 0" }} />
+        </div>
+        <Typography variant="h5" gutterBottom textAlign="center">
+          {showForgot ? "Forgot Password" : "Log In or Sign Up With Prehome"}
+        </Typography>
 
         {!showForgot ? (
           <>
-            <input
+            <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={() => alert("Google login failed")}
+              />
+
+              <LoginSocialFacebook
+                appId="997130395950749"
+                onResolve={handleFacebookResponse}
+                onReject={() => alert("Facebook Login Failed")}
+              >
+                <FacebookLoginButton text="Continue With Facebook" />
+              </LoginSocialFacebook>
+            </Box>
+
+            <Divider sx={{ my: 3 }}>Or</Divider>
+
+            <Typography className="login-mail-text">Email</Typography>
+            <TextField
+              fullWidth
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={styles.input}
+              sx={{ mb: 2 }}
             />
-            <input
+
+            <Typography className="login-mail-text">Password</Typography>
+            <TextField
+              fullWidth
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={styles.input}
+              sx={{ mb: 1 }}
             />
-            <p style={styles.forgotText}>
-              <span onClick={() => setShowForgot(true)} style={styles.forgotLink}>Forgot Password?</span>
-            </p>
-            <button onClick={handleLogin} style={styles.button}>Login</button>
 
-            <p style={styles.orText}>OR</p>
-            <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={() => alert("Google login failed")} />
-            <p style={styles.orText}>OR</p>
-            <LoginSocialFacebook
-              appId="997130395950749"
-              onResolve={handleFacebookResponse}
-              onReject={() => alert("Facebook Login Failed")}
-            >
-              <FacebookLoginButton text="Continue With Facebook" />
-            </LoginSocialFacebook>
+            <Box textAlign="right">
+              <Link onClick={() => setShowForgot(true)} className="login-link">
+                Forgot Password?
+              </Link>
+            </Box>
 
-            <p style={styles.signupText}>
+            <ViewPropButton text="Continue" onClick={handleLogin} style={{ width: "100%" }} />
+
+            <Typography textAlign="center" mt={2}>
               Don&apos;t have an account?{" "}
-              <Link to="/signup" style={styles.signupLink}>Sign Up</Link>
-            </p>
+              <Link to="/signup" className="signup-link">
+                Sign Up
+              </Link>
+            </Typography>
           </>
         ) : (
           <>
             {forgotStep === 1 && (
               <>
-                <input
+                <Typography className="login-mail-text">Enter your email</Typography>
+                <TextField
+                  fullWidth
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Email"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
-                  style={styles.input}
+                  sx={{ mb: 2 }}
                 />
-                <button onClick={handleForgotSubmit} style={styles.button}>Send OTP</button>
+                <ViewPropButton text="Send OTP" onClick={handleForgotSubmit} style={{ width: "100%" }} />
               </>
             )}
             {forgotStep === 2 && (
               <>
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
+                <Typography className="login-mail-text">Enter OTP</Typography>
+                <TextField
+                  fullWidth
+                  placeholder="OTP"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  style={styles.input}
+                  sx={{ mb: 2 }}
                 />
-                <button onClick={handleVerifyOtp} style={styles.button}>Verify OTP</button>
+                <ViewPropButton text="Verify OTP" onClick={handleVerifyOtp} style={{ width: "100%" }} />
               </>
             )}
             {forgotStep === 3 && (
               <>
-                <input
+                <Typography className="login-mail-text">Enter New Password</Typography>
+                <TextField
+                  fullWidth
                   type="password"
                   placeholder="Enter New Password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  style={styles.input}
+                  sx={{ mb: 2 }}
                 />
-                <button onClick={handleResetPassword} style={styles.button}>Reset Password</button>
+                <ViewPropButton text="Reset Password" onClick={handleResetPassword} style={{ width: "100%" }} />
               </>
             )}
 
-            <p style={styles.info}>{forgotMessage}</p>
-            <p style={styles.forgotText}>
+            <Typography textAlign="center" mt={2} color="primary">{forgotMessage}</Typography>
+
+            <Typography textAlign="center" mt={2}>
               <span
                 onClick={() => {
                   setShowForgot(false);
@@ -188,89 +240,16 @@ const LoginSignup = () => {
                   setNewPassword("");
                   setForgotMessage("");
                 }}
-                style={styles.forgotLink}
+                style={{ color: "#1976d2", cursor: "pointer", textDecoration: "underline" }}
               >
                 Back to Login
               </span>
-            </p>
+            </Typography>
           </>
         )}
-      </div>
-    </div>
+      </Container>
+    </Box>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f4f5f7",
-  },
-  formBox: {
-    padding: "30px",
-    borderRadius: "10px",
-    backgroundColor: "#fff",
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-    display: "flex",
-    flexDirection: "column",
-    width: "300px",
-  },
-  heading: {
-    textAlign: "center",
-    marginBottom: "20px",
-  },
-  input: {
-    padding: "10px",
-    marginBottom: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-  },
-  forgotText: {
-    textAlign: "right",
-    marginBottom: "15px",
-    fontSize: "14px",
-  },
-  forgotLink: {
-    color: "#1976d2",
-    textDecoration: "underline",
-    fontWeight: "normal",
-    cursor: "pointer",
-  },
-  button: {
-    padding: "10px",
-    borderRadius: "5px",
-    border: "none",
-    backgroundColor: "#1976d2",
-    color: "#fff",
-    fontSize: "16px",
-    cursor: "pointer",
-  },
-  orText: {
-    textAlign: "center",
-    margin: "15px 0",
-    fontSize: "14px",
-    color: "#999",
-  },
-  signupText: {
-    marginTop: "15px",
-    textAlign: "center",
-    fontSize: "14px",
-  },
-  signupLink: {
-    color: "#1976d2",
-    textDecoration: "none",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-  info: {
-    textAlign: "center",
-    color: "#1976d2",
-    fontSize: "14px",
-    marginTop: "10px",
-  }
 };
 
 export default LoginSignup;

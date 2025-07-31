@@ -40,6 +40,10 @@
 .read-the-docs {
   color: #888;
 } */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&amp;family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap");
+* {
+  font-family: "Poppins", sans-serif !important;
+}
 .css-kibv85 {
   overflow: scroll !important;
   scrollbar-width: none;
@@ -142,6 +146,7 @@ body {
   padding: 10px 20px;
   transition: all 0.3s;
   margin: 5px;
+  margin-top: 7%;
   cursor: pointer;
   text-transform: inherit;
   border: none !important;
@@ -176,6 +181,8 @@ body {
   color: black;
   font-size: 20px;
   font-family: "Poppins";
+
+
 }
 .sub-Heading {
   margin: 2% 0%;
@@ -206,13 +213,38 @@ body {
 .card-btn-container {
   margin-top: 2%;
 }
-.poppins-bold-16 {
+.sidebar-text {
   font-family: "Poppins", sans-serif !important;
-  /* font-weight: bold !important; */
+  font-weight: bold;
   font-size: 16px !important;
   line-height: 20px !important;
   letter-spacing: 0.1px !important;
- 
+  font-weight: 700;
+}
+.poppins-bold-16 {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.1px !important;
+  font-weight: 700;
+}
+.poppins-bold-12 {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: bold !important;
+  font-size: 12px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.1px !important;
+  font-weight: 700;
+}
+.poppins-bold-10 {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: bold !important;
+  font-size: 12px !important;
+  line-height: 20px !important;
+  letter-spacing: 0px !important;
+  font-weight: 700;
+  color: #000;
 }
 .fixed-card {
   width: 100%;
@@ -305,12 +337,12 @@ body {
   flex-direction: column;
   margin: 0px;
   padding: 20px;
-  font-family: "Poppins, sans-serif";
+  /* font-family: "Poppins, sans-serif"; */
 }
 .card-subhead {
   font-size: 20px;
   color: #000;
-  font-family: "Inter";
+  font-family: "Poppins";
 }
 .application-btn {
   color: #000 !important;
@@ -323,7 +355,7 @@ body {
   cursor: pointer;
   font-size: 20px !important;
   font-weight: 400 !important;
-  font-family: "Inter" !important;
+  font-family: "Poppins";
 }
 .chatbot-application-btn {
   background: #fff;
@@ -352,7 +384,8 @@ body {
   border-radius: 60px;
   height: 44px;
   width: 120px;
-  margin: 0 0.2%;
+  margin: 0 5%;
+  /* gap: 10px; */
   font-family: "Poppins" !important;
 }
 
@@ -388,16 +421,16 @@ body {
   font-size: 12px;
   border: 1px solid #3e3e3e;
   border-radius: 60px;
-  padding: 8px 16px;                  /* ✅ replaced fixed width */
+  padding: 8px 16px; /* ✅ replaced fixed width */
   margin: 0 0.2%;
   font-family: "Poppins";
-  white-space: nowrap;               /* ✅ prevent wrapping */
-  min-width: fit-content;            /* ✅ grow based on text */
-  max-width: 100%;                   /* ✅ avoid overflow */
+  white-space: nowrap; /* ✅ prevent wrapping */
+  min-width: fit-content; /* ✅ grow based on text */
+  max-width: 100%; /* ✅ avoid overflow */
   text-align: center;
 }
 
-.chatbot-outline-cta:hover {
+/* .chatbot-outline-cta:hover {
   background: #f5e4c4;
   color: #3e3e3e;
   border: none;
@@ -405,9 +438,9 @@ body {
   padding: 8px 16px;
   margin: 0 0.2%;
   transition: 0.3s ease;
-}
+} */
 
-.chatbot-outline-cta.clicked {
+.chatbot-outline-cta:hover {
   font-size: 12px;
   font-weight: bold;
   color: #fff;
@@ -424,7 +457,7 @@ body {
   border: 1px solid #3e3e3e;
   border-radius: 60px;
   padding: 10px 24px;
-  margin: 0 0.2%;
+  margin: 0 1%;
   font-family: "Poppins", sans-serif;
   white-space: nowrap;
   min-width: fit-content;
@@ -435,19 +468,22 @@ body {
 
 .outline-cta:hover {
   background: #a9dbeb;
-  color: #3e3e3e;
+  color: #000;
   border: none;
   padding: 10px 24px;
-  font-size: 16px;
+  font-size: 14px;
+  /* font-weight: bold; */
 }
 
 .outline-cta.clicked {
-  background: #0086ad;
+  background: #0086ad !important;
   color: #fff;
   font-size: 14px;
   font-weight: bold;
   border: none;
   padding: 10px 24px;
+  border: none !important;
+  outline: none;
 }
 
 .text-card {
@@ -488,7 +524,12 @@ body {
   overflow-x: scroll;
   scrollbar-width: none;
   align-items: center;
-  margin-bottom: 24px;
+  /* margin-bottom: 24px; */
+}
+.cta-container-chatbot{
+  display: block;
+  /* overflow-x: scroll; */
+  
 }
 .text-card-container {
   display: flex;
@@ -509,17 +550,16 @@ body {
   padding: 0;
 }
 
-.cta-container {
+/* .cta-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
   margin-top: 12px;
-}
+} */
 
 .text-card-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 32px;
+  /* gap: 32px; */
   padding: 32px 16px;
   justify-content: center;
 }
@@ -532,12 +572,6 @@ body {
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.Heading-text-card {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 12px;
 }
 
 .sub-Heading-1 {
@@ -650,7 +684,7 @@ body {
 .subhead-text-cont {
   display: flex;
   justify-content: space-between;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
+  font-family: Inter !important;
 }
 .skip-text {
   cursor: pointer;
@@ -672,9 +706,275 @@ body {
   font-size: 20px;
   font-family: "Poppins";
 }
+.property-visited {
+  position: absolute;
+  top: 15px;
+  left: 35px;
+  background: #7be495;
+  color: #222;
+  font-weight: bold;
+  padding: 8px 24px;
+  /* px: 3,
+            py: 1, */
+  border-radius: 30px;
+  font-size: 16px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
 
+.scheduled-visit {
+  position: absolute;
+  top: 15px;
+  left: 35px;
+  background: #c7f6fe;
+  color: #222;
+  font-weight: bold;
+  padding: 8px 24px;
+  /* px: 3,
+            py: 1, */
+  border-radius: 30px;
+  font-size: 16px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.shortlisted {
+  position: absolute;
+  top: 15px;
+  left: 35px;
+  background: #ffd580;
+  color: #222;
+  font-weight: bold;
+  padding: 8px 24px;
+  /* px: 3,
+            py: 1, */
+  border-radius: 30px;
+  font-size: 14px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.property-card-container {
+  display: flex;
+  overflow: hidden;
+  height: 355px;
+  align-items: flex-start;
+  box-shadow: none;
+}
+.prop-card-img-section {
+  position: relative;
+  width: 477px;
+  min-width: 290px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prop-card-img {
+  width: 90%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 32px;
+  display: block;
+}
+.prev-icon {
+  position: absolute;
+  left: 7%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #bdbdbd;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+}
+.next-icon {
+  position: absolute;
+  right: 7%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #bdbdbd;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+}
+.next-icon:hover {
+  background: #a9a9a9;
+}
+.prev-icon:hover {
+  background: #a9a9a9;
+}
+.prop-card-content-sec {
+  display: flex;
+  flex: 1;
+  /* px: { xs: 3, md: 2 },
+          py: { xs: 3, md: 0 }, */
+  padding: 0 16px;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.prop-card-heading {
+  font-family: "Poppins";
+  font-weight: 700;
+  font-size: 26px;
+  color: #1a1a1a;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  padding: 8px 0;
+}
+
+.prop-card-subhead {
+  font-family: "Poppins";
+  font-weight: 400;
+  font-size: 16px;
+  color: #000;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  padding: 8px 0;
+}
+.prop-card-cta {
+  background: #ffe7b2;
+  color: #000;
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 8px 24px;
+}
+.prop-details-prop-visited {
+  background: #7be495;
+  color: #222;
+  font-weight: 600;
+  padding: 10px 24px;
+  /* px: 3;
+                      py: 1.2; */
+  border-radius: 20px;
+  font-size: 16;
+  text-align: center;
+  min-width: 160px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+.prop-details-prop-visit-date {
+  background: #D4EDF4;
+  color: #3E3E3E;
+  font-weight: 600;
+  padding: 10px 24px;
+  /* px: 3;
+                      py: 1.2; */
+  border-radius: 20px;
+  font-size: 16;
+  text-align: center;
+  min-width: 160px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+.prop-details-shortlist-cta{
+                          background: #F8C86B;
+                          color: #000;
+                          font-weight: bold;
+                          padding: 10px 24px;
+                          border-radius: 20px;
+                          font-size: 14;
+                          text-align: center;
+                          min-width: 140px;
+                          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+                          display: none;
+                      
+}
+.prop-card-cta-parent{
+
+            text-decoration: none;
+            display: flex;
+            justify-content: flex-start;
+}
+.prop-cards-parent{
+
+                background-color: #fff;
+                border-radius: 24px;
+                box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.05);
+                padding: 20px 0px;
+              margin: 2% 0;
+                /* pt: { xs: 0, md: 3 },
+                pb: { xs: 0, md: 2 },
+                px: { xs: 0, md: 0 },
+                mb: 4,
+                margin:{xs:"8% 2%",md:"3% 0"} */
+      
+}
 @media (min-width: 576px) and (max-width: 767.98px) {
+
   /* Styles for small devices */
+  .prev-icon ,.next-icon{
+height: 56px;
+width: 56px;
+}
+.prev-icon {
+  left: 3%;
+}
+.next-icon{
+right: 3%;
+}
+  .prop-card-cta-parent{
+
+            text-decoration: none;
+            display: flex;
+            justify-content: flex-end;
+}
+  .property-visited,.scheduled-visit{
+    position: absolute;
+    left: 10px;
+    font-size: 12px;
+  }
+  .prop-card-cta{
+    width: 90px;
+    height: 31px;
+    font-size: 10px;
+    font-weight: 600;
+    background-color: #FFE6B6;
+    padding: 10px 5px;
+    text-align: center;
+  }
+  .prop-card-subhead{
+        font-size: 12px;
+
+  }
+  .prop-card-heading{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .prop-card-img-section{
+  position: relative;
+  width: 100%;
+  min-width: 290px;
+  /* height: 350px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prop-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 22px;
+  display: block;
+}
+  .property-card-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  align-items: flex-start;
+  box-shadow: none;
+  margin: 0 10px;
+}
   .chatbot-footer {
     box-shadow: none;
   }
@@ -687,7 +987,7 @@ body {
     font-size: 14px;
   }
 
-  .chatbot-outline-cta.clicked {
+  .chatbot-outline-cta:hover {
     font-size: 12px;
     font-weight: bold;
     color: #fff;
@@ -709,7 +1009,7 @@ body {
     margin: 1.5% 1.5%;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
   }
-  .chatbot-outline-cta:hover {
+  /* .chatbot-outline-cta:hover {
     background: #f5e4c4;
     color: #3e3e3e;
     font-size: 12px;
@@ -719,7 +1019,7 @@ body {
     width: 90px;
     margin: 2% 2%;
     transition: 0.8s;
-  }
+  } */
   .application-cta-container {
     display: none;
   }
@@ -860,7 +1160,91 @@ body {
 
 @media (min-width: 768px) and (max-width: 991.98px) {
   /* Styles for tablets */
+  .prop-details-prop-visited,.prop-details-prop-visit-date {
+  font-size: 12px;
+}
+    .prop-cards-parent{
 
+                background-color: #fff;
+                border-radius: 24px;
+                box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.05);
+                padding: 0px 0px;
+              margin: 2% 1%;
+      
+}
+.prev-icon ,.next-icon{
+height: 56px;
+width: 56px;
+}
+.prev-icon {
+  left: 3%;
+}
+.next-icon{
+right: 3%;
+}
+  .prop-card-cta-parent{
+
+            text-decoration: none;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 2%;
+}
+.view-prop-btn {
+    font-size: 14px;
+
+    width: 175px;
+    height: 40px;
+    background: #0086ad;
+    border-radius: 42px;
+    padding: 10px 0px;
+  }
+  .property-visited,.scheduled-visit{
+    position: absolute;
+    left: 10px;
+    font-size: 12px;
+  }
+  .prop-card-cta{
+    width: 90px;
+    height: 31px;
+    font-size: 10px;
+    font-weight: 600;
+    background-color: #FFE6B6;
+    padding: 10px 5px;
+    text-align: center;
+  }
+  .prop-card-subhead{
+        font-size: 12px;
+
+  }
+  .prop-card-heading{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .prop-card-img-section{
+  position: relative;
+  width: 100%;
+  min-width: 290px;
+  /* height: 350px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prop-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 22px;
+  display: block;
+}
+  .property-card-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  align-items: flex-start;
+  box-shadow: none;
+  /* margin: 0 10px; */
+}
   .chatbot-footer {
     box-shadow: none;
   }
@@ -873,7 +1257,7 @@ body {
     font-size: 14px;
   }
 
-  .chatbot-outline-cta.clicked {
+  .chatbot-outline-cta:hover {
     font-size: 12px;
     font-weight: bold;
     color: #fff;
@@ -895,7 +1279,7 @@ body {
     margin: 1.5% 1.5%;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
   }
-  .chatbot-outline-cta:hover {
+  /* .chatbot-outline-cta:hover {
     background: #f5e4c4;
     color: #3e3e3e;
     font-size: 12px;
@@ -905,7 +1289,7 @@ body {
     width: 90px;
     margin: 2% 2%;
     transition: 0.8s;
-  }
+  } */
   .application-cta-container {
     display: none;
   }
@@ -959,7 +1343,7 @@ body {
     overflow-x: scroll;
     scrollbar-width: none;
     align-items: center;
-    margin-bottom: 24px;
+    /* margin-bottom: 24px; */
 
     border-top: 1px solid grey;
     padding-top: 5%;
@@ -1052,6 +1436,49 @@ body {
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
   /* Styles for desktops */
+  .scheduled-visit,.property-visited{
+      font-size: 12px;
+
+  }
+  .prop-card-heading {
+  font-size: 20px;
+}
+.prop-card-subhead{
+  font-size: 14px;
+}
+  .text-card-container{
+    justify-content: flex-start;
+  }
+  .prop-card-cta{
+    width: 90px;
+    height: 31px;
+    font-size: 10px;
+    font-weight: 600;
+    background-color: #FFE6B6;
+    padding: 10px 5px;
+    text-align: center;
+  }
+  .prop-cards-parent{
+
+                background-color: #fff;
+                border-radius: 24px;
+                box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.05);
+                padding: 20px 0px;
+              margin: 2% 1%;
+                /* pt: { xs: 0, md: 3 },
+                pb: { xs: 0, md: 2 },
+                px: { xs: 0, md: 0 },
+                mb: 4,
+                margin:{xs:"8% 2%",md:"3% 0"} */
+      
+}
+  .property-card-container{
+    height: 315px;
+  }
+  .prop-card-img-section{
+    height: 310px;
+    width: 400px;
+  }
   .chatbot-card {
     max-width: 100%;
   }
@@ -1097,6 +1524,80 @@ body {
 
 @media (min-width: 1200px) and (max-width: 1399.98px) {
   /* Styles for large desktops */
+
+  .prev-icon ,.next-icon{
+height: 56px;
+width: 56px;
+}
+.prev-icon {
+  left: 3%;
+}
+.next-icon{
+right: 3%;
+}
+  .prop-card-cta-parent{
+
+            text-decoration: none;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 2%;
+}
+.view-prop-btn {
+    font-size: 14px;
+
+    width: 175px;
+    height: 40px;
+    background: #0086ad;
+    border-radius: 42px;
+    padding: 10px 0px;
+  }
+  .property-visited,.scheduled-visit{
+    position: absolute;
+    left: 10px;
+    font-size: 12px;
+  }
+  .prop-card-cta{
+    width: 90px;
+    height: 31px;
+    font-size: 10px;
+    font-weight: 600;
+    background-color: #FFE6B6;
+    padding: 10px 5px;
+    text-align: center;
+  }
+  .prop-card-subhead{
+        font-size: 12px;
+
+  }
+  .prop-card-heading{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .prop-card-img-section{
+  position: relative;
+  width: 100%;
+  min-width: 290px;
+  /* height: 350px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prop-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 22px;
+  display: block;
+}
+  .property-card-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  align-items: flex-start;
+  box-shadow: none;
+  /* margin: 0 10px; */
+}
   .Heading {
     color: black;
     font-size: 24px;
@@ -1125,6 +1626,7 @@ body {
 
 @media (min-width: 1400px) {
   /* Styles for extra large screens */
+  
   .Heading {
     color: black;
     font-size: 24px;
@@ -1143,6 +1645,99 @@ body {
 }
 
 @media (max-width: 575.98px) {
+  .cta-container-chatbot{
+  display: block;
+  /* overflow-x: scroll; */
+  
+}
+  .sub-Heading-1,.sub-Heading{
+    font-size: 14px;
+  }
+  .Heading-text-card {
+  font-weight: bold;
+  color: black;
+  font-size: 16px;
+  font-family: "Poppins";
+}
+  .prop-details-prop-visited,.prop-details-prop-visit-date {
+  font-size: 12px;
+}
+  .prop-cards-parent{
+
+                background-color: #fff;
+                border-radius: 24px;
+                box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.05);
+                padding: 0px 0px;
+              margin: 8% 2%;
+                /* pt: { xs: 0, md: 3 },
+                pb: { xs: 0, md: 2 },
+                px: { xs: 0, md: 0 },
+                mb: 4,
+                margin:{xs:"8% 2%",md:"3% 0"} */
+      
+}
+.prev-icon ,.next-icon{
+height: 56px;
+width: 56px;
+}
+.prev-icon {
+  left: 3%;
+}
+.next-icon{
+right: 3%;
+}
+  .prop-card-cta-parent{
+
+            text-decoration: none;
+            display: flex;
+            justify-content: flex-end;
+}
+  .property-visited,.scheduled-visit{
+    position: absolute;
+    left: 10px;
+    font-size: 12px;
+  }
+  .prop-card-cta{
+    width: 90px;
+    height: 31px;
+    font-size: 10px;
+    font-weight: 600;
+    background-color: #FFE6B6;
+    padding: 10px 5px;
+    text-align: center;
+  }
+  .prop-card-subhead{
+        font-size: 12px;
+
+  }
+  .prop-card-heading{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .prop-card-img-section{
+  position: relative;
+  width: 100%;
+  min-width: 290px;
+  /* height: 350px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prop-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 22px;
+  display: block;
+}
+  .property-card-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  align-items: flex-start;
+  box-shadow: none;
+}
   .chatbot-footer {
     box-shadow: none;
   }
@@ -1153,7 +1748,7 @@ body {
     width: 85%;
   }
 
-  .chatbot-outline-cta.clicked {
+  .chatbot-outline-cta:hover {
     font-size: 12px;
     font-weight: bold;
     color: #fff;
@@ -1175,7 +1770,7 @@ body {
     margin: 1.5% 1.5%;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
   }
-  .chatbot-outline-cta:hover {
+  /* .chatbot-outline-cta:hover {
     background: #f5e4c4;
     color: #3e3e3e;
     font-size: 12px;
@@ -1185,7 +1780,7 @@ body {
     width: 90px;
     margin: 2% 2%;
     transition: 0.8s;
-  }
+  } */
   .application-cta-container {
     display: none;
   }
@@ -1239,7 +1834,7 @@ body {
     scrollbar-width: none;
     align-items: center;
     margin-bottom: 10px;
-    flex-flow: wrap;
+    /* flex-flow: wrap; */
     /* padding-top: 5%; */
   }
 
@@ -1261,12 +1856,18 @@ body {
   .outline-cta {
     background: transparent;
     color: #3e3e3e;
-    font-size: 12px;
+    font-size: 16px;
     border: 1px solid #3e3e3e;
     border-radius: 60px;
     height: 44px;
     margin: 0 1%;
     padding: 0px 30px;
+  }
+.outline-cta:hover {
+  
+    
+    font-size: 14px;
+    
   }
   .carousel-img-container {
     width: 100%;
@@ -1319,13 +1920,13 @@ body {
     height: 40px;
   }
   .view-prop-btn {
-    display: "flex";
+    display: flex;
     align-self: center;
     font-size: 12px;
     font-weight: bold;
     color: #fff;
     width: 181px;
-    height: "44px";
+    height: 44px;
     background: #0086ad;
     border-radius: 42px;
     padding: 10px 20px;
@@ -1333,6 +1934,8 @@ body {
     margin: 5px;
     cursor: pointer;
     text-transform: inherit;
+    text-decoration: none;
+    margin-bottom: 4%;
   }
   .text-card {
     width: 100%;

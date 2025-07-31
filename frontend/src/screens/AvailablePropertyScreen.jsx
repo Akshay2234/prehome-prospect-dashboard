@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PropertyCards from "../components/PropertyCards";
 import "../assets/style.css";
+import { auto } from "@popperjs/core";
 
 const AvailablePropertyScreen = () => {
   const [properties, setProperties] = useState([]);
@@ -28,7 +29,7 @@ const AvailablePropertyScreen = () => {
   return (
     <Box sx={{ background: "#ECECEC", minHeight: "100vh", width: "100%" }}>
       {/* Header */}
-           <Box
+      <Box
         sx={{
           width: "100%",
           background: "#ECECEC",

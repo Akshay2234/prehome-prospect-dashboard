@@ -20,7 +20,7 @@ const Signup = () => {
   const sendOtp = async () => {
     setLoading(true);
     try {
-      await axios.post("/api/auth/send-otp", { email });
+      await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/send-otp", { email });
       setActiveStep(1);
       setError("");
       alert("OTP sent to your email");
@@ -34,7 +34,7 @@ const Signup = () => {
   const verifyOtp = async () => {
     setLoading(true);
     try {
-      await axios.post("/api/auth/verify-otp", { email, otp });
+      await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/verify-otp", { email, otp });
       setActiveStep(2);
       setError("");
       alert("OTP verified! Set your password.");
@@ -54,7 +54,7 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      await axios.post("/api/auth/set-password", { email, password });
+      await axios.post("https://prehome-prospect-dashboard.onrender.com/api/auth/set-password", { email, password });
       setError("");
       alert("Signup successful!");
       // Reset state or navigate to login
