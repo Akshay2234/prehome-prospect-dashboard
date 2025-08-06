@@ -122,11 +122,11 @@ const LoginSignup = () => {
 
   return (
     <Box className="main-box-login" sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <Container maxWidth="xs" className="login-container" sx={{ padding: 4, backgroundColor: "white", borderRadius: "16px", boxShadow: 3 }}>
-        <div className="img-container" style={{ textAlign: "center" }}>
+      <Container maxWidth="xs" className="login-container" sx={{ padding: 4,  borderRadius: "16px" }}>
+        <div className="img-container d-none" style={{ textAlign: "center" }}>
           <img src={icon} alt="logo" style={{ height: "100px", margin: "5% 0" }} />
         </div>
-        <Typography variant="h5" gutterBottom textAlign="center">
+        <Typography variant="h5" style={{ fontFamily:"Poppins", fontSize:"32px",fontWeight:"600" }} gutterBottom textAlign="center">
           {showForgot ? "Forgot Password" : "Log In or Sign Up With Prehome"}
         </Typography>
 

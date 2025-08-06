@@ -48,7 +48,7 @@ const MapComponent = ({ center, places = [] }) => {
 
   return (
     <GoogleMap
-      mapContainerStyle={{ width: '100%', height: '400px' }}
+      mapContainerStyle={{ width: '100%',  height: '560px', borderRadius: 16 }}
       center={mapCenter}
       zoom={zoom}
       onLoad={handleOnLoad}

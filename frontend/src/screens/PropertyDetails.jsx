@@ -28,6 +28,7 @@ const PropertyDetails = () => {
   const [selectedView, setSelectedView] = useState(null);
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [visitDate, setVisitDate] = useState(null);
+  const [propertyVisited, setPropertyVisited] = useState(false);
   const [status, setStatus] = useState("");
   const [clickedIndex, setClickedIndex] = useState(null);
 
@@ -234,7 +235,7 @@ const PropertyDetails = () => {
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
+              flexDirection: "row",
               alignItems: { xs: "flex-start", md: "flex-end" },
               gap: 2,
               mb: 2,
@@ -257,6 +258,32 @@ const PropertyDetails = () => {
                     {isShortlisted && (
                       <Box className="prop-details-shortlist-cta">Shortlisted</Box>
                     )}
+                  
+
+                    {/* {visitDate && (
+                      <Box
+                        sx={{
+                          background: "#D4EDF4",
+                          color: "#3E3E3E",
+                          fontWeight: 600,
+                          px: 3,
+                          py: 1.2,
+                          borderRadius: "20px",
+                          fontSize: 16,
+                          textAlign: "center",
+                          minWidth: 200,
+                          boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+                          // display: "none",
+                        }}
+                      >
+                        Property Visit on{" "}
+                        {new Date(visitDate).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </Box>
+                    )} */}
                   </Box>
                 )}
 
@@ -264,6 +291,7 @@ const PropertyDetails = () => {
                   propertyId={property._id}
                   userId={userId}
                   onUpdate={(updated) => {
+                    // setPropertyVisited(updated.propertyVisited || false)
                     setIsShortlisted(updated.shortlisted || false);
                     setVisitDate(updated.visitDate ? new Date(updated.visitDate) : null);
                     setStatus(updated.status || "");
@@ -292,7 +320,7 @@ const PropertyDetails = () => {
               alt="Selected"
               style={{
                 width: "100%",
-                height: "400px",
+                height: "517px",
                 objectFit: "cover",
                 borderRadius: "16px",
               }}

@@ -15,6 +15,8 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [visitDate, setVisitDate] = useState(null);
+    const [propertyVisited, setPropertyVisited] = useState(false);
+
   const [status, setStatus] = useState(""); // Added status tracking
 
   useEffect(() => {
@@ -24,6 +26,7 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
         if (res.data) {
           setIsShortlisted(res.data.shortlisted || false);
           setVisitDate(res.data.visitDate ? new Date(res.data.visitDate) : null);
+          setPropertyVisited(res.data.propertyVisited || false)
           setStatus(res.data.status || ""); // Set current status
         }
       } catch (err) {
@@ -94,7 +97,7 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
 <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
+              flexDirection: {xs:"column",md:"row"},
               alignItems: { xs: "flex-start", md: "flex-end" },
               gap: 2,
               // minWidth: 320,
@@ -126,8 +129,8 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
               {visitDate ? "Reschedule Visit" : "Schedule Visit"}
             </button>
           )}
-
-          <Button
+          {status == "Visited" && (
+            <Button
             sx={{
               background: "#FFD580",
               color: "#222",
@@ -144,6 +147,9 @@ fontFamily:"Poppins",
           >
             Shortlisted
           </Button>
+          )}
+
+          
         </>
       )}
 
@@ -167,7 +173,7 @@ fontFamily:"Poppins",
       )}
 </Box>
       {showCalendar && (
-        <div style={{ marginTop: "10px",position:"absolute",top:"280px" }}>
+        <div style={{ marginTop: "10px",position:"absolute",top:"150px",right: "60px" }}>
           <DatePicker
             selected={visitDate}
             onChange={handleDateSelect}
