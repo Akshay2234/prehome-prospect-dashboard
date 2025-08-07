@@ -11,7 +11,8 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
+
 import { jwtDecode } from "jwt-decode";
 import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
@@ -29,6 +30,36 @@ const LoginSignup = () => {
   const [forgotMessage, setForgotMessage] = useState("");
 
   const navigate = useNavigate();
+const loginWithGoogle = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    try {
+      const userInfoResponse = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`,
+        },
+      });
+
+      const userEmail = userInfoResponse.data.email;
+
+      const response = await axios.post(`${apiBase}/google-login`, {
+        email: userEmail,
+      });
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user_id", response.data.userId);
+      localStorage.setItem("user_email", userEmail);
+
+      if (response.data.isGoogleAccount) {
+        navigate("/set-password");
+      } else {
+        navigate("/application-screen");
+      }
+    } catch (err) {
+      alert("Google Login failed");
+    }
+  },
+  onError: () => alert("Google login failed"),
+});
 
   const apiBase = "https://prehome-prospect-dashboard.onrender.com/api/auth";
 
@@ -132,20 +163,82 @@ const LoginSignup = () => {
 
         {!showForgot ? (
           <>
-            <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSuccess}
-                onError={() => alert("Google login failed")}
-              />
+           <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+  {/* Custom Google Button */}
+  {/* <Box
+    onClick={() => document.getElementById("custom-google-btn").click()}
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 1,
+      border: "1px solid #000",
+      borderRadius: "30px",
+      padding: "10px 20px",
+      width: "100%",
+      cursor: "pointer",
+      backgroundColor: "#fff",
+    }}
+  >
+    <FcGoogle size={24} />
+    <span style={{ fontWeight: 500 }}>Continue With Google</span>
+  </Box>
 
-              <LoginSocialFacebook
-                appId="997130395950749"
-                onResolve={handleFacebookResponse}
-                onReject={() => alert("Facebook Login Failed")}
-              >
-                <FacebookLoginButton text="Continue With Facebook" />
-              </LoginSocialFacebook>
-            </Box>
+  <Box sx={{ display: "none" }}>
+    <GoogleLogin
+      onSuccess={handleGoogleLoginSuccess}
+      onError={() => alert("Google login failed")}
+      useOneTap
+      auto_select
+      id="custom-google-btn"
+    />
+  </Box> */}
+<Box
+  onClick={loginWithGoogle}
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 1,
+    border: "1px solid #000",
+    borderRadius: "30px",
+    padding: "10px 20px",
+    width: "100%",
+    cursor: "pointer",
+    backgroundColor: "#fff",
+    "&:hover": { backgroundColor: "#f0f0f0" },
+  }}
+>
+  <FcGoogle size={24} />
+  <span style={{ fontWeight: 500 }}>Continue With Google</span>
+</Box>
+
+  {/* Custom Facebook Button */}
+  <LoginSocialFacebook
+    appId="997130395950749"
+    onResolve={handleFacebookResponse}
+    onReject={() => alert("Facebook Login Failed")}
+  >
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 1,
+        border: "1px solid #000",
+        borderRadius: "30px",
+        padding: "10px 20px",
+        width: "100%",
+        cursor: "pointer",
+        backgroundColor: "#fff",
+      }}
+    >
+      <FaFacebook size={22} />
+      <span style={{ fontWeight: 500 }}>Continue With Facebook</span>
+    </Box>
+  </LoginSocialFacebook>
+</Box>
+
 
             <Divider sx={{ my: 3 }}>Or</Divider>
 
