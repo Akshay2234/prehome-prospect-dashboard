@@ -3,6 +3,12 @@ import axios from "axios";
 import AuthInput from "../components/AuthInput";
 import AuthButton from "../components/AuthButton";
 import { useNavigate } from "react-router-dom";
+import {
+  Typography,
+  Box,
+  
+} from "@mui/material";
+import icon from "../assets/logo.png";
 
 const steps = ["Enter Email", "Verify OTP", "Set Password"];
 
@@ -76,6 +82,7 @@ const Signup = () => {
       case 0:
         return (
           <>
+          <h6 className="login-mail-text">Email Id</h6>
             <AuthInput
               type="email"
               placeholder="Enter Email"
@@ -87,6 +94,7 @@ const Signup = () => {
               onClick={sendOtp}
               disabled={!email || loading}
               type="button"
+              
             />
           </>
         );
@@ -135,7 +143,13 @@ const Signup = () => {
 
   return (
     <div className="auth-container">
-      <h2>Sign Up</h2>
+        <Box className="img-container" sx={{ textAlign: "center",display:{xs:"block",md:"none"} }}>
+                <img src={icon} alt="logo" style={{ height: "100px", margin: "5% 0" }} />
+              </Box>
+              <Typography variant="h5" sx={{ fontFamily:"Poppins", fontSize:{xs:"20px",lg:"32px"},fontWeight:"600",marginBottom:"10%" }} gutterBottom textAlign="center">
+      Sign Up With Prehome
+                </Typography>
+      
       {renderStepContent()}
       {error && (
         <p style={{ color: "red", textAlign: "center", marginTop: "1rem" }}>

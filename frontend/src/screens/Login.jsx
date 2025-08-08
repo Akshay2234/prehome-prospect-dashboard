@@ -152,12 +152,12 @@ const loginWithGoogle = useGoogleLogin({
   };
 
   return (
-    <Box className="main-box-login" sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <Container maxWidth="xs" className="login-container" sx={{ padding: 4,  borderRadius: "16px" }}>
-        <div className="img-container d-none" style={{ textAlign: "center" }}>
+    <Box className="main-box-login" sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center"}}>
+      <Container maxWidth="xs" className="login-container" sx={{ padding: {xs:1,md:4},  borderRadius: "16px" }}>
+        <Box className="img-container" sx={{ textAlign: "center",display:{xs:"block",md:"none"} }}>
           <img src={icon} alt="logo" style={{ height: "100px", margin: "5% 0" }} />
-        </div>
-        <Typography variant="h5" style={{ fontFamily:"Poppins", fontSize:"32px",fontWeight:"600" }} gutterBottom textAlign="center">
+        </Box>
+        <Typography variant="h5" sx={{ fontFamily:"Poppins", fontSize:{xs:"20",md:"32px"},fontWeight:"600",marginBottom:"5%" }} gutterBottom textAlign="center">
           {showForgot ? "Forgot Password" : "Log In or Sign Up With Prehome"}
         </Typography>
 
@@ -198,19 +198,21 @@ const loginWithGoogle = useGoogleLogin({
   sx={{
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     gap: 1,
     border: "1px solid #000",
     borderRadius: "30px",
     padding: "10px 20px",
-    width: "100%",
+    width: "358px",
+    height:"56px",
     cursor: "pointer",
     backgroundColor: "#fff",
+    fontFamily: "Poppins, sans-serif",
     "&:hover": { backgroundColor: "#f0f0f0" },
   }}
 >
   <FcGoogle size={24} />
-  <span style={{ fontWeight: 500 }}>Continue With Google</span>
+  <span style={{ fontWeight: 500 ,fontSize:16,}}>Continue With Google</span>
 </Box>
 
   {/* Custom Facebook Button */}
@@ -223,52 +225,65 @@ const loginWithGoogle = useGoogleLogin({
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-evenly",
         gap: 1,
         border: "1px solid #000",
         borderRadius: "30px",
         padding: "10px 20px",
-        width: "100%",
+        width: "358px",
+        height:"56px",
         cursor: "pointer",
         backgroundColor: "#fff",
+    "&:hover": { backgroundColor: "#f0f0f0" },
+
       }}
     >
-      <FaFacebook size={22} />
-      <span style={{ fontWeight: 500 }}>Continue With Facebook</span>
+      <FaFacebook size={24} />
+      <span style={{ fontWeight: 500 ,fontSize:16}}>Continue With Facebook</span>
     </Box>
   </LoginSocialFacebook>
 </Box>
 
 
-            <Divider sx={{ my: 3 }}>Or</Divider>
+            <Divider sx={{ my: 3 ,color:"grey"}}>Or</Divider>
+<Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+  <Box>
 
-            <Typography className="login-mail-text">Email</Typography>
-            <TextField
-              fullWidth
+            <p className="login-mail-text">Email Id</p>
+            <input
+              // fullWidth
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              sx={{ mb: 2 }}
+              // sx={{ mb: 2,borderRadius:"8px" }}
+              className="auth-input"
             />
+  </Box>
+<Box>
 
-            <Typography className="login-mail-text">Password</Typography>
-            <TextField
-              fullWidth
+            <p className="login-mail-text">Password</p>
+           
+            <input
+              // fullWidth
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              sx={{ mb: 1 }}
+              // sx={{ mb: 1,borderRadius:"8px" }}
+               className="auth-input"
             />
-
+</Box>
+</Box>
             <Box textAlign="right">
               <Link onClick={() => setShowForgot(true)} className="login-link">
                 Forgot Password?
               </Link>
             </Box>
+<Box  display="flex" flexDirection="column" alignItems="center" gap={2}>
 
-            <ViewPropButton text="Continue" onClick={handleLogin} style={{ width: "100%" }} />
+            <ViewPropButton text="Continue" onClick={handleLogin} style={{ width: "358px",height:"56px" }} />
+</Box>
 
             <Typography textAlign="center" mt={2}>
               Don&apos;t have an account?{" "}
@@ -281,16 +296,31 @@ const loginWithGoogle = useGoogleLogin({
           <>
             {forgotStep === 1 && (
               <>
-                <Typography className="login-mail-text">Enter your email</Typography>
-                <TextField
+                {/* <Typography className="login-mail-text">Enter your email</Typography> */}
+<Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+  <Box>
+
+                 <h6 className="login-mail-text">Email Id</h6>
+                {/* <TextField
                   fullWidth
                   type="email"
                   placeholder="Email"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
                   sx={{ mb: 2 }}
-                />
-                <ViewPropButton text="Send OTP" onClick={handleForgotSubmit} style={{ width: "100%" }} />
+                /> */}
+                 <input
+              // fullWidth
+              type="email"
+              placeholder="Email"
+                value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+              // sx={{ mb: 2,borderRadius:"8px" }}
+              className="auth-input"
+            />
+  </Box>
+                <ViewPropButton text="Send OTP" onClick={handleForgotSubmit} style={{ width: "358px",height:"56px"}} />
+</Box>
               </>
             )}
             {forgotStep === 2 && (
