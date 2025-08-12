@@ -41,6 +41,7 @@ const enrichedProperties = properties.map((property) => {
 };
 
 // GET property by ID (with optional user enrichment and geocoding)
+// GET property by ID (with optional user enrichment and geocoding + fallback)
 exports.getPropertyById = async (req, res) => {
   const userId = req.query.userId;
 
@@ -65,19 +66,56 @@ exports.getPropertyById = async (req, res) => {
     }
 
     const API_KEY = "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc";
-    const geoResponse = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
-      params: { address: property.location, key: API_KEY },
-    });
+    let coordinates = {};
 
-    const coordinates =
-      geoResponse.data.status === "OK" && geoResponse.data.results.length > 0
-        ? geoResponse.data.results[0].geometry.location
-        : {};
+    // 1️⃣ Try exact address geocoding
+    try {
+      const geoResponse = await axios.get(
+        "https://maps.googleapis.com/maps/api/geocode/json",
+        { params: { address: property.location, key: API_KEY } }
+      );
+
+      if (
+        geoResponse.data.status === "OK" &&
+        geoResponse.data.results.length > 0
+      ) {
+        coordinates = geoResponse.data.results[0].geometry.location;
+      }
+    } catch (err) {
+      console.warn("Exact geocoding failed:", err.message);
+    }
+
+    // 2️⃣ Fallback: try city/locality if exact failed
+    if (!coordinates.lat || !coordinates.lng) {
+      console.log("Trying city-level geocoding...");
+      const cityName = property.location.split(",").slice(-1)[0].trim(); // last part as city
+      try {
+        const cityGeoResponse = await axios.get(
+          "https://maps.googleapis.com/maps/api/geocode/json",
+          { params: { address: cityName, key: API_KEY } }
+        );
+
+        if (
+          cityGeoResponse.data.status === "OK" &&
+          cityGeoResponse.data.results.length > 0
+        ) {
+          coordinates = cityGeoResponse.data.results[0].geometry.location;
+        }
+      } catch (err) {
+        console.warn("City geocoding failed:", err.message);
+      }
+    }
+
+    // 3️⃣ Final fallback: default location (India center)
+    if (!coordinates.lat || !coordinates.lng) {
+      console.log("Using default coordinates...");
+      coordinates = { lat: 20.5937, lng: 78.9629 }; // India center
+    }
 
     res.json({
       ...property.toObject(),
-      latitude: coordinates.lat || null,
-      longitude: coordinates.lng || null,
+      latitude: coordinates.lat,
+      longitude: coordinates.lng,
       shortlisted,
       visitDate,
     });
@@ -86,6 +124,7 @@ exports.getPropertyById = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch property" });
   }
 };
+
 
 // POST new property
 exports.createProperty = async (req, res) => {

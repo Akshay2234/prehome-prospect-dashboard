@@ -33,8 +33,8 @@ const AdminPanel = () => {
     radius: "", // ✅ Added radius
   });
 
-  const API_BASE = "https://prehome-prospect-dashboard.onrender.com/api";
-  const UPLOADS_BASE = "https://prehome-prospect-dashboard.onrender.com";
+  const API_BASE = "http://localhost:5000/api";
+  const UPLOADS_BASE = "http://localhost:5000";
 
   useEffect(() => {
     fetchProperties();
@@ -189,7 +189,7 @@ const handleUpload = async (e) => {
   formData.append("image", e.target.files[0]);
 
   try {
-    const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/admin/upload-image", formData, {
+    const res = await axios.post("http://localhost:5000/api/admin/upload-image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     const newImage = {
@@ -314,7 +314,7 @@ const handleUpload = async (e) => {
             <input type="number" placeholder="Bathrooms" value={form.generalInfo.numberOfBathrooms} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, numberOfBathrooms: parseInt(e.target.value) } })} />
             <input type="number" placeholder="Floors" value={form.generalInfo.numberOfFloors} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, numberOfFloors: parseInt(e.target.value) } })} />
 
-            <input placeholder="Location Summary" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} />
+            <input placeholder="Map Location" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} />
 
             {/* ✅ Nearby Radius */}
             <input

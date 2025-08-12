@@ -59,8 +59,18 @@ const MapComponent = ({ center, places = [] }) => {
         title="Property Location"
         icon={{
           url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+          scaledSize: new window.google.maps.Size(50, 50), // marker ko bada kar diya
         }}
       />
+      {/* Center InfoWindow */}
+      <InfoWindow
+        position={mapCenter}
+        options={{ pixelOffset: new window.google.maps.Size(0, -40) }}
+      >
+        <div>
+          <strong>Map Center</strong>
+        </div>
+      </InfoWindow>
 
       {/* Nearby places */}
       {places.map((place, index) => (

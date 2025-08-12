@@ -65,7 +65,7 @@ const PropertyCards = ({
               src={
                 images[currentImageIndex].url.startsWith("http")
                   ? images[currentImageIndex].url
-                  : `https://prehome-prospect-dashboard.onrender.com${images[currentImageIndex].url}`
+                  : `http://localhost:5000${images[currentImageIndex].url}`
               }
               alt={images[currentImageIndex].label || "Property"}
               className="prop-card-img"

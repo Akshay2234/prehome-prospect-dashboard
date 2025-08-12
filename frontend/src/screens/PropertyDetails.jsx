@@ -69,7 +69,7 @@ const PropertyDetails = () => {
  const fetchProperty = async () => {
   try {
     const res = await axios.get(
-      `https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`
+      `http://localhost:5000/api/properties/${id}`
     );
 
     const propertyData = res.data;
@@ -79,7 +79,7 @@ const PropertyDetails = () => {
       ...img,
       url: img.url.startsWith("http")
         ? img.url
-        : `https://prehome-prospect-dashboard.onrender.com${img.url}`,
+        : `http://localhost:5000${img.url}`,
     }));
 
     propertyData.images = fixedImages;
@@ -102,7 +102,7 @@ const PropertyDetails = () => {
       const results = await Promise.all(
         types.map(async (type) => {
           const res = await axios.post(
-            "https://prehome-prospect-dashboard.onrender.com/api/properties/nearby-places",
+            "http://localhost:5000/api/properties/nearby-places",
             { location, type, radius }
           );
           return res.data;
@@ -124,7 +124,7 @@ const PropertyDetails = () => {
  const handleImageLabelClick = (url, index) => {
   const fullUrl = url.startsWith("http")
     ? url
-    : `https://prehome-prospect-dashboard.onrender.com${url}`;
+    : `http://localhost:5000${url}`;
   setSelectedImageUrl(fullUrl);
   setClickedIndex(index);
 };
