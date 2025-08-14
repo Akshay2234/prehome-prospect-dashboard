@@ -16,7 +16,7 @@ const AdminSignup = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/auth/register", { email, password });
+      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/admin/auth/register", { email, password });
       alert(res.data.message || "Admin account created!");
       navigate("/admin-login");
     } catch (error) {

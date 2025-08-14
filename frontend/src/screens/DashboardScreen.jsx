@@ -158,7 +158,7 @@ const DashboardScreen = () => {
     const loadProgress = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/form/load-progress/${userId}`
+          `https://prehome-prospect-dashboard.onrender.com/api/form/load-progress/${userId}`
         );
         const saved = res.data.responses || [];
         setResponses(saved);
@@ -205,7 +205,7 @@ const DashboardScreen = () => {
       setSectionAnswers({});
 
       axios
-        .post("http://localhost:5000/api/form/save-progress", {
+        .post("https://prehome-prospect-dashboard.onrender.com/api/form/save-progress", {
           userId,
           responses: updatedResponses,
         })

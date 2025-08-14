@@ -69,7 +69,7 @@ const PropertyDetails = () => {
  const fetchProperty = async () => {
   try {
     const res = await axios.get(
-      `http://localhost:5000/api/properties/${id}`
+      `https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`
     );
 
     const propertyData = res.data;
@@ -79,7 +79,7 @@ const PropertyDetails = () => {
       ...img,
       url: img.url.startsWith("http")
         ? img.url
-        : `http://localhost:5000${img.url}`,
+        : `https://prehome-prospect-dashboard.onrender.com${img.url}`,
     }));
 
     propertyData.images = fixedImages;
@@ -102,7 +102,7 @@ const PropertyDetails = () => {
       const results = await Promise.all(
         types.map(async (type) => {
           const res = await axios.post(
-            "http://localhost:5000/api/properties/nearby-places",
+            "https://prehome-prospect-dashboard.onrender.com/api/properties/nearby-places",
             { location, type, radius }
           );
           return res.data;
@@ -124,7 +124,7 @@ const PropertyDetails = () => {
  const handleImageLabelClick = (url, index) => {
   const fullUrl = url.startsWith("http")
     ? url
-    : `http://localhost:5000${url}`;
+    : `https://prehome-prospect-dashboard.onrender.com${url}`;
   setSelectedImageUrl(fullUrl);
   setClickedIndex(index);
 };
@@ -246,7 +246,7 @@ const PropertyDetails = () => {
                 {(isShortlisted || visitDate) && (
                   <Box
                     sx={{
-                      display: "flex",
+                      display: "none",
                       flexDirection: "row",
                       gap: 1,
                       flexWrap: "wrap",

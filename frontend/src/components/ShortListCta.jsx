@@ -17,7 +17,7 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
   useEffect(() => {
     const fetchUserActivity = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/activity/${userId}/${propertyId}`);
+        const res = await axios.get(`https://prehome-prospect-dashboard.onrender.com/api/activity/${userId}/${propertyId}`);
         if (res.data) {
           setIsShortlisted(res.data.shortlisted || false);
           setVisitDate(res.data.visitDate ? new Date(res.data.visitDate) : null);
@@ -35,7 +35,7 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
 
   const saveActivity = async (updatedFields) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/activity/save", {
+      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/activity/save", {
         userId,
         propertyId,
         ...updatedFields,
@@ -90,11 +90,11 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
       )}
 
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 2 }}>
-        
-        {/* Case 1: Just shortlisted */}
         {isShortlisted && !visitDate && status !== "Visited" && (
           <Button sx={btnStyle("#FFD580", "#222")}>Shortlisted</Button>
         )}
+        
+        {/* Case 1: Just shortlisted */}
 
         {/* Case 2: Date set but not visited */}
         {visitDate && status !== "Visited" && (
@@ -122,14 +122,14 @@ const ShortlistCTA = ({ userId, propertyId, onUpdate }) => {
 
       {/* Calendar */}
       {showCalendar && (
-        <div style={{ marginTop: "10px", position: "absolute", top: "150px", right: "60px" }}>
+        <Box sx={{ marginTop: "10px", position: "absolute", top: {xs:"350px",md:"150px"}, right:{xs:"117px",md:"60px"}  }}>
           <DatePicker
             selected={visitDate}
             onChange={handleDateSelect}
             filterDate={isDateSelectable}
             inline
           />
-        </div>
+        </Box>
       )}
     </div>
   );

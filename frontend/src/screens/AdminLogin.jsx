@@ -10,7 +10,7 @@ const AdminLogin = () => {
 
   const handleAdminLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/auth/login", { email, password });
+      const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/admin/auth/login", { email, password });
       localStorage.setItem("admin_token", res.data.token);
       navigate("/admin-panel");
     } catch (error) {
