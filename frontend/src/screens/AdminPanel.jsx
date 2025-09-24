@@ -21,7 +21,7 @@ const AdminPanel = () => {
     },
     generalInfo: {
       propertyAddress: "",
-      propertyType: "",
+      propertyType: [],
       yearBuilt: "",
       squareFootage: "",
       numberOfBedrooms: "",
@@ -33,8 +33,8 @@ const AdminPanel = () => {
     radius: "", // ✅ Added radius
   });
 
-  const API_BASE = "https://prehome-prospect-dashboard.onrender.com/api";
-  const UPLOADS_BASE = "https://prehome-prospect-dashboard.onrender.com";
+  const API_BASE = "http://localhost:5000/api";
+  const UPLOADS_BASE = "http://localhost:5000";
 
   useEffect(() => {
     fetchProperties();
@@ -87,7 +87,7 @@ const AdminPanel = () => {
       },
       generalInfo: {
         propertyAddress: "",
-        propertyType: "",
+        propertyType: [],
         yearBuilt: "",
         squareFootage: "",
         numberOfBedrooms: "",
@@ -189,7 +189,7 @@ const handleUpload = async (e) => {
   formData.append("image", e.target.files[0]);
 
   try {
-    const res = await axios.post("https://prehome-prospect-dashboard.onrender.com/api/admin/upload-image", formData, {
+    const res = await axios.post("http://localhost:5000/api/admin/upload-image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     const newImage = {
@@ -288,13 +288,26 @@ const handleUpload = async (e) => {
             <h4>General Info</h4>
             <input placeholder="Property Address" value={form.generalInfo.propertyAddress} onChange={e => setForm({ ...form, generalInfo: { ...form.generalInfo, propertyAddress: e.target.value } })} />
           <select
+          multiple
   value={form.generalInfo.propertyType}
-  onChange={e =>
+  // onChange={e =>
+  //   setForm({
+  //     ...form,
+  //     generalInfo: {
+  //       ...form.generalInfo,
+  //       propertyType: e.target.value,
+  //     },
+  //   })
+  // }
+   onChange={e =>
     setForm({
       ...form,
       generalInfo: {
         ...form.generalInfo,
-        propertyType: e.target.value,
+        propertyType: Array.from(
+          e.target.selectedOptions,
+          option => option.value
+        ),
       },
     })
   }

@@ -33,7 +33,7 @@ const propertySchema = new mongoose.Schema({
   generalInfo: {
     propertyAddress: String,
     propertyType: {
-      type: String,
+      type: [String],
       enum: ["hospital", "restaurant", "school", "mall", "park", "gym"], // dropdown values
       default:[]
     },

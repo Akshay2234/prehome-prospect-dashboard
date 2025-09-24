@@ -69,7 +69,7 @@ const PropertyDetails = () => {
  const fetchProperty = async () => {
   try {
     const res = await axios.get(
-      `https://prehome-prospect-dashboard.onrender.com/api/properties/${id}`
+      `http://localhost:5000/api/properties/${id}`
     );
 
     const propertyData = res.data;
@@ -79,7 +79,7 @@ const PropertyDetails = () => {
       ...img,
       url: img.url.startsWith("http")
         ? img.url
-        : `https://prehome-prospect-dashboard.onrender.com${img.url}`,
+        : `http://localhost:5000${img.url}`,
     }));
 
     propertyData.images = fixedImages;
@@ -93,29 +93,50 @@ const PropertyDetails = () => {
 
 
   // Updated fetchNearbyPlaces to loop through multiple types
-  const fetchNearbyPlaces = async (location, propertyTypes) => {
-    try {
-      const types = Array.isArray(propertyTypes)
-        ? propertyTypes
-        : [propertyTypes];
+ const VALID_TYPES = [
+  "hospital",
+  "school",
+  "restaurant",
+  "atm",
+  "bank",
+  "gym",
+  "park",
+  "doctor",
+  "pharmacy",
+  "university",
+  "library",
+  "police",
+  "fire_station",
+  "grocery_or_supermarket",
+];
 
-      const results = await Promise.all(
-        types.map(async (type) => {
-          const res = await axios.post(
-            "https://prehome-prospect-dashboard.onrender.com/api/properties/nearby-places",
-            { location, type, radius }
-          );
-          return res.data;
-        })
-      );
+const fetchNearbyPlaces = async (location, propertyTypes) => {
+  try {
+    const types = Array.isArray(propertyTypes) ? propertyTypes : [propertyTypes];
 
-      // Flatten all arrays into a single array
-      const merged = results.flat();
-      setNearbyPlaces(merged);
-    } catch (error) {
-      console.error("Error fetching nearby places:", error);
-    }
-  };
+    // ✅ filter invalid types
+    const filteredTypes = types.filter(type => VALID_TYPES.includes(type));
+
+    if (filteredTypes.length === 0) return; // nothing valid to search
+
+    const results = await Promise.all(
+      filteredTypes.map(async (type) => {
+        const res = await axios.post(
+          "http://localhost:5000/api/properties/nearby-places",
+          { location, type, radius }
+        );
+        return res.data;
+      })
+    );
+
+    const merged = results.flat();
+    setNearbyPlaces(merged);
+  } catch (error) {
+    console.error("Error fetching nearby places:", error);
+  }
+};
+
+
 
   const handleRadiusChange = (event, newValue) => {
     setRadius(newValue);
@@ -124,7 +145,7 @@ const PropertyDetails = () => {
  const handleImageLabelClick = (url, index) => {
   const fullUrl = url.startsWith("http")
     ? url
-    : `https://prehome-prospect-dashboard.onrender.com${url}`;
+    : `http://localhost:5000${url}`;
   setSelectedImageUrl(fullUrl);
   setClickedIndex(index);
 };
@@ -388,6 +409,9 @@ const PropertyDetails = () => {
             sx={{ border: "1px solid grey" }}
             center={{ lat: property.latitude, lng: property.longitude }}
             places={nearbyPlaces}
+            propertyAddress={property.generalInfo.propertyAddress}
+  propertyName={property.title}
+            
           />
         </Box>
       </Container>

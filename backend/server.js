@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
@@ -10,6 +11,13 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+
+// 🚨 Fix for COOP blocking issue
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
+  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+  next();
+});
 
 // ✅ Step 2: Import and use routes (AFTER middleware setup)
 const adminAuthRoutes = require('./routes/adminAuth');
@@ -22,7 +30,7 @@ const formRoutes = require("./routes/formRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
-const path = require("path");
+
 app.use("/api/admin/auth", adminAuthRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/auth", authRoutes);
@@ -37,6 +45,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Add this line to register the upload route
 app.use("/api/upload", uploadRoutes);
+
 // ✅ Step 3: Connect MongoDB
 mongoose
   .connect("mongodb+srv://pre_home:pre1234home@cluster0.qsxrc.mongodb.net/prehome", {
