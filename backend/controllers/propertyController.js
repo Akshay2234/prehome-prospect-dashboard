@@ -65,7 +65,7 @@ exports.getPropertyById = async (req, res) => {
       }
     }
 
-    const API_KEY = "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc";
+    const API_KEY = "AIzaSyA93tSLxeCpJkt_lACo4xjv0lrkkJ_9SGM";
     let coordinates = {};
 
     // 1️⃣ Try exact address geocoding
@@ -124,7 +124,6 @@ exports.getPropertyById = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch property" });
   }
 };
-
 
 // POST new property
 exports.createProperty = async (req, res) => {

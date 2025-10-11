@@ -3,7 +3,7 @@
 
 // const MapComponent = ({ center, places = [], propertyName = "Property Location" }) => {
 //   const { isLoaded } = useLoadScript({
-//     googleMapsApiKey: "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc",
+//     googleMapsApiKey: "AIzaSyA93tSLxeCpJkt_lACo4xjv0lrkkJ_9SGM",
 //   });
 
 //   const [mapCenter, setMapCenter] = useState(center);
@@ -102,7 +102,7 @@ import axios from "axios";
 
 const MapComponent = ({ center, places = [], propertyAddress = "", propertyName = "Property Location" }) => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc", // Replace with your valid key
+    googleMapsApiKey: "AIzaSyA93tSLxeCpJkt_lACo4xjv0lrkkJ_9SGM", // Replace with your valid key
   });
 
   const [mapCenter, setMapCenter] = useState(center);
@@ -133,7 +133,7 @@ const MapComponent = ({ center, places = [], propertyAddress = "", propertyName 
           {
             params: {
               address: propertyAddress,
-              key: "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc", // Same key
+              key: "AIzaSyA93tSLxeCpJkt_lACo4xjv0lrkkJ_9SGM", // Same key
             },
           }
         );

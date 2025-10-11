@@ -9,8 +9,8 @@ const JWT_SECRET = 'prehome_secret_key';
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'akshay821212@gmail.com',
-    pass: 'lzzc soyw iipi burq'
+    user: 'storage.prehome@gmail.com',
+    pass: 'Kulw qvqw tfoz nfvh'
   }
 });
 

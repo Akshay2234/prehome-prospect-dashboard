@@ -32,7 +32,7 @@ router.post("/nearby-places", async (req, res) => {
   }
 
   try {
-    const API_KEY = "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc";
+    const API_KEY = "AIzaSyA93tSLxeCpJkt_lACo4xjv0lrkkJ_9SGM";
 
     const geoResponse = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
       params: { address: location, key: API_KEY },
@@ -81,7 +81,7 @@ router.get("/:id/nearby", async (req, res) => {
       return res.status(404).json({ message: "Property not found" });
     }
 
-    const API_KEY = "AIzaSyA08jwhkUMNssPvaWsRlYE-S--IBpa4mUc";
+    const API_KEY = "AIzaSyA93tSLxeCpJkt_lACo4xjv0lrkkJ_9SGM";
 
     const geoResponse = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
       params: { address: property.location, key: API_KEY },
